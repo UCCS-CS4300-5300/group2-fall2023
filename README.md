@@ -32,7 +32,8 @@ TODO
 This link is only live whilst the application is running!
 
 ### Local Environment
-Ensure that you are using Python version `>= 3.8`. Before running the application make sure to install all required python packages. It is recommended that you use a _python virtual environment_.
+#### Install Dependencies
+Ensure that you are using Python version `>= 3.8`. Before running the application make sure to install all required python packages. It is recommended that you use a _python virtual environment_, although this is  optional.
 
 Create and activate a virtual environment using:
 ```
@@ -45,7 +46,8 @@ Install dependencies using:
 pip install -r requirements.txt
 ```
 
-Before running the application, ensure that you have configured a `SECRET_KEY` for the project. Start by copying the default environment file (`'.env.default`) to a new file named `.env`. Generate a new secret key value and update the `SECRET_KEY` variable in the `.env` file. You can generate a secret key using python with the following python script:
+#### Set up SECRET_KEY for Django
+Before running the application, ensure that you have configured a `SECRET_KEY` for the project. Start by copying the default environment file (`.env.default`) to a new file named `.env`. Generate a new secret key value and update the `SECRET_KEY` variable in the `.env` file. You can generate a secret key using python with the following python script:
 
 ```
 from django.core.management.utils import get_random_secret_key
@@ -57,6 +59,7 @@ Your `.env` file should have the following contents:
 SECRETY_KEY='<SOME GENERATED KEY>'
 ```
 
+#### Run Migration (Set up DB)
 Once your environment is configured you need to set up your local database. Run the following from the project root directory:
 
 ```
@@ -65,6 +68,8 @@ python manage.py migrate
 
 You should see a new database file `db.sqlite3`.
 
+
+#### Run the App
 Now, run the app using:
 
 ```
