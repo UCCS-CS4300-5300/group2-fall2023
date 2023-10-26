@@ -63,7 +63,7 @@ SECRETY_KEY='<SOME GENERATED KEY>'
 Once your environment is configured you need to set up your local database. Run the following from the project root directory:
 
 ```
-python manage.py migrate
+python3 manage.py migrate
 ```
 
 You should see a new database file `db.sqlite3`.
@@ -73,7 +73,7 @@ You should see a new database file `db.sqlite3`.
 Now, run the app using:
 
 ```
-python manage.py runserver
+python3 manage.py runserver
 ```
 
 ## Tests
