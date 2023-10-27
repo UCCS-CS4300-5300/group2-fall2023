@@ -17,16 +17,14 @@ __An Online Farmers Market__
 ### Replit
 Below is a link to the project.
 
-__Note__ that this link is __not__ a private access link. If you do not currently have permission to access, please request access from one of the contributors above.
-
 ```
-TODO
+https://replit.com/@sadamsoncpt/CS4300-Fall2023-Group2
 ```
 
 In replit, run the application by clicking the green `Run` button at the center of the screen. Note that a small `Webview` window will open when the application boots up. __Please do not use the `Webview` window!__ Instead, open the application web link in a web browser:
 
 ```
-TODO
+https://cs4300-fall2023-group2.sadamsoncpt.repl.co
 ```
 
 This link is only live whilst the application is running!
