@@ -40,6 +40,7 @@ X_FRAME_OPTIONS = '*'
 # GROUP 2 MAKE SURE YOU ADD APPS HERE
 
 INSTALLED_APPS = [
+    'Home',
     'Events',
     'django.contrib.admin',
     'django.contrib.auth',

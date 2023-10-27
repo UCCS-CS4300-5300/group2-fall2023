@@ -17,8 +17,34 @@
     </head>
     <body>
         <!-- Navigation Bar -->
-        <nav class="navbar navbar-expand-lg">
+        <nav class="navbar navbar-expand-md navbar-light harvestly-navbar">
+            <a class="navbar-brand" href="{% url 'index' %}">harvestly</a>
+            
+            <button 
+                class="navbar-toggler"
+                type="button"
+                data-toggle="collapse"
+                data-target="#harvestlyNavBarCollapse"
+                aria-controls="harvestlyNavBarCollapse" 
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
+            <div class="collapse navbar-collapse" id="harvestlyNavBarCollapse">
+                <ul class="navbar-nav ml-auto harvestly-nav">
+                    <li>
+                        <a href="{% url 'events-list' %}" class="harvestly-nav-button">events</a>
+                    </li>
+                    <li>
+                        <a class="harvestly-nav-button">some link</a>
+                    </li>
+                    <li>
+                        <a class="harvestly-nav-button">some link</a>
+                    </li>
+                </ul>
+            </div>
         </nav>
         
         <!-- Page  -->

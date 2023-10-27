@@ -6,10 +6,10 @@ from django.views import View
 from django.shortcuts import render
 
 class EventsList(View):
-    """ Get a list of Harvestly events. URL `/get-events-list/` or '/' """
+    """ Get a list of Harvestly events. URL `/get-events-list/` """
     
     def get(self, request):
-        """ Query all movies, format render in HTML. """
+        """ Query all events, render in events list template. """
 
         # TODO
         # Query events

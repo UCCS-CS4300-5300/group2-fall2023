@@ -20,11 +20,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from Home import views as home_views
 from Events import views as events_views
 
 urlpatterns = [
-    # TODO - Not sure if we want EventsList to be the landing page, need to figure this out with login
-    path("", events_views.EventsList.as_view(), name="index"),
+    # TODO - Not sure how this needs to be updated for login
+    path("", home_views.Home.as_view(), name="index"),
     path("events-list/", events_views.EventsList.as_view(), name="events-list"),
-
 ]
