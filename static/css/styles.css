@@ -42,7 +42,7 @@ footer .row {
 footer .col {
     margin-top: 1em;
 }
-footer .harvestly-nav-button {
+footer .harvestly-nav-link {
     white-space: nowrap;
 }
 
@@ -51,10 +51,10 @@ footer .harvestly-nav-button {
     margin-bottom: var(--navbar-pad);
 }
 
-.harvestly-nav .harvestly-nav-button {
+.harvestly-nav .harvestly-nav-link {
     margin-left: 1em;
 }
-.harvestly-nav-button {
+.harvestly-nav-link {
     text-decoration: none !important;
     color: var(--dark-color) !important;
 
@@ -67,7 +67,7 @@ footer .harvestly-nav-button {
 
     transition: all 0.3s ease;
 }
-.harvestly-nav-button::before {
+.harvestly-nav-link::before {
     content: "";
     background-color: var(--primary-color);
     position: absolute;
@@ -80,11 +80,11 @@ footer .harvestly-nav-button {
     transform-origin: left;
     transition: all 0.3s ease;
 }
-.harvestly-nav-button:hover {
+.harvestly-nav-link:hover {
     filter: opacity(1);
     color: var(--primary-color) !important;
 }
-.harvestly-nav-button:hover::before {
+.harvestly-nav-link:hover::before {
     transform: scaleX(1);
 }
 
