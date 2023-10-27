@@ -1,10 +1,15 @@
 /* Configure CSS variables here */
 :root {
     --pad: max(2em, 4vmin);
+    --content-pad: max(2em, 3vmin);
     --navbar-pad: max(1em, 3vmin);
+    --splash-pic-size: max(45vw, 290px);
+
+    --title-size: max(2.5em, 8vmin);
+    --subtitle-size: max(1.5em, 4.5vmin);
 
     --primary-color: rgb(0,0,0);
-    --secondary-color: rgb(0, 40, 0);
+    --secondary-color: rgb(0, 65, 0);
 }
 
 body {
@@ -68,11 +73,29 @@ footer .harvestly-nav-button {
     transform: scaleX(0);
     transform-origin: left;
     transition: all 0.3s ease;
-  }
-  .harvestly-nav-button:hover {
+}
+.harvestly-nav-button:hover {
     filter: opacity(1);
     color: var(--secondary-color) !important;
-  }
-  .harvestly-nav-button:hover::before {
+}
+.harvestly-nav-button:hover::before {
     transform: scaleX(1);
-  }
+}
+
+.title {
+    font-size: var(--title-size) !important;
+}
+.subtitle {
+    font-size: var(--subtitle-size) !important;
+    color: var(--secondary-color);
+}
+
+.splash-pic {
+    border-radius: 5px;
+    width: var(--splash-pic-size);
+    height: auto;
+}
+
+.content {
+    margin: 0 var(--content-pad);
+}
