@@ -26,5 +26,6 @@ from Events import views as events_views
 urlpatterns = [
     # TODO - Not sure how this needs to be updated for login
     path("", home_views.Home.as_view(), name="index"),
+    path("about-us/", home_views.About.as_view(), name="about"),
     path("events-list/", events_views.EventsList.as_view(), name="events-list"),
 ]

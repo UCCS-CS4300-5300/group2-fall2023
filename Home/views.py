@@ -12,3 +12,11 @@ class Home(View):
         """ Render home page. """
 
         return render(request, "home.html", )
+    
+class About(View):
+    """ Harvestly home page. URL `/` """
+    
+    def get(self, request):
+        """ Render about page. """
+
+        return render(request, "about.html", )
