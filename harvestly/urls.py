@@ -1,3 +1,6 @@
+### CS 4300 Fall 2023 Group 2
+### Harvestly
+
 """django_project URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -13,9 +16,15 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path
 
+from Events import views as events_views
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # TODO - Not sure if we want EventsList to be the landing page, need to figure this out with login
+    path("", events_views.EventsList.as_view(), name="index"),
+    path("events-list/", events_views.EventsList.as_view(), name="events-list"),
+
 ]

@@ -2,16 +2,33 @@
 
 <html lang="en">
     <head>
+        {% load static %}
         <title> {% block title %}{% endblock %} </title>
+
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
+        <!-- Font -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto">
 
-        {% load static %}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}">
+        <!-- Bootstrap css -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
     </head>
     <body>
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-expand-lg">
+
+        </nav>
         
+        <!-- Page  -->
+        {% block content %}{% endblock %}
+        
+        <!-- Footer -->
+
+        <!-- Bootstrap js (and dependencies) -->
+        <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+        <script src="{% static 'js/popper.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
     </body>
 </html>

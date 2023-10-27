@@ -79,3 +79,6 @@ python3 manage.py runserver
 ## Tests
 
 
+## Django Apps
+* `Events` - Schedule, Display, Join, and Update Events
+
