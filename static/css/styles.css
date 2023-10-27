@@ -56,7 +56,7 @@ footer .harvestly-nav-button {
 }
 .harvestly-nav-button {
     text-decoration: none !important;
-    color: var(--primary-color) !important;
+    color: rgb(0,0,0) !important;
 
     position: relative;
     display: inline-block;
@@ -69,7 +69,7 @@ footer .harvestly-nav-button {
 }
 .harvestly-nav-button::before {
     content: "";
-    background-color: var(--secondary-color);
+    background-color: var(--primary-color);
     position: absolute;
     width: 100%;
     height: 2px;
@@ -82,7 +82,7 @@ footer .harvestly-nav-button {
 }
 .harvestly-nav-button:hover {
     filter: opacity(1);
-    color: var(--secondary-color) !important;
+    color: var(--primary-color) !important;
 }
 .harvestly-nav-button:hover::before {
     transform: scaleX(1);
@@ -93,7 +93,7 @@ footer .harvestly-nav-button {
 }
 .subtitle {
     font-size: var(--subtitle-size) !important;
-    color: var(--secondary-color);
+    color: var(--primary-color);
 }
 
 .splash-pic {
