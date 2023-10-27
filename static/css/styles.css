@@ -56,7 +56,7 @@ footer .harvestly-nav-button {
 }
 .harvestly-nav-button {
     text-decoration: none !important;
-    color: rgb(0,0,0) !important;
+    color: var(--dark-color) !important;
 
     position: relative;
     display: inline-block;
@@ -90,6 +90,7 @@ footer .harvestly-nav-button {
 
 .title {
     font-size: var(--title-size) !important;
+    color: var(--dark-color);
 }
 .subtitle {
     font-size: var(--subtitle-size) !important;
