@@ -8,8 +8,8 @@
     --title-size: max(2.5em, 8vmin);
     --subtitle-size: max(1.5em, 4.5vmin);
 
-    --primary-color: rgb(122,168,116);
-    --secondary-color: rgb(247, 219, 106);
+    --primary-color: rgb(0,67,0);
+    --secondary-color: rgb(139,129,0);
     --danger-color: rgb(154,68,68);
     --warning-color: rgb(222,143,95);
     --info-color: rgb(129,202,207);
