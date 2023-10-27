@@ -1,5 +1,4 @@
 # Harvestly
-__An Online Farmers Market__
 Welcome to Harvestly! Our mission is to provide a platform for farmers and customers to get together and do business. Harvestly makes it easy for farmers to advertise when, what, and where they're selling, and helps them get together for market events. The markets that the farmers create then get shown to customers that come looking for high-quality produce that you just can't get from a grocery store. Whether you're looking to sell or to buy, let us be the first to welcome you to a thriving community of people looking to share the joy of fresh produce that's made with heart.
 
 ## CS 4300-001 Fall 2023 Group 2
