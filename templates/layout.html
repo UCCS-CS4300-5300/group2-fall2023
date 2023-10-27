@@ -18,7 +18,7 @@
     <body>
         <!-- Navigation Bar -->
         <nav class="navbar navbar-expand-md navbar-light harvestly-navbar">
-            <a class="navbar-brand" href="{% url 'index' %}">harvestly</a>
+            <a class="navbar-brand" href="{% url 'index' %}">harvestly (logo soon)</a>
             
             <button 
                 class="navbar-toggler"
@@ -48,9 +48,48 @@
         </nav>
         
         <!-- Page  -->
-        {% block content %}{% endblock %}
-        
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
         <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col">
+                    <div class="row">
+                        <a class="harvestly-nav-button" href="https://github.com/SamuelAdamson">samuel ↱</a>
+                    </div>
+                    <div class="row">
+                        <a class="harvestly-nav-button" href="https://github.com/veckertUCCS">victor ↱</a>
+                    </div>
+                    <div class="row">
+                        <a class="harvestly-nav-button" href="https://github.com/kshry">keegan ↱</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <a class="harvestly-nav-button" href="https://github.com/mgibbon2">matthew ↱</a>
+                    </div>
+                    <div class="row">
+                        <a class="harvestly-nav-button" href="https://github.com/jesroberts101">jesse ↱</a>
+                    </div>
+                    <div class="row">
+                        <a class="harvestly-nav-button" href="https://github.com/eander17">evan ↱</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <a class="harvestly-nav-button" href="https://uccs.edu">uccs ↱</a>
+                    </div>
+                    <div class="row">
+                        <a class="harvestly-nav-button" href="https://eas.uccs.edu/">eas ↱</a>
+                    </div>
+                    <div class="row">
+                        <a class="harvestly-nav-button" href="https://coloradosprings.gov/">cos ↱</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
 
         <!-- Bootstrap js (and dependencies) -->
         <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>

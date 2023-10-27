@@ -7,6 +7,29 @@
 body {
     font-family: 'Roboto', sans-serif;
     padding: var(--pad);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex-grow: 1;
+}
+
+footer {
+    margin-top: var(--navbar-pad);
+    margin-left: auto;
+    margin-right: auto;
+}
+footer .row {
+    margin: 0.2rem 1rem;
+    justify-content: center;
+}
+footer .col {
+    margin-top: 1em;
+}
+footer .harvestly-nav-button {
+    white-space: nowrap;
 }
 
 .harvestly-navbar {
@@ -14,17 +37,20 @@ body {
     margin-bottom: var(--navbar-pad);
 }
 
+.harvestly-nav .harvestly-nav-button {
+    margin-left: 1em;
+}
 .harvestly-nav-button {
     text-decoration: none !important;
     color: rgb(0,0,0) !important;
 
-    margin-left: 1em;
     position: relative;
     display: inline-block;
     cursor: pointer;
     filter: opacity(0.7);
     font-size: large;
-    
+    text-align: center;
+
     transition: all 0.3s ease;
 }
 .harvestly-nav-button::before {
