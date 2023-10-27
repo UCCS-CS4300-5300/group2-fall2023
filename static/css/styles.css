@@ -10,6 +10,7 @@
 
     --primary-color: rgb(0,0,0);
     --secondary-color: rgb(0, 65, 0);
+    --brand-color: rgb(57, 149, 71);
 }
 
 body {
@@ -43,6 +44,7 @@ footer .harvestly-nav-button {
 .harvestly-navbar {
     padding: 0;
     margin-bottom: var(--navbar-pad);
+    background-color: var(--brand-color);
 }
 
 .harvestly-nav .harvestly-nav-button {
