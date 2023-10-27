@@ -44,7 +44,6 @@ footer .harvestly-nav-button {
 .harvestly-navbar {
     padding: 0;
     margin-bottom: var(--navbar-pad);
-    background-color: var(--brand-color);
 }
 
 .harvestly-nav .harvestly-nav-button {
