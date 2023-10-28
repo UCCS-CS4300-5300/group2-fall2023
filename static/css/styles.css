@@ -212,7 +212,3 @@ footer .harvestly-nav-link {
 .home-navbar-brand:hover .home-text::before {
   transform: scaleX(1);
 }
-
-.product-card {
-  max-width: 150px;
-}
