@@ -1,0 +1,10 @@
+[
+  {
+    "model": "Products.vendor",
+    "pk": 1,
+    "fields": {
+      "name": "vendor1",
+      "description": "they're the first ever vendor"
+    }
+  }
+]
