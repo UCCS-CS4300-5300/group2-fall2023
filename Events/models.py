@@ -11,6 +11,10 @@ from django.db import models
 # Date
 # Start Time
 # End Time
-# Farmers <- From Farmer model
-# Products <- Probably from other model?
-# Customers <- From Customer model
+
+class Event(models.Model):
+    name = models.CharField(max_length=200)
+    location = models.CharField(max_length=200)
+    date = models.CharField(max_length=200)
+    start_time = models.CharField(max_length=200)
+    end_time = models.CharField(max_length=200)
