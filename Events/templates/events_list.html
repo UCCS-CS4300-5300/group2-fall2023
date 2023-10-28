@@ -3,6 +3,24 @@
 
 {% block content %}
 <div id="main">
-    <h1> EVENTS LIST </h1>
+    <h1>EVENTS LIST</h1>
+    <ul>
+        {% for event in events %}
+            <li>
+                <strong>{{ event.name }}</strong><br>
+                Location: {{ event.location }}<br>
+                Date: {{ event.date }}<br>
+                Start Time: {{ event.start_time }}<br>
+                End Time: {{ event.end_time }}<br>
+                {% for product in event.product_list %}
+                    <li>
+                        Product Name: {{ product.0 }}<br>
+                        Count: {{ product.1 }}<br>
+                        Price: {{ product.2 }}<br>
+                    </li>
+                {% endfor %}
+            </li>
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}

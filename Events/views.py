@@ -4,6 +4,7 @@
 
 from django.views import View
 from django.shortcuts import render
+from .models import Event
 
 class EventsList(View):
     """ Get a list of Harvestly events. URL `/get-events-list/` """
@@ -13,6 +14,6 @@ class EventsList(View):
 
         # TODO
         # Query events
+        events = Event.objects.all()
         # Pass events to events_list.html
-
-        return render(request, "events_list.html", )
+        return render(request, "events_list.html", {'events': events})
