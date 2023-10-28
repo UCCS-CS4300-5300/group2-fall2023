@@ -12,7 +12,7 @@
             <li>
                 <div class="event-title"><strong>{{ event.name }}</strong></div>
                     <div class="event-location">Location: {{ event.location }}</div>
-                    <div class="event-date">Date: {{ event.date }}</div>
+                    <div class="event-date">Date: {{ event.start_time.date }}</div>
                     <div class="event-start-time">Start time: {{ event.start_time }}</div>
                     <div class="event-end-time">End time: {{ event.end_time }}</div>
             </li>

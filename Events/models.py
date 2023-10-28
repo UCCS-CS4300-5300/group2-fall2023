@@ -15,6 +15,5 @@ from django.db import models
 class Event(models.Model):
     name = models.CharField(max_length=200)
     location = models.CharField(max_length=200)
-    date = models.CharField(max_length=200)
-    start_time = models.CharField(max_length=200)
-    end_time = models.CharField(max_length=200)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
