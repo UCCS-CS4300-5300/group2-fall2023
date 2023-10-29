@@ -9,15 +9,15 @@
     --title-size: max(2.5em, 8vmin);
     --subtitle-size: max(1.5em, 4.5vmin);
 
-    --primary-color: rgb(171,194,112);
+    --primary-color: rgb(171, 194, 112);
     --primary-color-hover: #939b62;
-    --secondary-color: rgb(254,200,104);
+    --secondary-color: rgb(254, 200, 104);
     --secondary-color-hover: rgb(253, 215, 149);
-    --danger-color: rgb(154,68,68);
-    --warning-color: rgb(222,143,95);
-    --info-color: rgb(129,202,207);
-    --light-color: rgb(245,247,248);
-    --dark-color: rgb(0,21,42);
+    --danger-color: rgb(154, 68, 68);
+    --warning-color: rgb(222, 143, 95);
+    --info-color: rgb(129, 202, 207);
+    --light-color: rgb(245, 247, 248);
+    --dark-color: rgb(0, 21, 42);
     --brand-color: rgb(57, 149, 71);
 }
 
@@ -71,7 +71,7 @@ footer .harvestly-nav-link {
     transition: all 0.3s ease;
 }
 .harvestly-nav-link::before {
-    content: "";
+    content: '';
     background-color: var(--primary-color);
     position: absolute;
     width: 100%;
@@ -88,7 +88,7 @@ footer .harvestly-nav-link {
     color: var(--primary-color) !important;
 }
 .harvestly-nav-link:hover::before {
-    transform: scaleX(1);
+      transform: scaleX(1);
 }
 
 .harvestly-nav-btn-primary {
@@ -110,15 +110,15 @@ footer .harvestly-nav-link {
 
     transition: all 0.3s ease;
 }
-.harvestly-nav-btn-primary:hover{
+.harvestly-nav-btn-primary:hover {
     color: var(--light-color) !important;
-    background-color: var(--primary-color-hover)
+    background-color: var(--primary-color-hover);
 }
-.harvestly-nav-btn-primary:focus{
+.harvestly-nav-btn-primary:focus {
     color: var(--light-color) !important;
     border: 5px solid var(--primary-color-hover);
 }
-.harvestly-nav-btn-primary:active{
+.harvestly-nav-btn-primary:active {
     color: var(--light-color) !important;
     background-color: var(--primary-color-hover);
     border: 5px solid var(--primary-color);
@@ -143,14 +143,14 @@ footer .harvestly-nav-link {
 
     transition: all 0.3s ease;
 }
-.harvestly-nav-btn-secondary:hover{
+.harvestly-nav-btn-secondary:hover {
     color: var(--light-color) !important;
-    background-color: var(--secondary-color-hover)
+    background-color: var(--secondary-color-hover);
 }
-.harvestly-nav-btn-secondary:focus{
+.harvestly-nav-btn-secondary:focus {
     border: 5px solid var(--dark-color);
 }
-.harvestly-nav-btn-secondary:active{
+.harvestly-nav-btn-secondary:active {
     color: var(--light-color) !important;
     background-color: var(--secondary-color-hover);
     border: 5px solid var(--dark-color);
@@ -195,7 +195,7 @@ footer .harvestly-nav-link {
     transition: all ease 0.3s;
 }
 .home-text::before {
-    content: "";
+    content: '';
     background-color: var(--dark-color);
     position: absolute;
     width: 100%;

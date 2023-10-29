@@ -19,6 +19,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
     </head>
+
     <body>
         <!-- Navigation Bar -->
         <nav class="navbar navbar-expand-md navbar-light harvestly-navbar">
@@ -26,16 +27,9 @@
                 <img class="home-logo" src="{% static 'img/logo.png' %}" alt="Harvestly" />
                 <h3 class="home-text"> Harvestly </h3>
             </a>
-            
-            <button 
-                class="navbar-toggler"
-                type="button"
-                data-toggle="collapse"
-                data-target="#harvestlyNavBarCollapse"
-                aria-controls="harvestlyNavBarCollapse" 
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-            >
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#harvestlyNavBarCollapse"
+                aria-controls="harvestlyNavBarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -45,7 +39,7 @@
                         <a href="{% url 'events-list' %}" class="harvestly-nav-link">Markets</a>
                     </li>
                     <li>
-                        <a class="harvestly-nav-link">some link</a>
+                        <a href="{% url 'products-list' %}" class="harvestly-nav-link">Products</a>
                     </li>
                     <li>
                         <a class="harvestly-nav-link">some link</a>
@@ -53,7 +47,7 @@
                 </ul>
             </div>
         </nav>
-        
+
         <!-- Page  -->
         <main class="content">
             {% block content %}{% endblock %}
