@@ -1,214 +1,214 @@
 /* Configure CSS variables here */
 :root {
-  --pad: max(2em, 4vmin);
-  --content-pad: max(2em, 3vmin);
-  --navbar-pad: max(1em, 3vmin);
-  --splash-pic-size: max(45vw, 290px);
-  --logo-size: max(32px, 8vmin);
+    --pad: max(2em, 4vmin);
+    --content-pad: max(2em, 3vmin);
+    --navbar-pad: max(1em, 3vmin);
+    --splash-pic-size: max(45vw, 290px);
+    --logo-size: max(32px, 8vmin);
 
-  --title-size: max(2.5em, 8vmin);
-  --subtitle-size: max(1.5em, 4.5vmin);
+    --title-size: max(2.5em, 8vmin);
+    --subtitle-size: max(1.5em, 4.5vmin);
 
-  --primary-color: rgb(171, 194, 112);
-  --primary-color-hover: #939b62;
-  --secondary-color: rgb(254, 200, 104);
-  --secondary-color-hover: rgb(253, 215, 149);
-  --danger-color: rgb(154, 68, 68);
-  --warning-color: rgb(222, 143, 95);
-  --info-color: rgb(129, 202, 207);
-  --light-color: rgb(245, 247, 248);
-  --dark-color: rgb(0, 21, 42);
-  --brand-color: rgb(57, 149, 71);
+    --primary-color: rgb(171, 194, 112);
+    --primary-color-hover: #939b62;
+    --secondary-color: rgb(254, 200, 104);
+    --secondary-color-hover: rgb(253, 215, 149);
+    --danger-color: rgb(154, 68, 68);
+    --warning-color: rgb(222, 143, 95);
+    --info-color: rgb(129, 202, 207);
+    --light-color: rgb(245, 247, 248);
+    --dark-color: rgb(0, 21, 42);
+    --brand-color: rgb(57, 149, 71);
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
-  padding: var(--pad);
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    padding: var(--pad);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 main {
-  flex-grow: 1;
+    flex-grow: 1;
 }
 
 footer {
-  margin-top: var(--navbar-pad);
-  margin-left: auto;
-  margin-right: auto;
+    margin-top: var(--navbar-pad);
+    margin-left: auto;
+    margin-right: auto;
 }
 footer .row {
-  margin: 0.2rem 1rem;
-  justify-content: center;
+    margin: 0.2rem 1rem;
+    justify-content: center;
 }
 footer .col {
-  margin-top: 1em;
+    margin-top: 1em;
 }
 footer .harvestly-nav-link {
-  white-space: nowrap;
+    white-space: nowrap;
 }
 
 .harvestly-navbar {
-  padding: 0;
-  margin-bottom: var(--navbar-pad);
+    padding: 0;
+    margin-bottom: var(--navbar-pad);
 }
 
 .harvestly-nav .harvestly-nav-link {
-  margin-left: 1em;
+    margin-left: 1em;
 }
 .harvestly-nav-link {
-  text-decoration: none !important;
-  color: var(--dark-color) !important;
+    text-decoration: none !important;
+    color: var(--dark-color) !important;
 
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  filter: opacity(0.7);
-  font-size: large;
-  text-align: center;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    filter: opacity(0.7);
+    font-size: large;
+    text-align: center;
 
-  transition: all 0.3s ease;
+    transition: all 0.3s ease;
 }
 .harvestly-nav-link::before {
-  content: '';
-  background-color: var(--primary-color);
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  bottom: 0;
-  left: 0;
+    content: '';
+    background-color: var(--primary-color);
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
 
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: all 0.3s ease;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: all 0.3s ease;
 }
 .harvestly-nav-link:hover {
-  filter: opacity(1);
-  color: var(--primary-color) !important;
+    filter: opacity(1);
+    color: var(--primary-color) !important;
 }
 .harvestly-nav-link:hover::before {
-  transform: scaleX(1);
+      transform: scaleX(1);
 }
 
 .harvestly-nav-btn-primary {
-  text-decoration: none !important;
-  color: var(--light-color);
+    text-decoration: none !important;
+    color: var(--light-color);
 
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  font-size: large;
-  text-align: center;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    font-size: large;
+    text-align: center;
 
-  min-height: 40px;
-  min-width: 120px;
+    min-height: 40px;
+    min-width: 120px;
 
-  border: 1px solid var(--primary-color);
-  border-radius: 5px;
-  background-color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    background-color: var(--primary-color);
 
-  transition: all 0.3s ease;
+    transition: all 0.3s ease;
 }
 .harvestly-nav-btn-primary:hover {
-  color: var(--light-color) !important;
-  background-color: var(--primary-color-hover);
+    color: var(--light-color) !important;
+    background-color: var(--primary-color-hover);
 }
 .harvestly-nav-btn-primary:focus {
-  color: var(--light-color) !important;
-  border: 5px solid var(--primary-color-hover);
+    color: var(--light-color) !important;
+    border: 5px solid var(--primary-color-hover);
 }
 .harvestly-nav-btn-primary:active {
-  color: var(--light-color) !important;
-  background-color: var(--primary-color-hover);
-  border: 5px solid var(--primary-color);
+    color: var(--light-color) !important;
+    background-color: var(--primary-color-hover);
+    border: 5px solid var(--primary-color);
 }
 
 .harvestly-nav-btn-secondary {
-  text-decoration: none !important;
-  color: var(--secondary-color);
+    text-decoration: none !important;
+    color: var(--secondary-color);
 
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  font-size: large;
-  text-align: center;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    font-size: large;
+    text-align: center;
 
-  min-height: 40px;
-  min-width: 120px;
+    min-height: 40px;
+    min-width: 120px;
 
-  border: 5px solid var(--secondary-color);
-  border-radius: 5px;
-  background-color: var(--plight-color);
+    border: 5px solid var(--secondary-color);
+    border-radius: 5px;
+    background-color: var(--plight-color);
 
-  transition: all 0.3s ease;
+    transition: all 0.3s ease;
 }
 .harvestly-nav-btn-secondary:hover {
-  color: var(--light-color) !important;
-  background-color: var(--secondary-color-hover);
+    color: var(--light-color) !important;
+    background-color: var(--secondary-color-hover);
 }
 .harvestly-nav-btn-secondary:focus {
-  border: 5px solid var(--dark-color);
+    border: 5px solid var(--dark-color);
 }
 .harvestly-nav-btn-secondary:active {
-  color: var(--light-color) !important;
-  background-color: var(--secondary-color-hover);
-  border: 5px solid var(--dark-color);
+    color: var(--light-color) !important;
+    background-color: var(--secondary-color-hover);
+    border: 5px solid var(--dark-color);
 }
 
 .title {
-  font-size: var(--title-size) !important;
-  color: var(--dark-color);
+    font-size: var(--title-size) !important;
+    color: var(--dark-color);
 }
 .subtitle {
-  font-size: var(--subtitle-size) !important;
-  color: var(--primary-color);
+    font-size: var(--subtitle-size) !important;
+    color: var(--primary-color);
 }
 
 .splash-pic {
-  border-radius: 5px;
-  width: var(--splash-pic-size);
-  height: auto;
+    border-radius: 5px;
+    width: var(--splash-pic-size);
+    height: auto;
 }
 
 .content {
-  margin: 0 var(--content-pad);
+    margin: 0 var(--content-pad);
 }
 
 .home-navbar-brand {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 0 0.8rem 0 0.3rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.8rem 0 0.3rem;
 }
 .home-logo {
-  width: var(--logo-size);
-  height: auto;
-  filter: brightness(85%) !important;
+    width: var(--logo-size);
+    height: auto;
+    filter: brightness(85%) !important;
 }
 .home-text {
-  padding: 0;
-  margin: 0;
-  color: var(--dark-color);
-  filter: opacity(0.7);
-  transition: all ease 0.3s;
+    padding: 0;
+    margin: 0;
+    color: var(--dark-color);
+    filter: opacity(0.7);
+    transition: all ease 0.3s;
 }
 .home-text::before {
-  content: '';
-  background-color: var(--dark-color);
-  position: absolute;
-  width: 100%;
-  height: 3px;
-  bottom: 0;
-  left: 0;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: all 0.3s ease;
+    content: '';
+    background-color: var(--dark-color);
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    bottom: 0;
+    left: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: all 0.3s ease;
 }
 .home-navbar-brand:hover .home-text {
-  filter: opacity(1);
+    filter: opacity(1);
 }
 .home-navbar-brand:hover .home-text::before {
-  transform: scaleX(1);
+    transform: scaleX(1);
 }
