@@ -22,10 +22,13 @@ from django.urls import path
 
 from Home import views as home_views
 from Events import views as events_views
+from Products import views as products_views
 
 urlpatterns = [
     # TODO - Not sure how this needs to be updated for login
     path("", home_views.Home.as_view(), name="index"),
     path("about-us/", home_views.About.as_view(), name="about"),
     path("events-list/", events_views.EventsList.as_view(), name="events-list"),
+    path("products-list/", products_views.ProductList.as_view(), name="products-list"),
+    path("admin/", admin.site.urls),
 ]
