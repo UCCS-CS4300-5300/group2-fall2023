@@ -1,8 +1,10 @@
+### CS 4300 Fall 2023 Group 2
+### Harvestly
+### Products Views
+
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from .models import Product
-
-# Create your views here.
 
 
 class ProductList(ListView):
