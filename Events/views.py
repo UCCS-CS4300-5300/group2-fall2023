@@ -2,7 +2,7 @@
 ### Harvestly
 ### Events Views
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Event
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -13,7 +13,6 @@ class EventList(ListView):
     
     def get(self, request):
         """ Query all events, render in events list template. """
-
         # Query events
         model = Event.objects.all()
         template_name = "event_list.html"
@@ -21,6 +20,13 @@ class EventList(ListView):
         # Pass events to events_list.html
         return render(request, template_name, {'eventlist': model})
     
+    def post(self, request):
+        form = EventForm(request.POST)
+        if request.method == 'POST' and form.is_valid():
+            object = form.save(commit=False)
+            object.save()
+            return redirect('event-list')
+
 class EventDetail(DetailView):
     def detail_event(self, request):
         model = self
