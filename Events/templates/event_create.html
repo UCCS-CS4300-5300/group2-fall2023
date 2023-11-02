@@ -2,7 +2,14 @@
 {% block title %}Create Event{% endblock %}
 
 {% block content %}
-<div id="main">
-    
+
+<a href="{% url 'event-list' %}">Back to Events</a>
+<form method="post" action="{% url 'event-list' %}">
+<div id="main" style="background-color: black;"></div>
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Create" />
 </div>
+</form>
+
 {% endblock %}
