@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<a href="{% url 'event-list' %}">Back to Events</a>
+<a href="{% url 'events' %}">Back to Events</a>
 <div id="main">
     <div class="details-title"><h1>{{ event.name }} Details</h1></div>
             <div class="event-location">Location: {{ event.location }}</div>
@@ -11,4 +11,6 @@
             <div class="event-start-time">Start time: {{ event.start_time }}</div>
             <div class="event-end-time">End time: {{ event.end_time }}</div>
 </div>
+<a href="{% url 'event-update' event.id %}"><button>Edit</button></a>
+<a href="{% url 'event-delete' event.id %}"><button>Delete</button></a>
 {% endblock %}

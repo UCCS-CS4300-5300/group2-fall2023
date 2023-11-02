@@ -4,15 +4,13 @@
 {% block content %}
 
 <div id="main">
-    <a href="{% url 'create-event'%}">Create Event</a>
+    <a href="{% url 'event-create'%}">Create Event</a>
     {% if eventlist %}
         <h1>EVENTS LIST</h1>
         {% for event in eventlist %}
             <li>
                 <div class="event-title"><strong>{{ event.name }}</strong></div>
                 <td><a href="{% url 'event-detail' event.id %}"><button>See More</button></a></td>
-                <td><a href="{% url 'event-update' event.id %}"><button>Edit</button></a></td>
-                <td><a href="{% url 'event-delete' event.id %}"><button>Delete</button></a></td>
             </li>
         {% endfor %}
     {% else %}

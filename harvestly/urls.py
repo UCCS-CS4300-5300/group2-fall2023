@@ -18,7 +18,7 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from Home import views as home_views
 from Events import views as events_views
@@ -28,6 +28,7 @@ urlpatterns = [
     # TODO - Not sure how this needs to be updated for login
     path("", home_views.Home.as_view(), name="index"),
     path("about-us/", home_views.About.as_view(), name="about"),
+    path('events/', include('Events.urls')),
     path("event-list/", events_views.EventList.as_view(), name="event-list"),
     path("create-event/", events_views.EventCreate.as_view(), name="create-event"),
     path("products-list/", products_views.ProductList.as_view(), name="products-list"),
