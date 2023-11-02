@@ -2,6 +2,8 @@
 {% block title %}{{ event.name }} Details{% endblock %}
 
 {% block content %}
+
+<a href="{% url 'event-list' %}">Back to Events</a>
 <div id="main">
     <div class="details-title"><h1>{{ event.name }} Details</h1></div>
             <div class="event-location">Location: {{ event.location }}</div>

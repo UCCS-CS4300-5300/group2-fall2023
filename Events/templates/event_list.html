@@ -2,6 +2,7 @@
 {% block title %}Events{% endblock %}
 
 {% block content %}
+
 <div id="main">
     <a href="{% url 'create-event'%}">Create Event</a>
     {% if eventlist %}
@@ -9,7 +10,9 @@
         {% for event in eventlist %}
             <li>
                 <div class="event-title"><strong>{{ event.name }}</strong></div>
-                <button class="details-redirect" type="button">More Details</button>
+                <td><a href="{% url 'event-detail' event.id %}"><button>See More</button></a></td>
+                <td><a href="{% url 'event-update' event.id %}"><button>Edit</button></a></td>
+                <td><a href="{% url 'event-delete' event.id %}"><button>Delete</button></a></td>
             </li>
         {% endfor %}
     {% else %}
