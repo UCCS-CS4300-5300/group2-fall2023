@@ -2,7 +2,7 @@
 {% block title %}Products{% endblock %}
 
 {% block content %}
-<div id="main">
+<div>
     {% if product_list %}
         <h1>Our Products</h1>
         <div class="row">
@@ -22,7 +22,7 @@
             {% endfor %}
         </div>
     {% else %}
-        <h1>NO PRODUCTS</h1>
+        {% include "empty_list.html" with items="products" %}
     {% endif %}
 </div>
 {%endblock %}
