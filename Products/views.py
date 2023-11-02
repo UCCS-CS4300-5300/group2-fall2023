@@ -8,7 +8,7 @@ from .models import Product
 
 
 class ProductList(ListView):
-    """Get a list of Harvestly products. URL `/get-products-list/`"""
+    """ Get a list of Harvestly products. URL `/get-products-list/` """
 
     # Query products
     model = Product

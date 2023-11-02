@@ -3,7 +3,7 @@
 ### Products Models
 
 from django.db import models
-from Events.mdoels import Event
+from Events.models import Event
 
 class Vendor(models.Model):
     name = models.CharField(max_length=255)
@@ -19,6 +19,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2)
     # image = models.ImageField(upload_to='products/images') # need pillow installed
     product_vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
+    product_event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.name
