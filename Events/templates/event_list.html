@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block title %}Events{% endblock %}
+
+{% block content %}
+<div id="main">
+    {% if eventlist %}
+        <h1>EVENTS LIST</h1>
+        { % for event in eventlist % }
+            <li>
+                <div class="event-title"><strong>{{ event.name }}</strong></div>
+                <button class="details-redirect" type="button">More Details</button>
+            </li>
+        { % endfor % }
+    {% else %}
+        <h1>NO EVENTS</h1>
+    {% endif %}
+</div>
+{% endblock %}
