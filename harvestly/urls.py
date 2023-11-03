@@ -25,7 +25,6 @@ from Events import views as events_views
 from Products import views as products_views
 
 urlpatterns = [
-    # TODO - Not sure how this needs to be updated for login
     path("", home_views.Home.as_view(), name="index"),
     path("about-us/", home_views.About.as_view(), name="about"),
 
@@ -33,4 +32,12 @@ urlpatterns = [
     
     path("products-list/", products_views.ProductList.as_view(), name="products-list"),
     path("admin/", admin.site.urls),
+    # TODO - Not sure how this needs to be updated for login
+    path('signup/', home_views.SignUp.as_view(), name='signup'),
+    path('accounts/profile/', home_views.login_redirect),
+    path('accounts/logout/', home_views.logout_request, name='logout'),
+]
+
+urlpatterns+= [
+    path('accounts/', include("django.contrib.auth.urls"))
 ]
