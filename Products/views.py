@@ -10,7 +10,14 @@ from .models import Product
 class ProductList(ListView):
     """ Get a list of Harvestly products. URL `/get-products-list/` """
 
-    # Query products
-    model = Product
-    template_name = "products_list.html"
-    context_object_name = "product_list"
+    def get(self, request):
+        """ Query all products, render in product list template. """
+
+        # Query products
+        model = Product.objects.all()
+        template_name = "product_list.html"
+        
+        # Pass products to events_list.html
+        return render(request, template_name, {'product_list': model})
+    
+    
