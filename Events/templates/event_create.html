@@ -2,13 +2,33 @@
 {% block title %}Create Event{% endblock %}
 
 {% block content %}
+<div class="d-flex justify-content-center">
+    <div class="d-flex flex-column" style="border: solid var(--primary-color); border-radius: 10px;">
+        <div class="m-3">
+            <div class="d-flex justify-content-center"><h1>Add an Event</h1></div>
+                <div>
+                <form method="post">
+                <div id="main" class="d-flex justify-content-center m-1"></div>
+                    {% csrf_token %}
+                    <div class="mb-1">{{ form.name.label }}</div>
+                    <div class="mb-2">{{ form.name }}</div>
 
-<form method="post">
-<div id="main" style="background-color: black;"></div>
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input class="harvestly-nav-btn-primary" type="submit" value="Create" />
+                    <div class="mb-1">{{ form.location.label }}</div>
+                    <div class="mb-2">{{ form.location }}</div>
+
+                    <div class="mb-1">{{ form.start_time.label }}</div>
+                    <div class="mb-2">{{ form.start_time }}</div>
+
+                    <div class="mb-1">{{ form.end_time.label }}</div>
+                    <div class="mb-2">{{ form.end_time }}</div>
+                    <div class="d-flex flex-row justify-content-center mt-3 mb-3">
+                        <input class="harvestly-nav-btn-primary" type="submit" value="Add Event" />
+                        <div class="d-flex justify-content-center ml-2"><a class="harvestly-nav-btn-secondary" href="{% url 'events' %}">Back</a></div>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-</form>
-<a href="{% url 'events' %}"><button>Back</button></a>
 {% endblock %}
