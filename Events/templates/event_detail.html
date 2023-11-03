@@ -10,7 +10,9 @@
             <div class="event-start-time">Start time: {{ event.start_time }}</div>
             <div class="event-end-time">End time: {{ event.end_time }}</div>
 </div>
-<a href="{% url 'event-update' event.id %}"><button>Edit</button></a>
-<a href="{% url 'event-delete' event.id %}"><button>Delete</button></a>
+{% if user.is_authenticated %}
+    <a href="{% url 'event-update' event.id %}"><button>Edit</button></a>
+    <a href="{% url 'event-delete' event.id %}"><button>Delete</button></a>
+{% endif %}
 <a href="{% url 'events' %}"><button>Back</button></a>
 {% endblock %}
