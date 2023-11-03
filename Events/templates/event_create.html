@@ -2,33 +2,20 @@
 {% block title %}Create Event{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-center">
-    <div class="d-flex flex-column" style="border: solid var(--primary-color); border-radius: 10px;">
-        <div class="m-3">
-            <div class="d-flex justify-content-center"><h1>Add an Event</h1></div>
-                <div>
-                <form method="post">
-                <div id="main" class="d-flex justify-content-center m-1"></div>
-                    {% csrf_token %}
-                    <div class="mb-1">{{ form.name.label }}</div>
-                    <div class="mb-2">{{ form.name }}</div>
-
-                    <div class="mb-1">{{ form.location.label }}</div>
-                    <div class="mb-2">{{ form.location }}</div>
-
-                    <div class="mb-1">{{ form.start_time.label }}</div>
-                    <div class="mb-2">{{ form.start_time }}</div>
-
-                    <div class="mb-1">{{ form.end_time.label }}</div>
-                    <div class="mb-2">{{ form.end_time }}</div>
-                    <div class="d-flex flex-row justify-content-center mt-3 mb-3">
-                        <div class="d-flex justify-content-center"><a class="harvestly-nav-btn-secondary" href="{% url 'events' %}">Back</a></div>
-                        <input class="harvestly-nav-btn-primary ml-2" type="submit" value="Add Event" />
-                    </div>
+<div>
+    <h3 class="subtitle"> Add New Event </h3>
+    <form method="post">
+        {% csrf_token %}
+        <div class="row pt-4 mb-2">
+            {% for field in form %}
+                <div class="col-md-12 harvestly-form-item">
+                    <div style="width: 100%;">{{ field.label }}</div>
+                    <div class="mb-1" style="width: 100%;">{{ field }}</div>
                 </div>
-                </form>
-            </div>
-        </div>
-    </div>
+            {% endfor %}
+        </div>        
+        <input class="harvestly-nav-btn-primary" type="submit" value="Add Event" />
+        <a class="harvestly-nav-btn-secondary" href="{% url 'events' %}">Cancel</a>
+    </form>
 </div>
 {% endblock %}

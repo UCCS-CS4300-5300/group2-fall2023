@@ -9,6 +9,8 @@
 
     --title-size: max(2.5em, 8vmin);
     --subtitle-size: max(1.5em, 4.5vmin);
+    --form-label-size: max(1.2em, 2.5vmin);
+    --form-input-size: max(0.7em, 1.8vmin);
 
     --primary-color: rgb(121,155,65);
     --primary-color-hover: #939b62;
@@ -213,6 +215,21 @@ footer .harvestly-nav-link {
 }
 .home-navbar-brand:hover .home-text::before {
     transform: scaleX(1);
+}
+
+.harvestly-form-item {
+    font-size: var(--form-label-size);
+    color: var(--dark-color)
+}
+.harvestly-form-item input,
+.harvestly-form-item textarea {
+    font-size: var(--form-input-size);
+    padding: 0.5rem 1rem;
+    width: 100%;
+    margin-bottom: 2rem;
+    border-color: var(--dark-color);
+    border-width: 2px;
+    border-radius: 5px;
 }
 
 
