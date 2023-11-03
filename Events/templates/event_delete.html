@@ -6,8 +6,8 @@
     <form method="post">
         {% csrf_token %} 
         <p>Are you sure you want to delete "{{ event.name }}"?</p>
-        <input type="submit" value="Confirm" />
+        <input class="harvestly-nav-btn-primary" type="submit" value="Confirm" />
     </form>
 </div>
-<a href="{% url 'events' %}"><button>Back</button></a>
+<a class="harvestly-nav-btn-secondary" href="{% url 'event-update' event.id %}">Back</a>
 {% endblock %}

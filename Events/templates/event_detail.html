@@ -14,8 +14,7 @@
 
 </div>
 {% if user.is_authenticated %}
-    <a href="{% url 'event-update' event.id %}"><button>Edit</button></a>
-    <a href="{% url 'event-delete' event.id %}"><button>Delete</button></a>
+    <a class="harvestly-nav-btn-primary" href="{% url 'event-update' event.id %}">Edit</a>
 {% endif %}
-<a href="{% url 'events' %}"><button>Back</button></a>
+<a class="harvestly-nav-btn-secondary" href="{% url 'events' %}">Back</a>
 {% endblock %}
