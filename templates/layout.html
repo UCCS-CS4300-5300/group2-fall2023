@@ -45,16 +45,16 @@
                         <a href="{% url 'about' %}" class="harvestly-nav-link">About Us</a>
                     </li>
                     {% if not user.is_authenticated %}
-                    <li>
-                        <a href="{% url 'signup' %}" class="harvestly-nav-link">Sign Up</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'login' %}" class="harvestly-nav-link">Login</a>
-                    </li>
+                        <li>
+                            <a href="{% url 'signup' %}" class="harvestly-nav-link">Sign Up</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'login' %}" class="harvestly-nav-link">Login</a>
+                        </li>
                     {% else %}
-                    <li>
-                        <a href="{% url 'logout' %}" class="harvestly-nav-link">Logout</a>
-                    </li>
+                        <li>
+                            <a href="{% url 'logout' %}" class="harvestly-nav-link">Logout</a>
+                        </li>
                     {% endif %}
                 </ul>
             </div>
