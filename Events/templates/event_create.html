@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}Create Event{% endblock %}
+
+{% block content %}
+
+<form method="post">
+<div id="main" style="background-color: black;"></div>
+    {% csrf_token %}
+    {{ form }}
+    <input class="harvestly-nav-btn-primary" type="submit" value="Create" />
+</div>
+</form>
+
+{% endblock %}

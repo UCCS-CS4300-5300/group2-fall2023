@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block title %}Events{% endblock %}
+
+{% block content %}
+
+<div>
+    <a class="harvestly-nav-btn-primary mb-3" href="{% url 'event-create'%}">
+        <h2 class="p-2 mb-0">Create Event</h2>
+    </a>
+    {% if eventlist %}
+        <h1>Upcoming Events</h1>
+        {% for event in eventlist %}
+            <li>
+                <div class="event-title"><strong>{{ event.name }}</strong></div>
+                <td><a href="{% url 'event-detail' event.id %}"><button>See More</button></a></td>
+            </li>
+        {% endfor %}
+    {% else %}
+        {% include "empty_list.html" with items="events" %}
+    {% endif %}
+</div>
+{% endblock %}

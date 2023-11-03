@@ -27,7 +27,9 @@ from Products import views as products_views
 urlpatterns = [
     path("", home_views.Home.as_view(), name="index"),
     path("about-us/", home_views.About.as_view(), name="about"),
-    path("events-list/", events_views.EventsList.as_view(), name="events-list"),
+
+    path('events/', include('Events.urls')),
+    
     path("products-list/", products_views.ProductList.as_view(), name="products-list"),
     path("admin/", admin.site.urls),
     # TODO - Not sure how this needs to be updated for login
