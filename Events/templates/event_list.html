@@ -3,10 +3,12 @@
 
 {% block content %}
 
-<div id="main">
-    <a href="{% url 'event-create'%}"><button>Create Event</button></a>
+<div>
+    <a class="harvestly-nav-btn-primary mb-3" href="{% url 'event-create'%}">
+        <h2 class="p-2 mb-0">Create Event</h2>
+    </a>
     {% if eventlist %}
-        <h1>EVENTS LIST</h1>
+        <h1>Upcoming Events</h1>
         {% for event in eventlist %}
             <li>
                 <div class="event-title"><strong>{{ event.name }}</strong></div>
@@ -14,7 +16,7 @@
             </li>
         {% endfor %}
     {% else %}
-        <h1>NO EVENTS</h1>
+        {% include "empty_list.html" with items="events" %}
     {% endif %}
 </div>
 {% endblock %}
