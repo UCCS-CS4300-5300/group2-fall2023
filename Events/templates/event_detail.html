@@ -1,4 +1,6 @@
 {% extends "layout.html" %}
+{% load filters %}
+
 {% block title %}{{ event.name }} Details{% endblock %}
 
 {% block content %}
@@ -6,9 +8,9 @@
 <div id="main">
     <div class="details-title"><h1>{{ event.name }} Details</h1></div>
             <div class="event-location">Location: {{ event.location }}</div>
-            <div class="event-date">Date: {{ event.start_time|date:"F j, Y" }}</div>
-            <div class="event-start-time">Start Time: {{ event.start_time|time:"P" }}</div>
-            <div class="event-end-time">End Time: {{ event.end_time|time:"P" }}</div>
+            <div class="event-date">Date: {{ event.start_time|format_date_range:event.end_time }}</div>
+            <div class="event-start-time">Start Time: {{ event.start_time|time:"H:i" }}</div>
+            <div class="event-end-time">End Time: {{ event.end_time|time:"H:i" }}</div>
 
 </div>
 {% if user.is_authenticated %}
