@@ -1,6 +1,9 @@
 from django import forms
 from .models import Event
 
+class DateTimeInput(forms.DateInput):
+    input_type = 'datetime-local'
+
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
@@ -13,6 +16,6 @@ class EventForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(),
             'location': forms.TextInput(),
-            'start_time': forms.DateTimeInput(),
-            'end_time': forms.DateTimeInput()
+            'start_time': DateTimeInput(),
+            'end_time': DateTimeInput()
         }
