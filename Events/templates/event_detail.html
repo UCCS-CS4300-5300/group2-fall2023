@@ -6,9 +6,10 @@
 <div id="main">
     <div class="details-title"><h1>{{ event.name }} Details</h1></div>
             <div class="event-location">Location: {{ event.location }}</div>
-            <div class="event-date">Date: {{ event.date }}</div>
-            <div class="event-start-time">Start time: {{ event.start_time }}</div>
-            <div class="event-end-time">End time: {{ event.end_time }}</div>
+            <div class="event-date">Date: {{ event.start_time|date:"F j, Y" }}</div>
+            <div class="event-start-time">Start Time: {{ event.start_time|time:"P" }}</div>
+            <div class="event-end-time">End Time: {{ event.end_time|time:"P" }}</div>
+
 </div>
 {% if user.is_authenticated %}
     <a href="{% url 'event-update' event.id %}"><button>Edit</button></a>

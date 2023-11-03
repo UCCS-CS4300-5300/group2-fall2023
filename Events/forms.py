@@ -16,6 +16,8 @@ class EventForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(),
             'location': forms.TextInput(),
-            'start_time': DateTimeInput(),
-            'end_time': DateTimeInput()
+            'start_time': DateTimeInput(format='%Y-%m-%dT%H:%M'),
+            'end_time': DateTimeInput(format='%Y-%m-%dT%H:%M')
         }
+
+

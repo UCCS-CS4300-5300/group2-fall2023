@@ -51,6 +51,14 @@ class EventUpdate(UpdateView):
     # Establish the target template for use
     template_name = "event_update.html"
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['initial'] = {
+            'start_time': self.object.start_time,
+            'end_time': self.object.end_time
+        }
+        return kwargs
+
 
 class EventDelete(DeleteView):
     """ View to delete an Event. URL `/events/<int:pk>/delete` """
