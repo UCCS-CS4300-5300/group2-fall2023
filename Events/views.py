@@ -7,7 +7,7 @@ from .models import Event
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .forms import EventForm
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 class EventList(ListView):
     """ Get a list of Harvestly events. URL `/event-list/` """
@@ -58,6 +58,10 @@ class EventUpdate(UpdateView):
 
     # Establish the target template for use
     template_name = "event_update.html"
+
+    # This works, but it returns the user to the event list as opposed
+    # to the page for the current event
+    success_url = reverse_lazy('events')
         
 class EventDelete(DeleteView):
     # Establish the model type and template name for the generic view

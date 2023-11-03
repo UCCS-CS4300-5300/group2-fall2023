@@ -6,5 +6,12 @@
 <a href="{% url 'events' %}">Back to Events</a>
 <div id="main">
     <div class="update-title"><strong>Update {{ event.name }}</strong></div>
+    <form method="post">
+        <div id="main" style="background-color: black;"></div>
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Update" />
+        </div>
+        </form>
 </div>
 {% endblock %}
