@@ -3,8 +3,7 @@
 
 {% block content %}
 
-<a href="{% url 'events' %}">Back to Events</a>
-<form method="post" action="{% url 'event-list' %}">
+<form method="post">
 <div id="main" style="background-color: black;"></div>
     {% csrf_token %}
     {{ form }}
