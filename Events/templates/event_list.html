@@ -9,13 +9,15 @@
     </a>
     {% if eventlist %}
         <h1>Upcoming Events</h1>
+        <div class="row pt-4 mb-2">
         {% for event in eventlist %}
-            <li>
+            <div class="col-md-4">
                 <div class="event-title"><strong>{{ event.name }}</strong></div>
                 <div class="event-date">{{ event.start_time|date:"F j, Y" }}</div>
                 <td><a class="harvestly-nav-btn-primary" href="{% url 'event-detail' event.id %}">See More</a></td>
-            </li>
+            </div>
         {% endfor %}
+        </div>
     {% else %}
         {% include "empty_list.html" with items="events" %}
     {% endif %}

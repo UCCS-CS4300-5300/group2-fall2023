@@ -8,14 +8,14 @@
         {% csrf_token %}
         <div class="row pt-4 mb-2">
             {% for field in form %}
-                <div class="col-md-12 harvestly-form-item">
-                    <div style="width: 100%;">{{ field.label }}</div>
-                    <div class="mb-1" style="width: 100%;">{{ field }}</div>
+                <div class="col-md-6 harvestly-form-item">
+                    <div>{{ field.label }}</div>
+                    <div class="mb-1">{{ field }}</div>
                 </div>
             {% endfor %}
-        </div>        
+        </div>       
+        <a class="harvestly-nav-btn-secondary" href="{% url 'events' %}">Cancel</a> 
         <input class="harvestly-nav-btn-primary" type="submit" value="Add Event" />
-        <a class="harvestly-nav-btn-secondary" href="{% url 'events' %}">Cancel</a>
     </form>
 </div>
 {% endblock %}

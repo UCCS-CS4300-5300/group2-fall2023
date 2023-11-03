@@ -9,14 +9,14 @@
         <div class="row pt-4 mb-2">
             {% for field in form %}
                 <div class="col-md-12 harvestly-form-item">
-                    <div style="width: 100%;">{{ field.label }}</div>
-                    <div class="mb-1" style="width: 100%;">{{ field }}</div>
+                    <div>{{ field.label }}</div>
+                    <div class="mb-1">{{ field }}</div>
                 </div>
             {% endfor %}
         </div>        
-        <input class="harvestly-nav-btn-primary" type="submit" value="Update Event" />
         <a class="harvestly-nav-btn-secondary" href="{% url 'event-detail' event.id %}">Cancel</a>
         <a class="harvestly-nav-btn-secondary" href="{% url 'event-delete' event.id %}">Remove Event</a>
+        <input class="harvestly-nav-btn-primary" type="submit" value="Update Event" />
     </form>
 </div>
 {% endblock %}
