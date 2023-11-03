@@ -3,9 +3,13 @@
 
 {% block content %}
 <div>
+    <div class="d-flex align-items-center justify-content-between mb-5">
+        <h1 class="title">Products</h1>
+        <a href="{% url 'product-create' %}" class="harvestly-nav-btn-primary">
+            <h3 class="m-0 px-3 py-2">Product +</h3>
+        </a>
+    </div>
     {% if product_list %}
-        <h1>Products</h1>
-
         <div class="row">
             {% for product in product_list %}
                 <div class="col-md-4 my-2">
