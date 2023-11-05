@@ -232,6 +232,36 @@ footer .harvestly-nav-link {
     border-radius: 5px;
 }
 
+.harvestly-card-link,
+.harvestly-card-link:hover {
+    text-decoration: none;
+}
+.harvestly-card-link .card-body {
+    background-color: rgba(0,0,0,0.15);
+    transition: background-color 0.3s ease;
+}
+.harvestly-card-link .card-body h6 {
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+.harvestly-card-link:hover .card-body {
+    background-color: white;
+}
+.harvestly-card-link:hover .card-body h6 {
+    opacity: 1;
+}
+.harvestly-card-link .card {
+    color: var(--dark-color);
+    border-color: var(--dark-color);
+    border-width: 1px;
+    transition: all 0.3s ease;
+}
+.harvestly-card-link:hover .card {
+    color: var(--primary-color);
+    transform: scale(1.01);
+    box-shadow: 0 0 12px rgba(0,0,0,0.5);
+}
+
 
 @media screen and (max-width: 400px) {
     :root {

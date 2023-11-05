@@ -13,15 +13,19 @@
         <div class="row">
             {% for product in product_list %}
                 <div class="col-md-4 my-2">
-                    <div class="card">
-                        {% load static %}
-                        <img src="{% static 'img/product_placeholder.png' %}" alt="Product Image" class="card-img-top ">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ product.name }}</h5>
-                            <p class="card-text">{{ product.description }}</p>
-                            <p class="card-text">Price: ${{ product.price }}</p>
+                    <a class="harvestly-card-link" href="{% url 'product-details' product.id %}">
+                        <div class="card">
+                            {% load static %}
+                            <img src="{% static 'img/product_placeholder.png' %}" alt="Product Image" class="card-img-top ">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ product.name|title }}</h3>
+                                <div class="d-flex justify-content-between">
+                                    <h6>${{ product.price }}</h6>
+                                    <h6>&times;{{ product.quantity }}</h6>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             {% endfor %}
         </div>

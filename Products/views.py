@@ -3,6 +3,7 @@
 ### Products Views
 
 from django.shortcuts import render
+from django.urls import reverse
 from django.views.generic.list import ListView
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -26,7 +27,7 @@ class ProductList(ListView):
     
 
 class ProductCreate(CreateView):
-    """ Create View for an Event Object. URL `/events/new` """
+    """ Create View for an Event Object. URL `/products/new` """
 
     # Establish model type and form class for use
     model = Product
@@ -34,3 +35,16 @@ class ProductCreate(CreateView):
 
     # Establish the target template for use
     template_name = "product_create.html"
+
+    def get_success_url(self):
+        """ Get success URL after post completion. """
+
+        return reverse("product-details", kwargs={"pk": self.object.pk})
+
+
+class ProductDetails(DetailView):
+    """ Product Details about a specific product. URL `/products/details/<int:pk>` """
+
+    # Set model type
+    model = Product
+    template_name = "product_detail.html"
