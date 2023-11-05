@@ -21,7 +21,7 @@
                             <div class="card-body">
                                 <h3 class="card-title">{{ product.name|title }}</h3>
                                 <div class="d-flex justify-content-between">
-                                    <h5>${{ product.price }}</h5>
+                                    <h5>${{ product.price|floatformat:"2" }}</h5>
                                     <h5>&times;{{ product.quantity }}</h5>
                                 </div>
                             </div>
