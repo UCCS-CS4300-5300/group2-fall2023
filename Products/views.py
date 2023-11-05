@@ -9,7 +9,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from .models import Product
-from .forms import ProductForm, ProductUpdateForm, ProductReserveForm
+from .forms import ProductForm, ProductReserveForm
 
 
 class ProductList(ListView):
@@ -55,7 +55,7 @@ class ProductUpdate(UpdateView):
 
     # Establish model type and form class for use
     model = Product
-    form_class = ProductUpdateForm
+    form_class = ProductForm
 
     # Establish the target template for use
     template_name = "product_update.html"

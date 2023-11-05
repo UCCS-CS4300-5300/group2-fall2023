@@ -36,17 +36,19 @@ class ProductForm(forms.ModelForm):
         }
 
 
-class ProductUpdateForm(forms.ModelForm):
-    """ Product update form, intended for use after initial creation """
-
-    class Meta:
-        model = Product
-        fields = []
-
-
 class ProductReserveForm(forms.ModelForm):
     """ Product reserve form, for user to reserve a quantity of a product """
 
     class Meta:
         model = Product
-        fields = []
+        fields = [
+            "quantity",
+        ]
+
+        widgets = {
+            "quantity": forms.NumberInput(attrs={"step": "1", "min": "1", "placeholder": "Reserve quantity"}),
+        }
+
+        labels = {
+            "quantity": "Reserve Quantity",
+        }
