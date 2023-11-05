@@ -34,3 +34,19 @@ class ProductForm(forms.ModelForm):
             "quantity": "Product quantity",
             "description": "Product description",
         }
+
+
+class ProductUpdateForm(forms.ModelForm):
+    """ Product update form, intended for use after initial creation """
+
+    class Meta:
+        model = Product
+        fields = []
+
+
+class ProductReserveForm(forms.ModelForm):
+    """ Product reserve form, for user to reserve a quantity of a product """
+
+    class Meta:
+        model = Product
+        fields = []

@@ -9,7 +9,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from .models import Product
-from .forms import ProductForm
+from .forms import ProductForm, ProductUpdateForm, ProductReserveForm
 
 
 class ProductList(ListView):
@@ -27,7 +27,7 @@ class ProductList(ListView):
     
 
 class ProductCreate(CreateView):
-    """ Create View for an Event Object. URL `/products/new` """
+    """ Create View for an Event Object. URL `/products/new/` """
 
     # Establish model type and form class for use
     model = Product
@@ -43,8 +43,54 @@ class ProductCreate(CreateView):
 
 
 class ProductDetails(DetailView):
-    """ Product Details about a specific product. URL `/products/details/<int:pk>` """
+    """ Product Details about a specific product. URL `/products/details/<int:pk>/` """
 
     # Set model type
     model = Product
     template_name = "product_detail.html"
+
+
+class ProductUpdate(UpdateView):
+    """ Edit product details of a specific product. URL `/products/edit/<int:pk>/` """
+
+    # Establish model type and form class for use
+    model = Product
+    form_class = ProductUpdateForm
+
+    # Establish the target template for use
+    template_name = "product_update.html"
+
+    def get_success_url(self):
+        """ Get success URL after post completion. """
+
+        return reverse("product-details", kwargs={"pk": self.object.pk})
+
+
+class ProductDelete(DeleteView):
+    """ Delete a specific product. URL `/products/delete/<int:pk>/` """
+
+    # Establish the model type and template name for the generic view
+    model = Product
+    template_name = "product_delete.html"
+
+    def get_success_url(self):
+        """ Get success URL after post completion. """
+
+        return reverse("products")
+    
+
+class ProductReserve(UpdateView):
+    """ Reserve a quantity of a specific product. URL `/products/reserve/<int:pk>/` """
+
+    # Establish the model type and form class for use
+    model = Product
+    form_class = ProductReserveForm
+
+    # Establish the target template for use
+    template_name = "product_reserve.html"
+
+    def get_success_url(self):
+        """ Get success URL after post completion. """
+
+        return reverse("product-details", kwargs={"pk": self.object.pk})
+
