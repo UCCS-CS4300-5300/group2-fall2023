@@ -4,16 +4,38 @@
 {% block content %}
 <div>
     <h3 class="subtitle">{{ product.name|title }}</h3>
-    <div class="row mt-4 mb-5">
-        <div class="col-md-6">
-            <!-- TODO load image -->
-            {% load static %}
-            <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Product Image" width="100%">
+    <form method="post">
+        {% csrf_token %}
+        <div class="row mt-4 mb-5">
+            <div class="col-md-6">
+                <!-- TODO load image -->
+                {% load static %}
+                <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Product Image" width="100%">
+            </div>
+            <div class="col-md-6 align-self-center">
+                <div class="d-flex flex-column align-items-center justify-content-center">
+                    <h3>Delete {{ product.name|title }}</h3>
+                    <div class="d-flex">
+                        <a
+                            class="harvestly-nav-btn-secondary d-flex justify-content-center align-items-center mr-2"
+                            href="{% url 'product-details' product.id %}"
+                        >
+                            Cancel
+                        </a>
+                        {% if user.is_authenticated %}
+                            <input class="harvestly-nav-btn-primary" type="submit" value="Confirm Deletion" />
+                        {% else %}
+                            <a 
+                                class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center"
+                                href="{% url 'signup' %}"
+                            >
+                                Confirm Deletion
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
         </div>
-        <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
-            <h3>Delete {{ product.name|title }}</h3>
-        </div>
-    </div>
+    </form>
 
 </div>
 {%endblock %}
