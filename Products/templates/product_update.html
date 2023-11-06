@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% block title %}Edit Product{% endblock %}
+
+{% block content %}
+<div>
+    <h3 class="subtitle">Edit Product Details</h3>
+    <form method="post">
+        {% csrf_token %}
+        <div class="row mt-4 mb-5">
+            <div class="col-md-6 align-self-center mb-1">
+                <!-- TODO make image updateable -->
+                {% load static %}
+                <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Product Image" width="100%">
+            </div>
+            <div class="col-md-6 align-self-center">
+                <div class="harvestly-form-item">
+                    {{ form.name.label }}
+                    {{ form.name }}
+                </div>
+                <div class="harvestly-form-item">
+                    {{ form.description.label }}
+                    {{ form.description }}
+                </div>
+                <div class="harvestly-form-item">
+                    {{ form.price.label }}
+                    {{ form.price }}
+                </div>
+                <div class="harvestly-form-item">
+                    {{ form.quantity.label }}
+                    {{ form.quantity }}
+                </div>
+                <div class="d-flex flex-column">
+                    {% if user.is_authenticated %}
+                        <button class="harvestly-nav-btn-primary w-100 my-2 py-2" type="submit">
+                            <h4 class="m-0">Update</h4>
+                        </button>
+                    {% else %}
+                        <a 
+                            class="harvestly-nav-btn-primary my-2 py-2 d-flex justify-content-center align-items-center"
+                            href="{% url 'signup' %}"
+                        >
+                            <h4 class="m-0">Update</h4>
+                        </a>
+                    {% endif %}
+                    <a
+                        class="harvestly-nav-btn-secondary py-2 d-flex justify-content-center align-items-center"
+                        href="{% url 'product-details' product.id %}"
+                    >
+                        <h4 class="m-0">Cancel</h4>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="justify-content-center">  </div>
+    </form>
+</div>
+{%endblock %}

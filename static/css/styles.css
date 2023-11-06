@@ -9,11 +9,13 @@
 
     --title-size: max(2.5em, 8vmin);
     --subtitle-size: max(1.5em, 4.5vmin);
+    --form-label-size: max(1.2em, 2.5vmin);
+    --form-input-size: max(0.7em, 1.8vmin);
 
     --primary-color: rgb(121,155,65);
     --primary-color-hover: #939b62;
-    --secondary-color: rgb(254, 200, 104);
-    --secondary-color-hover: rgb(253, 215, 149);
+    --secondary-color: rgb(145, 123, 12);
+    --secondary-color-hover: rgb(145, 123, 12);
     --danger-color: rgb(154, 68, 68);
     --warning-color: rgb(222, 143, 95);
     --info-color: rgb(129, 202, 207);
@@ -28,10 +30,10 @@ body {
 }
 
 main {
-    padding: 0 var(--pad);
+    padding: 0 var(--pad) 6rem;
     display: flex;
     flex-direction: column;
-    min-height: 80vh;
+    min-height: 72vh;
 }
 
 footer {
@@ -139,7 +141,7 @@ footer .harvestly-nav-link {
     min-height: 40px;
     min-width: 120px;
 
-    border: 5px solid var(--secondary-color);
+    border: 2px solid var(--secondary-color);
     border-radius: 5px;
     background-color: var(--plight-color);
 
@@ -213,6 +215,47 @@ footer .harvestly-nav-link {
 }
 .home-navbar-brand:hover .home-text::before {
     transform: scaleX(1);
+}
+
+.harvestly-form-item {
+    font-size: var(--form-label-size);
+    color: var(--dark-color)
+}
+.harvestly-form-item input,
+.harvestly-form-item textarea {
+    font-size: var(--form-input-size);
+    padding: 0.5rem 1rem;
+    width: 100%;
+    margin-bottom: 2rem;
+    border-color: var(--dark-color);
+    border-width: 2px;
+    border-radius: 5px;
+}
+
+.harvestly-card-link,
+.harvestly-card-link:hover {
+    text-decoration: none;
+}
+.harvestly-card-link .card-body {
+    background-color: rgba(0,0,0,0.1);
+}
+.harvestly-card-link .card-body h5 {
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+.harvestly-card-link:hover .card-body h5 {
+    opacity: 1;
+}
+.harvestly-card-link .card {
+    color: var(--dark-color);
+    border-color: var(--dark-color);
+    border-width: 0px;
+    transition: all 0.3s ease;
+}
+.harvestly-card-link:hover .card {
+    color: var(--primary-color);
+    transform: scale(1.01);
+    box-shadow: 0 0 10px 3px rgba(0,0,0,0.5);
 }
 
 

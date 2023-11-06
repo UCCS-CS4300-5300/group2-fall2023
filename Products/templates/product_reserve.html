@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block title %}Reserve Product{% endblock %}
+
+{% block content %}
+<div>
+    <h3 class="subtitle">{{ product.name|title }}</h3>
+    <div class="row mt-4 mb-5">
+        <div class="col-md-6">
+            <!-- TODO load image -->
+            {% load static %}
+            <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Product Image" width="100%">
+        </div>
+        <div class="col-md-6 align-self-center">
+            <form method="post">
+                {% csrf_token %}
+                <h3>{{ product.name|title }} Details</h3>
+                <div class="mt-5 w-100 d-flex justify-content-between">
+                    <h5 class="text-muted">${{ product.price|floatformat:"2" }}</h5>
+                    <h5 class="text-muted">&times;{{ product.quantity }}</h5>
+                </div>
+                <div class="harvestly-form-item">
+                    {{ form.reserve_quantity.label }}
+                    {{ form.reserve_quantity }}
+                </div>
+                <div class="d-flex flex-column">
+                    {% if user.is_authenticated %}
+                        <button class="harvestly-nav-btn-primary w-100 my-2 py-2" type="submit">
+                            <h4 class="m-0">Confirm Reservation</h4>
+                        </button>
+                    {% else %}
+                        <a 
+                            class="harvestly-nav-btn-primary my-2 py-2 d-flex justify-content-center align-items-center"
+                            href="{% url 'signup' %}"
+                        >
+                            <h4 class="m-0">Confirm Reservation</h4>
+                        </a>
+                    {% endif %}
+                    <a
+                        class="harvestly-nav-btn-secondary py-2 d-flex justify-content-center align-items-center"
+                        href="{% url 'product-details' product.id %}"
+                    >
+                        <h4 class="m-0">Cancel</h4>
+                    </a>
+                </div>
+
+                {% if form.is_bound and form.errors %}
+                    <div class="error-message mt-3">
+                        {{ form.errors }}
+                    </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+{%endblock %}
