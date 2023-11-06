@@ -4,7 +4,7 @@
 
 from django.test import TestCase
 from django.urls import reverse
-from Products import models
+from Products.models import Product
 
 
 class ProductListTests(TestCase):
@@ -57,14 +57,14 @@ class ProductListTests(TestCase):
     def test_product_list_with_products(self):
         """ Test the product list view with product instances """
 
-        product_1 = models.Product.objects.create(
+        product_1 = Product.objects.create(
             name="Product 1",
             description="Product 1 Description",
             price=3.45,
             quantity=10,
         )
 
-        product_2 = models.Product.objects.create(
+        product_2 = Product.objects.create(
             name="Product 2",
             description="Product 2 Description",
             price=12.00,
@@ -129,7 +129,7 @@ class ProductCreateTests(TestCase):
         response = self.client.post(reverse("product-create"), data)
         
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(models.Product.objects.filter(name="Product 1").exists())
+        self.assertTrue(Product.objects.filter(name="Product 1").exists())
 
 
     def test_product_create_missing_name(self):
@@ -251,7 +251,7 @@ class ProductDetailTests(TestCase):
     def setUp(self):
         """ Create an object to view details """
         
-        self.product_1 = models.Product.objects.create(
+        self.product_1 = Product.objects.create(
             id=1,
             name="Product 1",
             description="Product 1 Description",
@@ -320,7 +320,7 @@ class ProductUpdateTests(TestCase):
     def setUp(self):
         """ Create an object to be updated """
 
-        self.product_1 = models.Product.objects.create(
+        self.product_1 = Product.objects.create(
             id=1,
             name="Product 1",
             description="Product 1 Description",
@@ -397,7 +397,7 @@ class ProductUpdateTests(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # validate updated object
-        updated = models.Product.objects.get(id=self.product_1.id)
+        updated = Product.objects.get(id=self.product_1.id)
         self.assertEqual(updated.name, new_name)
 
 
@@ -416,7 +416,7 @@ class ProductUpdateTests(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # validate updated object
-        updated = models.Product.objects.get(id=self.product_1.id)
+        updated = Product.objects.get(id=self.product_1.id)
         self.assertEqual(updated.description, new_description)
 
 
@@ -435,7 +435,7 @@ class ProductUpdateTests(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # validate updated object
-        updated = models.Product.objects.get(id=self.product_1.id)
+        updated = Product.objects.get(id=self.product_1.id)
         self.assertEqual(updated.price, new_price)
 
 
@@ -454,7 +454,7 @@ class ProductUpdateTests(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # validate updated object
-        updated = models.Product.objects.get(id=self.product_1.id)
+        updated = Product.objects.get(id=self.product_1.id)
         self.assertEqual(updated.quantity, new_quantity)
 
 
@@ -465,7 +465,7 @@ class ProductDeleteTests(TestCase):
     def setUp(self):
         """ Create an object to be deleted """
 
-        self.product_1 = models.Product.objects.create(
+        self.product_1 = Product.objects.create(
             id=1,
             name="Product 1",
             description="Product 1 Description",
@@ -522,7 +522,7 @@ class ProductDeleteTests(TestCase):
         response = self.client.post(reverse("product-delete", args=[self.product_1.id]))
 
         self.assertEqual(response.status_code, 302)
-        self.assertFalse(models.Product.objects.filter(id=self.product_1.id).exists())
+        self.assertFalse(Product.objects.filter(id=self.product_1.id).exists())
 
 
 class ProductReserveTests(TestCase):
@@ -532,7 +532,7 @@ class ProductReserveTests(TestCase):
     def setUp(self):
         """ Create an object to be reserved """
 
-        self.product_1 = models.Product.objects.create(
+        self.product_1 = Product.objects.create(
             id=1,
             name="Product 1",
             description="Product 1 Description",
@@ -597,7 +597,7 @@ class ProductReserveTests(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # validate updated object
-        updated = models.Product.objects.get(id=self.product_1.id)
+        updated = Product.objects.get(id=self.product_1.id)
         self.assertEqual(updated.quantity, original_quantity - reserve_quantity)
 
 
@@ -616,7 +616,7 @@ class ProductReserveTests(TestCase):
         self.assertContains(response, "Reserve quantity must not exceed available quantity!")
 
         # validate that the object is not updated
-        updated = models.Product.objects.get(id=self.product_1.id)
+        updated = Product.objects.get(id=self.product_1.id)
         self.assertEqual(updated.quantity, original_quantity)
 
 
@@ -635,5 +635,5 @@ class ProductReserveTests(TestCase):
         self.assertContains(response, "Reserve quantity must be at least 1!")
 
         # validate that the object is not updated
-        updated = models.Product.objects.get(id=self.product_1.id)
+        updated = Product.objects.get(id=self.product_1.id)
         self.assertEqual(updated.quantity, original_quantity)
