@@ -89,6 +89,7 @@ class ProductReserveForm(forms.Form):
         reserve_quantity = self.cleaned_data.get("reserve_quantity")
         
         if reserve_quantity is not None and reserve_quantity < 1:
-            raise forms.ValidationError("Value must be greater than or equal to 1")
+            raise forms.ValidationError("Reserve quantity must be at least 1!")
         
         return reserve_quantity
+    

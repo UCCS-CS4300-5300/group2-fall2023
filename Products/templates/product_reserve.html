@@ -42,6 +42,12 @@
                         <h4 class="m-0">Cancel</h4>
                     </a>
                 </div>
+
+                {% if form.is_bound and form.errors %}
+                    <div class="error-message mt-3">
+                        {{ form.errors }}
+                    </div>
+                {% endif %}
             </form>
         </div>
     </div>

@@ -242,3 +242,398 @@ class ProductCreateTests(TestCase):
         
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Please correct the errors.")
+
+
+class ProductDetailTests(TestCase):
+    """ Test the Product Detail view """
+
+
+    def setUp(self):
+        """ Create an object to view details """
+        
+        self.product_1 = models.Product.objects.create(
+            id=1,
+            name="Product 1",
+            description="Product 1 Description",
+            price=3.45,
+            quantity=10,
+        )
+
+    
+    def test_product_detail_at_url(self):
+        """ Verify that the product detail exists at `/products/details/<int:pk>` """
+
+        response = self.client.get(f"/products/details/{self.product_1.id}")
+
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_product_detail_at_reverse_lookup(self):
+        """ Verify that the product detail exists with reverse lookup of `product-details` """
+
+        response = self.client.get(reverse("product-details", args=[self.product_1.id]))
+
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_product_detail_uses_template(self):
+        """ Verify that the product detail view uses the correct template """
+
+        response = self.client.get(reverse("product-details", args=[self.product_1.id]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "product_detail.html")
+
+
+    def test_product_detail_uses_layout(self):
+        """ Verify that the product detail view uses the layout template """
+
+        response = self.client.get(reverse("product-details", args=[self.product_1.id]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "layout.html")
+
+
+    def test_product_detail_missing_object(self):
+        """ Test the product detail view when there is no object at the given argument """
+
+        response = self.client.get(reverse("product-details", args=["999"]))
+
+        self.assertEqual(response.status_code, 404)
+
+
+    def test_product_detail_displays_object_details(self):
+        """ Test that the product detail view displays product details """
+
+        response = self.client.get(reverse("product-details", args=[self.product_1.id]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.product_1.name)
+        self.assertContains(response, self.product_1.description)
+        self.assertContains(response, self.product_1.price)
+        self.assertContains(response, self.product_1.quantity)
+
+
+class ProductUpdateTests(TestCase):
+    """ Test the Product Update view """
+
+    def setUp(self):
+        """ Create an object to be updated """
+
+        self.product_1 = models.Product.objects.create(
+            id=1,
+            name="Product 1",
+            description="Product 1 Description",
+            price=3.45,
+            quantity=10,
+        )
+
+    def test_product_update_at_url(self):
+        """ Verify that the product update exists at `/products/edit/<int:pk>` """
+
+        response = self.client.get(f"/products/edit/{self.product_1.id}")
+
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_product_update_at_reverse_lookup(self):
+        """ Verify that the product update exists with reverse lookup of `product-update` """
+
+        response = self.client.get(reverse("product-update", args=[self.product_1.id]))
+
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_product_update_uses_template(self):
+        """ Verify that the product update view uses the correct template """
+
+        response = self.client.get(reverse("product-update", args=[self.product_1.id]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "product_update.html")
+
+
+    def test_product_update_uses_layout(self):
+        """ Verify that the product update view uses the layout template """
+
+        response = self.client.get(reverse("product-update", args=[self.product_1.id]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "layout.html")
+
+
+    def test_product_update_missing_object(self):
+        """ Test the product update view when there is no object at the given argument """
+
+        response = self.client.get(reverse("product-update", args=["999"]))
+
+        self.assertEqual(response.status_code, 404)
+
+
+    def test_product_update_displays_object_details(self):
+        """ Test that the product update view displays product details (prior to being changed) """
+
+        response = self.client.get(reverse("product-update", args=[self.product_1.id]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.product_1.name)
+        self.assertContains(response, self.product_1.description)
+        self.assertContains(response, self.product_1.price)
+        self.assertContains(response, self.product_1.quantity)
+
+
+    def test_product_update_change_name(self):
+        """ Test that the product update view changes name successfully """
+
+        new_name = "New Object Name"
+        data = {
+            "name": new_name,
+            "description": self.product_1.description,
+            "price": self.product_1.price,
+            "quantity": self.product_1.quantity,
+        }
+
+        response = self.client.post(reverse("product-update", args=[self.product_1.id]), data)
+        self.assertEqual(response.status_code, 302)
+
+        # validate updated object
+        updated = models.Product.objects.get(id=self.product_1.id)
+        self.assertEqual(updated.name, new_name)
+
+
+    def test_product_update_change_description(self):
+        """ Test that the product update view changes description successfully """
+
+        new_description = "New Object Description"
+        data = {
+            "name": self.product_1.name,
+            "description": new_description,
+            "price": self.product_1.price,
+            "quantity": self.product_1.quantity,
+        }
+
+        response = self.client.post(reverse("product-update", args=[self.product_1.id]), data)
+        self.assertEqual(response.status_code, 302)
+
+        # validate updated object
+        updated = models.Product.objects.get(id=self.product_1.id)
+        self.assertEqual(updated.description, new_description)
+
+
+    def test_product_update_change_price(self):
+        """ Test that the product update view changes price successfully """
+
+        new_price = 100.00
+        data = {
+            "name": self.product_1.name,
+            "description": self.product_1.description,
+            "price": new_price,
+            "quantity": self.product_1.quantity,
+        }
+
+        response = self.client.post(reverse("product-update", args=[self.product_1.id]), data)
+        self.assertEqual(response.status_code, 302)
+
+        # validate updated object
+        updated = models.Product.objects.get(id=self.product_1.id)
+        self.assertEqual(updated.price, new_price)
+
+
+    def test_product_update_change_quantity(self):
+        """ Test that the product update view changes quantity successfully """
+
+        new_quantity = 20
+        data = {
+            "name": self.product_1.name,
+            "description": self.product_1.description,
+            "price": self.product_1.price,
+            "quantity": new_quantity,
+        }
+
+        response = self.client.post(reverse("product-update", args=[self.product_1.id]), data)
+        self.assertEqual(response.status_code, 302)
+
+        # validate updated object
+        updated = models.Product.objects.get(id=self.product_1.id)
+        self.assertEqual(updated.quantity, new_quantity)
+
+
+class ProductDeleteTests(TestCase):
+    """ Test the Product Delete view """
+
+
+    def setUp(self):
+        """ Create an object to be deleted """
+
+        self.product_1 = models.Product.objects.create(
+            id=1,
+            name="Product 1",
+            description="Product 1 Description",
+            price=3.45,
+            quantity=10,
+        )
+
+
+    def test_product_delete_at_url(self):
+        """ Verify that the product delete exists at `/products/delete/<int:pk>` """
+
+        response = self.client.get(f"/products/delete/{self.product_1.id}")
+
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_product_delete_at_reverse_lookup(self):
+        """ Verify that the product delete exists with reverse lookup of `product-delete` """
+
+        response = self.client.get(reverse("product-delete", args=[self.product_1.id]))
+
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_product_delete_uses_template(self):
+        """ Verify that the product delete view uses the correct template """
+
+        response = self.client.get(reverse("product-delete", args=[self.product_1.id]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "product_delete.html")
+
+
+    def test_product_delete_uses_layout(self):
+        """ Verify that the product delete view uses the layout template """
+
+        response = self.client.get(reverse("product-delete", args=[self.product_1.id]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "layout.html")
+
+
+    def test_product_delete_missing_object(self):
+        """ Test the product delete view when there is no object at the given argument """
+
+        response = self.client.get(reverse("product-delete", args=["999"]))
+
+        self.assertEqual(response.status_code, 404)
+
+    
+    def test_product_delete_valid(self):
+        """ Test the product delete post with a valid object ID """
+
+        response = self.client.post(reverse("product-delete", args=[self.product_1.id]))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(models.Product.objects.filter(id=self.product_1.id).exists())
+
+
+class ProductReserveTests(TestCase):
+    """ Test the Product Reserve view """
+
+
+    def setUp(self):
+        """ Create an object to be reserved """
+
+        self.product_1 = models.Product.objects.create(
+            id=1,
+            name="Product 1",
+            description="Product 1 Description",
+            price=3.45,
+            quantity=10,
+        )
+
+
+    def test_product_reserve_at_url(self):
+        """ Verify that the product reserve exists at `/products/reserve/<int:pk>` """
+
+        response = self.client.get(f"/products/reserve/{self.product_1.id}")
+
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_product_reserve_at_reverse_lookup(self):
+        """ Verify that the product reserve exists with reverse lookup of `product-reserve` """
+
+        response = self.client.get(reverse("product-reserve", args=[self.product_1.id]))
+
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_product_reserve_uses_template(self):
+        """ Verify that the product reserve view uses the correct template """
+
+        response = self.client.get(reverse("product-reserve", args=[self.product_1.id]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "product_reserve.html")
+
+
+    def test_product_reserve_uses_layout(self):
+        """ Verify that the product reserve view uses the layout template """
+
+        response = self.client.get(reverse("product-reserve", args=[self.product_1.id]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "layout.html")
+
+
+    def test_product_reserve_missing_object(self):
+        """ Test the product reserve view when there is no object at the given argument """
+
+        response = self.client.get(reverse("product-reserve", args=["999"]))
+
+        self.assertEqual(response.status_code, 404)
+
+
+    def test_product_reserve_valid(self):
+        """ Test the product reserve view with successful reservation """
+
+        original_quantity = self.product_1.quantity
+        reserve_quantity = 5
+        data = {
+            "reserve_quantity": reserve_quantity,
+        }
+
+        response = self.client.post(reverse("product-reserve", args=[self.product_1.id]), data)
+
+        self.assertEqual(response.status_code, 302)
+
+        # validate updated object
+        updated = models.Product.objects.get(id=self.product_1.id)
+        self.assertEqual(updated.quantity, original_quantity - reserve_quantity)
+
+
+    def test_product_reserve_quantity_maximum(self):
+        """ Test the product reserve view with `reserve_quantity` greater than allowed """
+
+        original_quantity = self.product_1.quantity
+        reserve_quantity = self.product_1.quantity + 1
+        data = {
+            "reserve_quantity": reserve_quantity,
+        }
+
+        response = self.client.post(reverse("product-reserve", args=[self.product_1.id]), data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Reserve quantity must not exceed available quantity!")
+
+        # validate that the object is not updated
+        updated = models.Product.objects.get(id=self.product_1.id)
+        self.assertEqual(updated.quantity, original_quantity)
+
+
+    def test_product_reserve_quantity_minimum(self):
+        """ Test the product reserve view with `reserve_quantity` less than allowed """
+
+        original_quantity = self.product_1.quantity
+        reserve_quantity = 0
+        data = {
+            "reserve_quantity": reserve_quantity,
+        }
+
+        response = self.client.post(reverse("product-reserve", args=[self.product_1.id]), data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Reserve quantity must be at least 1!")
+
+        # validate that the object is not updated
+        updated = models.Product.objects.get(id=self.product_1.id)
+        self.assertEqual(updated.quantity, original_quantity)

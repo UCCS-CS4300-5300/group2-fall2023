@@ -89,7 +89,7 @@ class ProductReserve(View):
         """ Handle get request to view (render form) """
         
         product = get_object_or_404(Product, pk=pk)
-        form = ProductReserveForm(request.POST)
+        form = ProductReserveForm
 
         return render(request, self.template_name, {"form": form, "product": product})
 
