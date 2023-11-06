@@ -43,7 +43,7 @@ class ProductCreate(CreateView):
         return reverse("product-details", kwargs={"pk": self.object.pk})
 
 
-class ProductDetails(DetailView):
+class ProductDetail(DetailView):
     """ Product Details about a specific product. URL `/products/details/<int:pk>/` """
 
     # Set model type

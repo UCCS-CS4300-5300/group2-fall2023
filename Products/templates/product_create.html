@@ -30,5 +30,11 @@
             {% endif %}
         </div>
     </form>
+
+    {% if form.errors %}
+        <div class="error-message">
+            Please correct the errors.
+        </div>
+    {% endif %}
 </div>
 {%endblock %}

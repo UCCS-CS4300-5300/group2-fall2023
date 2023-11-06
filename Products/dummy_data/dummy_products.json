@@ -6,7 +6,7 @@
       "name": "honey",
       "description": "honey made by bees",
       "price": "7.00",
-      "product_vendor": 1
+      "quantity": "20"
     }
   },
   {
@@ -16,7 +16,7 @@
       "name": "tomatoes",
       "description": "some tomatoes for sale",
       "price": "0.15",
-      "product_vendor": 1
+      "quantity": "5"
     }
   },
   {
@@ -26,7 +26,7 @@
       "name": "corn",
       "description": "corn on the cob",
       "price": "0.60",
-      "product_vendor": 1
+      "quantity": "15"
     }
   },
   {
@@ -36,7 +36,7 @@
       "name": "chickens",
       "description": "chickens locally raised no antibiotics",
       "price": "10.00",
-      "product_vendor": 1
+      "quantity": "2"
     }
   }
 ]

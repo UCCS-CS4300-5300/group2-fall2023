@@ -3,7 +3,7 @@
 ### Test Products Forms
 
 from django.test import TestCase
-from Products.forms import ProductForm, ProductReserveForm
+from Products import forms
 
 # TODO - Update when image upload is available
 
@@ -20,7 +20,7 @@ class ProductFormTest(TestCase):
             "description": "Some Product Description",
         }
 
-        form = ProductForm(data=data)
+        form = forms.ProductForm(data=data)
         self.assertTrue(form.is_valid())
 
 
@@ -38,7 +38,7 @@ class ProductFormTest(TestCase):
             "description": "Some Product Description",
         }
 
-        form = ProductForm(data=data)
+        form = forms.ProductForm(data=data)
         self.assertFalse(form.is_valid())
         self.assertIn("name", form.errors)
 
@@ -53,7 +53,7 @@ class ProductFormTest(TestCase):
             "description": "Some Product Description",
         }
 
-        form = ProductForm(data=data)
+        form = forms.ProductForm(data=data)
         self.assertFalse(form.is_valid())
         self.assertIn("quantity", form.errors)
 
@@ -67,7 +67,7 @@ class ProductFormTest(TestCase):
             "description": "Some Product Description",
         }
 
-        form = ProductForm(data=data)
+        form = forms.ProductForm(data=data)
         self.assertFalse(form.is_valid())
         self.assertIn("name", form.errors)
 
@@ -81,7 +81,7 @@ class ProductFormTest(TestCase):
             "description": "Some Product Description",
         }
 
-        form = ProductForm(data=data)
+        form = forms.ProductForm(data=data)
         self.assertFalse(form.is_valid())
         self.assertIn("price", form.errors)
 
@@ -95,7 +95,7 @@ class ProductFormTest(TestCase):
             "description": "Some Product Description",
         }
 
-        form = ProductForm(data=data)
+        form = forms.ProductForm(data=data)
         self.assertFalse(form.is_valid())
         self.assertIn("quantity", form.errors)
 
@@ -109,7 +109,7 @@ class ProductFormTest(TestCase):
             "quantity": 3,
         }
 
-        form = ProductForm(data=data)
+        form = forms.ProductForm(data=data)
         self.assertFalse(form.is_valid())
         self.assertIn("description", form.errors)
 
@@ -124,7 +124,7 @@ class ProductReserveFormTests(TestCase):
             "reserve_quantity": 1,
         }
 
-        form = ProductReserveForm(data=data)
+        form = forms.ProductReserveForm(data=data)
         self.assertTrue(form.is_valid())
 
     
@@ -135,7 +135,7 @@ class ProductReserveFormTests(TestCase):
             "reserve_quantity": 0,
         }
 
-        form = ProductReserveForm(data=data)
+        form = forms.ProductReserveForm(data=data)
         self.assertFalse(form.is_valid())
         self.assertIn("reserve_quantity", form.errors)
 
@@ -145,6 +145,6 @@ class ProductReserveFormTests(TestCase):
 
         data = {}
 
-        form = ProductReserveForm(data=data)
+        form = forms.ProductReserveForm(data=data)
         self.assertFalse(form.is_valid())
         self.assertIn("reserve_quantity", form.errors)

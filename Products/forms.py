@@ -22,10 +22,27 @@ class ProductForm(forms.ModelForm):
         ]
 
         widgets = {
-            "name": forms.TextInput(attrs={"maxlength": 255, "placeholder": "Product name (max 255 characters)"}),
-            "price": forms.NumberInput(attrs={"step": "0.01", "placeholder": "Product price"}),
-            "quantity": forms.NumberInput(attrs={"step": "1", "min": "1", "placeholder": "Product quantity"}),
-            "description": forms.Textarea(attrs={"rows": 5, "Placeholder": "Product description"}),
+            "name": forms.TextInput(attrs={
+                "required": "required",
+                "maxlength": "255", 
+                "placeholder": "Product name (max 255 characters)"
+            }),
+            "price": forms.NumberInput(attrs={
+                "required": "required",
+                "step": "0.01",
+                "placeholder": "Product price"
+            }),
+            "quantity": forms.NumberInput(attrs={
+                "required": "required",
+                "step": "1",
+                "min": "1",
+                "placeholder": "Product quantity"
+            }),
+            "description": forms.Textarea(attrs={
+                "required": "required",
+                "rows": 5,
+                "Placeholder": "Product description"
+            }),
         }
 
         labels = {
@@ -57,7 +74,12 @@ class ProductReserveForm(forms.Form):
         }
 
         widgets = {
-            "reserve_quantity": forms.NumberInput(attrs={"step": "1", "min": "1", "placeholder": "Reserve quantity"}),
+            "reserve_quantity": forms.NumberInput(attrs={
+                "required": "required",
+                "step": "1",
+                "min": "1",
+                "placeholder": "Reserve quantity"
+            }),
         }
 
 
