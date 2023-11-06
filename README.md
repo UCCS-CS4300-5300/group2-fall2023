@@ -81,7 +81,7 @@ Run tests for this project by executing the command:
 python manage.py test
 ```
 
-Tests in each app should be stored in a directory named `tests/`, and each test should follow the naming convention `test_<module_name>.py` (i.e. `<app name>/tests/test_models.py`). Violating this naming convention may result in the tests not being recognized by Django.
+Tests in each app should be stored in a directory named `tests/`, and each test should follow the naming convention `test_<module_name>.py` (i.e. `Events/tests/test_models.py`). Violating this naming convention may result in the tests not being recognized by Django.
 
 ## Django Apps
 * `Events` - Schedule, Display, Join, and Update Events
