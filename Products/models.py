@@ -8,9 +8,9 @@ from Events.models import Event
 
 
 class Product(models.Model):
-    """ Product model. """
+    """ Product model """
 
-    # TODO - Install pillow to upload images
+    # TODO - Install Pillow to work with images
     # TODO - Set up vendors app/model to link vendors to users,products,events
     # TODO - Set up link between events and product additions
 
@@ -22,10 +22,9 @@ class Product(models.Model):
         validators=[MinValueValidator(0)],
     )
 
-    # TODO - seee above
-    # image = models.ImageField(upload_to='products/images')
+    # TODO - see above
+    # image = models.ImageField(upload_to='products/images', blank=True, null=True)
     # product_vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
-    
     product_event = models.ForeignKey(Event, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):

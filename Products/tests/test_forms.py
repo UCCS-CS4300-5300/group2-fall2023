@@ -5,6 +5,7 @@
 from django.test import TestCase
 from Products.forms import ProductForm, ProductReserveForm
 
+# TODO - Update when image upload is available
 
 class ProductFormTest(TestCase):
     """ Test the ProductForm form class """
