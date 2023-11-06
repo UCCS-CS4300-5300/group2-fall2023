@@ -2,11 +2,12 @@
 ### Harvestly
 ### Products Views
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from django.views.generic.list import ListView
+from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.http import HttpResponseRedirect
 
 from .models import Product
 from .forms import ProductForm, ProductReserveForm
@@ -74,23 +75,45 @@ class ProductDelete(DeleteView):
     template_name = "product_delete.html"
 
     def get_success_url(self):
-        """ Get success URL after post completion. """
+        """ Get success URL after post completion """
 
         return reverse("products")
     
 
-class ProductReserve(UpdateView):
+class ProductReserve(View):
     """ Reserve a quantity of a specific product. URL `/products/reserve/<int:pk>/` """
 
-    # Establish the model type and form class for use
-    model = Product
-    form_class = ProductReserveForm
-
-    # Establish the target template for use
     template_name = "product_reserve.html"
 
-    def get_success_url(self):
-        """ Get success URL after post completion. """
+    def get(self, request, pk):
+        """ Handle get request to view (render form) """
+        
+        product = get_object_or_404(Product, pk=pk)
+        form = ProductReserveForm(request.POST)
 
-        return reverse("product-details", kwargs={"pk": self.object.pk})
+        return render(request, self.template_name, {"form": form, "product": product})
 
+
+    def post(self, request, pk):
+        """ Handle post request """
+
+        product = get_object_or_404(Product, pk=pk)
+        form = ProductReserveForm(request.POST)
+
+        if form.is_valid():
+            reserve_quantity = form.cleaned_data["reserve_quantity"]
+
+            if reserve_quantity <= product.quantity:
+                product.quantity -= reserve_quantity
+                product.save()
+                return HttpResponseRedirect(self.get_success_url(pk))
+
+            form.add_error("reserve_quantity", "Reserve quantity must not exceed available quantity!")
+
+        return render(request, self.template_name, {"form": form, "product": product})
+
+
+    def get_success_url(self, pk):
+        """ Get success URL after post completion """
+        
+        return reverse("product-details", kwargs={"pk": pk})

@@ -36,19 +36,17 @@ class ProductForm(forms.ModelForm):
         }
 
 
-class ProductReserveForm(forms.ModelForm):
+class ProductReserveForm(forms.Form):
     """ Product reserve form, for user to reserve a quantity of a product """
 
+    reserve_quantity = forms.IntegerField()
+
     class Meta:
-        model = Product
-        fields = [
-            "quantity",
-        ]
+        labels = {
+            "reserve_quantity": "Reserve Quantity",
+        }
 
         widgets = {
-            "quantity": forms.NumberInput(attrs={"step": "1", "min": "1", "placeholder": "Reserve quantity"}),
+            "reserve_quantity": forms.NumberInput(attrs={"step": "1", "min": "1", "placeholder": "Reserve quantity"}),
         }
 
-        labels = {
-            "quantity": "Reserve Quantity",
-        }
