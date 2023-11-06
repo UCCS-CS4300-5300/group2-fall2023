@@ -35,6 +35,16 @@ class ProductForm(forms.ModelForm):
             "description": "Product description",
         }
 
+    def clean_quantity(self):
+        """ Clean quantity field, ensure it is at least 1 """
+        
+        quantity = self.cleaned_data.get("quantity")
+        
+        if quantity is not None and quantity < 1:
+            raise forms.ValidationError("Value must be greater than or equal to 1")
+        
+        return quantity
+
 
 class ProductReserveForm(forms.Form):
     """ Product reserve form, for user to reserve a quantity of a product """
@@ -50,3 +60,13 @@ class ProductReserveForm(forms.Form):
             "reserve_quantity": forms.NumberInput(attrs={"step": "1", "min": "1", "placeholder": "Reserve quantity"}),
         }
 
+
+    def clean_reserve_quantity(self):
+        """ Clean quantity field, ensure it is at least 1 """
+        
+        reserve_quantity = self.cleaned_data.get("reserve_quantity")
+        
+        if reserve_quantity is not None and reserve_quantity < 1:
+            raise forms.ValidationError("Value must be greater than or equal to 1")
+        
+        return reserve_quantity
