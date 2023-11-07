@@ -4,17 +4,25 @@
 {% block content %}
 
 <div>
-    <a class="harvestly-nav-btn-primary mb-3" href="{% url 'event-create'%}">
-        <h2 class="p-2 mb-0">Create Event</h2>
-    </a>
+    <div class="d-flex align-items-center justify-content-between mb-5">
+        <h1 class="title">Events</h1>
+        <a href="{% url 'event-create'%}" class="harvestly-nav-btn-primary">
+            <h3 class="m-0 px-3 py-2">Event +</h3>
+        </a>
+    </div>
     {% if eventlist %}
         <h1>Upcoming Events</h1>
         <div class="row pt-4 mb-2">
         {% for event in eventlist %}
-            <div class="col-md-4">
-                <div class="event-title"><strong>{{ event.name }}</strong></div>
-                <div class="event-date">{{ event.start_time|date:"F j, Y" }}</div>
-                <td><a class="harvestly-nav-btn-primary" href="{% url 'event-detail' event.id %}">See More</a></td>
+            <div class="col-md-4 my-3">
+                <a class="harvestly-card-link" href="{% url 'event-detail' event.id %}">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">{{ event.name|title }}</h3>
+                            <h5>{{ event.start_time|date:"F j, Y" }} - {{ event.end_time|date:"F j, Y" }}</h5>
+                        </div>
+                    </div>
+                </a>
             </div>
         {% endfor %}
         </div>

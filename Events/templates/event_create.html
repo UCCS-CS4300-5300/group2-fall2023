@@ -13,9 +13,15 @@
                     <div class="mb-1">{{ field }}</div>
                 </div>
             {% endfor %}
-        </div>       
-        <a class="harvestly-nav-btn-secondary" href="{% url 'events' %}">Cancel</a> 
-        <input class="harvestly-nav-btn-primary" type="submit" value="Add Event" />
+        </div>
+        <div class="d-flex">
+            <a class="harvestly-nav-btn-secondary d-flex justify-content-center align-items-center mr-2" href="{% url 'events' %}">Cancel</a>
+            {% if user.is_authenticated %}
+                <input class="harvestly-nav-btn-primary" type="submit" value="Add Event" />
+            {% else %}
+                <a class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center" href="{% url 'signup' %}">Add Event</a>
+            {% endif %}
+        </div>
     </form>
 </div>
 {% endblock %}

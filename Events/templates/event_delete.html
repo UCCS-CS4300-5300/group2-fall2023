@@ -1,13 +1,51 @@
 {% extends "layout.html" %}
-{% block title %}Delete {{ event.name }}{% endblock %}
+{% block title %}Delete {{ event.name|title }}{% endblock %}
 
 {% block content %}
-<div id="main">
+<div>
+    <h3 class="subtitle">Delete {{ event.name|title }}</h3>
     <form method="post">
-        {% csrf_token %} 
-        <p>Are you sure you want to delete "{{ event.name }}"?</p>
-        <input class="harvestly-nav-btn-primary" type="submit" value="Confirm" />
+        {% csrf_token %}
+        <div class="row mt-4 mb-5">
+            <div class="col-md-6 mb-2">
+                <!-- TODO replace this image with a location mini-map/preview from Google Maps, similar to this:
+                    https://developers.google.com/maps/documentation/javascript/adding-a-google-map
+                -->
+                {% load static %}
+                <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Event Location Stub" width="100%">
+            </div>
+            <div class="col-md-6 align-self-center">
+                <h3>{{ event.name|title }} Details</h3>
+                <h5>{{ event.location }}</h5>
+
+                {% load filters %}
+                <h5>{{ event.start_time|format_date_range:event.end_time }}</h5>
+                <div class="mt-5 w-100">
+                    <h5 class="text-muted">Starts at {{ event.start_time|date:"F j, Y g:iA" }}</h5>
+                    <h5 class="text-muted">Ends at {{ event.end_time|date:"F j, Y g:iA" }}</h5>
+                </div>
+                <div class="d-flex flex-column">
+                    {% if user.is_authenticated %}
+                        <button class="harvestly-nav-btn-primary w-100 my-2 py-2" type="submit">
+                            <h4 class="m-0">Confirm Deletion</h4>
+                        </button>
+                    {% else %}
+                        <a 
+                            class="harvestly-nav-btn-primary my-2 py-2 d-flex justify-content-center align-items-center"
+                            href="{% url 'signup' %}"
+                        >
+                            <h4 class="m-0">Confirm Deletion</h4>
+                        </a>
+                    {% endif %}
+                    <a
+                        class="harvestly-nav-btn-secondary py-2 d-flex justify-content-center align-items-center"
+                        href="{% url 'event-detail' event.id %}"
+                    >
+                        <h4 class="m-0">Cancel</h4>
+                    </a>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
-<a class="harvestly-nav-btn-secondary" href="{% url 'event-update' event.id %}">Back</a>
 {% endblock %}
