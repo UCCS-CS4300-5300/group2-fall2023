@@ -191,7 +191,7 @@ class SignUpTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-        pattern = re.escape("The two password fields didn") + r"[\u2019 ']"
+        pattern = re.escape("The two password fields didn") + r"[\u2019 ']" + re.escape("t match.")
         self.assertTrue(pattern, response.content.decode("utf-8"))
 
 
