@@ -7,3 +7,5 @@ __pycache__/
 replit.nix
 venv/
 **/migrations/
+
+**/media/

@@ -14,8 +14,8 @@
 
     --primary-color: rgb(121,155,65);
     --primary-color-hover: #939b62;
-    --secondary-color: rgb(254, 200, 104);
-    --secondary-color-hover: rgb(253, 215, 149);
+    --secondary-color: rgb(145, 123, 12);
+    --secondary-color-hover: rgb(145, 123, 12);
     --danger-color: rgb(154, 68, 68);
     --warning-color: rgb(222, 143, 95);
     --info-color: rgb(129, 202, 207);
@@ -30,10 +30,10 @@ body {
 }
 
 main {
-    padding: 0 var(--pad);
+    padding: 0 var(--pad) 6rem;
     display: flex;
     flex-direction: column;
-    min-height: 80vh;
+    min-height: 72vh;
 }
 
 footer {
@@ -141,7 +141,7 @@ footer .harvestly-nav-link {
     min-height: 40px;
     min-width: 120px;
 
-    border: 5px solid var(--secondary-color);
+    border: 2px solid var(--secondary-color);
     border-radius: 5px;
     background-color: var(--plight-color);
 
@@ -230,6 +230,32 @@ footer .harvestly-nav-link {
     border-color: var(--dark-color);
     border-width: 2px;
     border-radius: 5px;
+}
+
+.harvestly-card-link,
+.harvestly-card-link:hover {
+    text-decoration: none;
+}
+.harvestly-card-link .card-body {
+    background-color: rgba(0,0,0,0.1);
+}
+.harvestly-card-link .card-body h5 {
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+.harvestly-card-link:hover .card-body h5 {
+    opacity: 1;
+}
+.harvestly-card-link .card {
+    color: var(--dark-color);
+    border-color: var(--dark-color);
+    border-width: 0px;
+    transition: all 0.3s ease;
+}
+.harvestly-card-link:hover .card {
+    color: var(--primary-color);
+    transform: scale(1.01);
+    box-shadow: 0 0 10px 3px rgba(0,0,0,0.5);
 }
 
 

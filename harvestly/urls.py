@@ -28,16 +28,16 @@ urlpatterns = [
     path("", home_views.Home.as_view(), name="index"),
     path("about-us/", home_views.About.as_view(), name="about"),
 
-    path('events/', include('Events.urls')),
+    path("events/", include("Events.urls")),
+    path("products/", include("Products.urls")),
     
-    path("products-list/", products_views.ProductList.as_view(), name="products-list"),
     path("admin/", admin.site.urls),
-    # TODO - Not sure how this needs to be updated for login
-    path('signup/', home_views.SignUp.as_view(), name='signup'),
-    path('accounts/profile/', home_views.login_redirect),
-    path('accounts/logout/', home_views.logout_request, name='logout'),
+    
+    path("signup/", home_views.SignUp.as_view(), name="signup"),
+    path("accounts/profile/", home_views.login_redirect),
+    path("accounts/logout/", home_views.logout_request, name="logout"),
 ]
 
 urlpatterns+= [
-    path('accounts/', include("django.contrib.auth.urls"))
+    path("accounts/", include("django.contrib.auth.urls"))
 ]
