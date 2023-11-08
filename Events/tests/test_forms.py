@@ -40,7 +40,7 @@ class EventFormTests(TestCase):
 
 
     def test_event_form_missing_location(self):
-        """ Test event form when name is missing """
+        """ Test event form when location is missing """
         
         data = {
             "name": "Some Event",
@@ -68,7 +68,7 @@ class EventFormTests(TestCase):
 
 
     def test_event_form_missing_end_time(self):
-        """ Test event form when start time is missing """
+        """ Test event form when end time is missing """
         
         data = {
             "name": "Some Event",
@@ -109,4 +109,18 @@ class EventFormTests(TestCase):
         form = forms.EventForm(data=data)
         self.assertFalse(form.is_valid())
         self.assertIn("end_time", form.errors)
+
+    def test_event_form_end_time_before_start_time(self):
+        """ Test the event form when the end time is before the start time """
+        # TODO not sure if we explicitly have a response to the user for this one.
+
+        data = {
+            "name": "Some Event",
+            "location": "Some Location",
+            "start_time": "2023-12-01T09:00",
+            "end_time": "2023-12-01T08:00",
+        }
+
+        form = forms.EventForm(data=data)
+        self.assertFalse(form.is_valid())
 

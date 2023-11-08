@@ -28,4 +28,15 @@ class EventForm(forms.ModelForm):
             "end_time": "End Time:",
         }
 
+    def check_end_time_not_before_start_time(self):
+        # TODO figure out how to compare datetimes
+        start_time = self.data.get("start_time")
+        end_time = self.data.get("end_time")
+
+    def start_time_not_in_past(self):   
+        # TODO figure out how to compare datetimes   
+        start_time = self.data.get("start_time")
+
+
+
 
