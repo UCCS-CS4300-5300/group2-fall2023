@@ -146,7 +146,164 @@ class EventDetailTests(TestCase):
 class EventCreateTests(TestCase):
     """ Test the Event Create View """
 
-    # TODO
+    def test_event_create_at_url(self):
+        """ Verify that the event create exists at `/events/new` """
+
+        response = self.client.get("/events/new")
+
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_event_create_at_reverse_lookup(self):
+        """ Verify that the event create exists with reverse lookup of `event-create` """
+
+        response = self.client.get(reverse("event-create"))
+
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_product_event_uses_template(self):
+        """ Verify that the event create view uses the correct template """
+
+        response = self.client.get(reverse("event-create"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "event_create.html")
+
+
+    def test_event_create_uses_layout(self):
+        """ Verify that the event create view uses the layout template """
+
+        response = self.client.get(reverse("event-create"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "layout.html")
+
+    
+    def test_event_creates_object(self):
+        """ Verify that the event create view successfully creates an event """
+
+        event_name = "Market 1" 
+        data = {
+            "name": event_name,
+            "location": "Some Location",
+            "start_time": "2023-12-01T09:00",
+            "end_time": "2023-12-03T09:00",
+        }
+
+        response = self.client.post(reverse("event-create"), data)
+        
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Event.objects.filter(name=event_name).exists())
+
+
+    def test_event_create_missing_name(self):
+        """ Test event create view when name is missing """
+        
+        data = {
+            "location": "Some Location",
+            "start_time": "2023-12-01T09:00",
+            "end_time": "2023-12-03T09:00",
+        }
+
+        response = self.client.post(reverse("event-create"), data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Please correct the errors.")
+
+
+    def test_event_create_missing_location(self):
+        """ Test event create view when location is missing """
+        
+        data = {
+            "name": "Market 1",
+            "start_time": "2023-12-01T09:00",
+            "end_time": "2023-12-03T09:00",
+        }
+
+        response = self.client.post(reverse("event-create"), data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Please correct the errors.")
+
+    
+    def test_event_create_missing_start_time(self):
+        """ Test event create view when start time is missing """
+        
+        data = {
+            "name": "Some Event",
+            "location": "Some Location",
+            "end_time": "2023-12-03T09:00",
+        }
+
+        response = self.client.post(reverse("event-create"), data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Please correct the errors.")
+
+
+    def test_event_create_missing_end_time(self):
+        """ Test event create view when end time is missing """
+        
+        data = {
+            "name": "Some Event",
+            "location": "Some Location",
+            "start_time": "2023-12-01T09:00",
+        }
+
+        response = self.client.post(reverse("event-create"), data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Please correct the errors.")
+
+
+    def test_event_create_invalid_start_time(self):
+        """ Test the event create when the start time is not in the correct format """
+
+        data = {
+            "name": "Some Event",
+            "location": "Some Location",
+            "start_time": "2023-12",
+            "end_time": "2023-12-03T09:00",
+        }
+
+        response = self.client.post(reverse("event-create"), data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Please correct the errors.")
+
+
+    def test_event_create_invalid_end_time(self):
+        """ Test the event create view when the end time is not in the correct format """
+
+        data = {
+            "name": "Some Event",
+            "location": "Some Location",
+            "start_time": "2023-12-01T09:00",
+            "end_time": "T09:00",
+        }
+
+        response = self.client.post(reverse("event-create"), data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Please correct the errors.")
+
+    
+    def test_event_create_end_time_before_star_time(self):
+        """ Test the event create view when the end time is before the start time """
+
+        data = {
+            "name": "Some Event",
+            "location": "Some Location",
+            "start_time": "2023-12-01T09:00",
+            "end_time": "2023-12-01T08:59",
+        }
+
+        response = self.client.post(reverse("event-create"), data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Please correct the errors.")
+        self.assertContains(response, "End time cannot be before start time")
 
 
 class EventUpdateTests(TestCase):

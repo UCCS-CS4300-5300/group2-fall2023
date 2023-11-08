@@ -22,6 +22,18 @@
                 <a class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center" href="{% url 'signup' %}">Add Event</a>
             {% endif %}
         </div>
+        {% if form.errors %}
+            <div class="error-message mt-2">
+                Please correct the errors.
+                <ul>
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
     </form>
 </div>
 {% endblock %}
