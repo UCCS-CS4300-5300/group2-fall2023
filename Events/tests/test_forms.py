@@ -96,6 +96,22 @@ class EventFormTests(TestCase):
         self.assertIn("start_time", form.errors)
 
 
+    def test_event_form_invalid_start_time_past(self):
+        """ Test the event form when start time is in the past """
+
+        data = {
+            "name": "Some Event",
+            "location": "Some Location",
+            "start_time": "2020-12-01T00:00",
+            "end_time": "2023-12-03T09:00",
+        }
+
+        form = forms.EventForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertIn("start_time", form.errors)
+
+
+
     def test_event_form_invalid_end_time(self):
         """ Test the event form when the end time is not in the correct format """
 
@@ -110,9 +126,9 @@ class EventFormTests(TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn("end_time", form.errors)
 
+
     def test_event_form_end_time_before_start_time(self):
         """ Test the event form when the end time is before the start time """
-        # TODO not sure if we explicitly have a response to the user for this one.
 
         data = {
             "name": "Some Event",
@@ -123,4 +139,5 @@ class EventFormTests(TestCase):
 
         form = forms.EventForm(data=data)
         self.assertFalse(form.is_valid())
+        self.assertIn("end_time", form.errors)
 

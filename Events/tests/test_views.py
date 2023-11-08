@@ -59,16 +59,16 @@ class EventListTests(TestCase):
             id=1,
             name="Event 1",
             location="Event 1 Location",
-            start_time="2023-12-01T09:00+03:00",
-            end_time="2023-12-01T10:00+03:00",
+            start_time="2024-12-01T09:00+03:00",
+            end_time="2024-12-01T10:00+03:00",
         )
 
         event_2 = Event.objects.create(
             id=2,
             name="Event 2",
             location="Event 2 Location",
-            start_time="2023-12-01T11:00+03:00",
-            end_time="2023-12-01T12:00+03:00",
+            start_time="2024-12-01T11:00+03:00",
+            end_time="2024-12-01T12:00+03:00",
         )
 
         response = self.client.get(reverse("events"))
@@ -89,8 +89,8 @@ class EventDetailTests(TestCase):
             id=1,
             name="Event 1",
             location="Event 1 Location",
-            start_time="2023-12-01T09:00+03:00",
-            end_time="2023-12-01T10:00+03:00",
+            start_time="2024-12-01T09:00+03:00",
+            end_time="2024-12-01T10:00+03:00",
         )
 
     def test_event_detail_at_url(self):
@@ -184,8 +184,8 @@ class EventCreateTests(TestCase):
         data = {
             "name": event_name,
             "location": "Some Location",
-            "start_time": "2023-12-01T09:00",
-            "end_time": "2023-12-03T09:00",
+            "start_time": "2024-12-01T09:00",
+            "end_time": "2024-12-03T09:00",
         }
 
         response = self.client.post(reverse("event-create"), data)
@@ -199,8 +199,8 @@ class EventCreateTests(TestCase):
         
         data = {
             "location": "Some Location",
-            "start_time": "2023-12-01T09:00",
-            "end_time": "2023-12-03T09:00",
+            "start_time": "2024-12-01T09:00",
+            "end_time": "2024-12-03T09:00",
         }
 
         response = self.client.post(reverse("event-create"), data)
@@ -214,8 +214,8 @@ class EventCreateTests(TestCase):
         
         data = {
             "name": "Market 1",
-            "start_time": "2023-12-01T09:00",
-            "end_time": "2023-12-03T09:00",
+            "start_time": "2024-12-01T09:00",
+            "end_time": "2024-12-03T09:00",
         }
 
         response = self.client.post(reverse("event-create"), data)
@@ -230,7 +230,7 @@ class EventCreateTests(TestCase):
         data = {
             "name": "Some Event",
             "location": "Some Location",
-            "end_time": "2023-12-03T09:00",
+            "end_time": "2024-12-03T09:00",
         }
 
         response = self.client.post(reverse("event-create"), data)
@@ -245,7 +245,7 @@ class EventCreateTests(TestCase):
         data = {
             "name": "Some Event",
             "location": "Some Location",
-            "start_time": "2023-12-01T09:00",
+            "start_time": "2024-12-01T09:00",
         }
 
         response = self.client.post(reverse("event-create"), data)
@@ -260,8 +260,8 @@ class EventCreateTests(TestCase):
         data = {
             "name": "Some Event",
             "location": "Some Location",
-            "start_time": "2023-12",
-            "end_time": "2023-12-03T09:00",
+            "start_time": "2024-12",
+            "end_time": "2024-12-03T09:00",
         }
 
         response = self.client.post(reverse("event-create"), data)
@@ -276,7 +276,7 @@ class EventCreateTests(TestCase):
         data = {
             "name": "Some Event",
             "location": "Some Location",
-            "start_time": "2023-12-01T09:00",
+            "start_time": "2024-12-01T09:00",
             "end_time": "T09:00",
         }
 
@@ -286,21 +286,21 @@ class EventCreateTests(TestCase):
         self.assertContains(response, "Please correct the errors.")
 
     
-    def test_event_create_end_time_before_star_time(self):
+    def test_event_create_end_time_before_start_time(self):
         """ Test the event create view when the end time is before the start time """
 
         data = {
             "name": "Some Event",
             "location": "Some Location",
-            "start_time": "2023-12-01T09:00",
-            "end_time": "2023-12-01T08:59",
+            "start_time": "2024-12-01T09:00",
+            "end_time": "2024-12-01T08:59",
         }
 
         response = self.client.post(reverse("event-create"), data)
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Please correct the errors.")
-        self.assertContains(response, "End time cannot be before start time")
+        self.assertContains(response, "End time must come after start time!")
 
 
 class EventUpdateTests(TestCase):
@@ -313,9 +313,9 @@ class EventUpdateTests(TestCase):
             name="Event 1",
             location="Event 1 Location",
             start_time=timezone.make_aware(
-                datetime.datetime(2023, 11, 1, 10, 0)
-            ),  # 2023-11-01 10:00
-            end_time=timezone.make_aware(datetime.datetime(2023, 11, 1, 12, 0)),
+                datetime.datetime(2025, 11, 1, 10, 0)
+            ),  # 2025-11-01 10:00
+            end_time=timezone.make_aware(datetime.datetime(2025, 11, 1, 12, 0)),
         )
         self.update_url = reverse("event-update", kwargs={"pk": self.event_1.pk})
         self.res = self.client.get(self.update_url)
@@ -382,7 +382,7 @@ class EventUpdateTests(TestCase):
         self.assertEqual(updated_event.location, new_location)
 
     def test_event_update_change_start_time(self):
-        new_start_time = timezone.make_aware(datetime.datetime(2023, 10, 5, 10, 0))
+        new_start_time = timezone.make_aware(datetime.datetime(2025, 10, 5, 10, 0))
         data = {
             "name": self.event_1.name,
             "location": self.event_1.location,
@@ -397,7 +397,7 @@ class EventUpdateTests(TestCase):
         self.assertEqual(updated_event.start_time, new_start_time)
 
     def test_event_update_change_end_time(self):
-        new_end_time = timezone.make_aware(datetime.datetime(2023, 12, 5, 12, 0))
+        new_end_time = timezone.make_aware(datetime.datetime(2025, 12, 5, 12, 0))
 
         data = {
             "name": self.event_1.name,
@@ -424,8 +424,8 @@ class EventDeleteTests(TestCase):
             id=1,
             name="Event 1",
             location="Event 1 Location",
-            start_time="2023-12-01T09:00+03:00",
-            end_time="2023-12-01T10:00+03:00",
+            start_time="2024-12-01T09:00+03:00",
+            end_time="2024-12-01T10:00+03:00",
         )
 
     def test_event_delete_at_url(self):

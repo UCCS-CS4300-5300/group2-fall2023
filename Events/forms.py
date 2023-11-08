@@ -1,3 +1,9 @@
+### CS 4300 Fall 2023 Group 2
+### Harvestly
+### Events Forms
+
+from datetime import datetime
+from django.utils import timezone
 from django import forms
 from .models import Event
 
@@ -28,14 +34,41 @@ class EventForm(forms.ModelForm):
             "end_time": "End Time:",
         }
 
-    def check_end_time_not_before_start_time(self):
-        # TODO figure out how to compare datetimes
-        start_time = self.data.get("start_time")
-        end_time = self.data.get("end_time")
 
-    def start_time_not_in_past(self):   
-        # TODO figure out how to compare datetimes   
-        start_time = self.data.get("start_time")
+    def clean_start_time(self):
+        """ Ensure that the start_time is not in the past """
+
+        start_time = self.cleaned_data.get("start_time")
+        now = datetime.now(timezone.get_current_timezone())
+
+        if start_time:
+            start_time_aware = datetime(
+                start_time.year,
+                start_time.month,
+                start_time.day,
+                start_time.hour,
+                start_time.minute,
+                tzinfo=timezone.get_current_timezone()
+            )
+
+            if start_time_aware < now:
+                raise forms.ValidationError("Start time must not be in the past!")
+        
+        return start_time
+    
+
+    def clean_end_time(self):
+        """ Ensure that the start_time comes before end_time """
+
+        start_time = self.cleaned_data.get("start_time")
+        end_time = self.cleaned_data.get("end_time")
+
+        if start_time and end_time and start_time > end_time:
+            raise forms.ValidationError("End time must come after start time!")
+        
+        return end_time
+
+
 
 
 
