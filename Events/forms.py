@@ -13,6 +13,7 @@ class EventForm(forms.ModelForm):
             'start_time',
             'end_time'
         ]
+        
         widgets = {
             'name': forms.TextInput(),
             'location': forms.TextInput(),
