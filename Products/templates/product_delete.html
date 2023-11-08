@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Delete Product{% endblock %}
+{% block title %}Delete {{ product.name|title }}{% endblock %}
 
 {% block content %}
 <div>
@@ -7,7 +7,7 @@
     <form method="post">
         {% csrf_token %}
         <div class="row mt-4 mb-5">
-            <div class="col-md-6">
+            <div class="col-md-6 mb-2">
                 <!-- TODO load image -->
                 {% load static %}
                 <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Product Image" width="100%">

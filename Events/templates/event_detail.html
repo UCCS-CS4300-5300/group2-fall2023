@@ -1,15 +1,58 @@
 {% extends "layout.html" %}
-{% block title %}{{ event.name }} Details{% endblock %}
+{% block title %}{{ event.name|title }} Details{% endblock %}
 
 {% block content %}
+<div>
+    <h3 class="subtitle">{{ event.name|title }}</h3>
+    <div class="row mt-4 mb-5">
+        <div class="col-md-6 mb-2">
+            <!-- TODO replace this image with a location mini-map/preview from Google Maps, similar to this:
+                https://developers.google.com/maps/documentation/javascript/adding-a-google-map
+            -->
+            {% load static %}
+            <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Event Location Stub" width="100%">
+        </div>
+        <div class="col-md-6 align-self-center">
+            <h3>{{ event.name|title }} Details</h3>
+            <h5>{{ event.location }}</h5>
 
-<div id="main">
-    <div class="details-title"><h1>{{ event.name }} Details</h1></div>
-            <div class="event-location">Location: {{ event.location }}</div>
-            <div class="event-date">Date: {{ event.start_time.date }}</div>
-            <div class="event-start-time">Start time: {{ event.start_time }}</div>
-            <div class="event-end-time">End time: {{ event.end_time }}</div>
+            {% load filters %}
+            <h5>{{ event.start_time|format_date_range:event.end_time }}</h5>
+            <div class="mt-5 w-100">
+                <h5 class="text-muted">Starts at {{ event.start_time|date:"F j, Y g:iA" }}</h5>
+                <h5 class="text-muted">Ends at {{ event.end_time|date:"F j, Y g:iA" }}</h5>
+            </div>
+        </div>
+    </div>
+
+    <!-- TODO if the user IS NOT the organizer of this event, display the vendor information and products -->
+    <div class="row mt-5 pt-4">
+        <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
+            <h3>View Products for this Market</h3>
+            <h5>Coming soon.</h5>
+        </div>
+        <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
+            <h3>Event Organizer Information</h3>
+            <h5>Coming soon.</h5>
+        </div>
+    </div>
+
+    <!-- TODO if the user IS the organizer of this event, display the edit/delete options -->
+    <div class="row mt-5 pt-4 justify-content-center">
+        <div class="col-md-6 d-flex flex-column justify-content-center align-self-center">
+            <a 
+                href="{% url 'event-update' event.id %}" 
+                class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center mb-3 py-2"
+            >
+                <h4 class="m-0">Edit Event</h4>
+            </a>
+            <a
+                href="{% url 'event-delete' event.id %}"
+                class="harvestly-nav-btn-secondary  d-flex justify-content-center align-items-center py-2"
+            >
+                <h4 class="m-0">Delete Event</h4>
+            </a>
+        </div>
+    </div>
 </div>
-<a href="{% url 'event-update' event.id %}"><button>Edit</button></a>
-<a href="{% url 'event-delete' event.id %}"><button>Delete</button></a>
 {% endblock %}

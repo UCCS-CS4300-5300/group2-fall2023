@@ -1,16 +1,66 @@
 {% extends "layout.html" %}
-{% block title %}Update {{ event.name }}{% endblock %}
+{% block title %}Edit Event{% endblock %}
 
 {% block content %}
-
-<div id="main">
-    <div class="update-title"><strong>Update {{ event.name }}</strong></div>
+<div>
+    <h3 class="subtitle"> Edit Event Details </h3>
     <form method="post">
-        <div id="main" style="background-color: black;"></div>
-            {% csrf_token %}
-            {{ form }}
-            <input type="submit" value="Update" />
-        </div>
-        </form>
+        {% csrf_token %}
+        <div class="row mt-4 mb-5">
+            <div class="col-md-6 mb-2">
+                <!-- TODO replace this image with a location mini-map/preview from Google Maps, similar to this:
+                    https://developers.google.com/maps/documentation/javascript/adding-a-google-map
+
+                    Make this location updateable in this view
+                -->
+                {% load static %}
+                <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Event Location Stub" width="100%">
+            </div>
+            <div class="col-md-6 align-self-center">
+                <div class="harvestly-form-item">
+                    {{ form.name.label }}
+                    {{ form.name }}
+                </div>
+                <div class="harvestly-form-item">
+                    {{ form.location.label }}
+                    {{ form.location }}
+                </div>
+                <div class="harvestly-form-item">
+                    {{ form.start_time.label }}
+                    {{ form.start_time }}
+                </div>
+                <div class="harvestly-form-item">
+                    {{ form.end_time.label }}
+                    {{ form.end_time }}
+                </div>
+                <div class="d-flex flex-column">
+                    {% if user.is_authenticated %}
+                        <button class="harvestly-nav-btn-primary mt-2 py-2" type="submit">
+                            <h4 class="m-0">Update</h4>
+                        </button>
+                    {% else %}
+                        <a 
+                            class="harvestly-nav-btn-primary mt-2 py-2 d-flex justify-content-center align-items-center"
+                            href="{% url 'signup' %}"
+                        >
+                            <h4 class="m-0">Update</h4>
+                        </a>
+                    {% endif %}
+                    <a
+                        class="harvestly-nav-btn-secondary mt-2 py-2 d-flex justify-content-center align-items-center"
+                        href="{% url 'event-delete' event.id %}"
+                    >
+                        <h4 class="m-0">Delete Event</h4>
+                    </a>
+                    <a
+                        class="harvestly-nav-btn-secondary mt-2 py-2 d-flex justify-content-center align-items-center"
+                        href="{% url 'event-detail' event.id %}"
+                    >
+                        <h4 class="m-0">Cancel</h4>
+                    </a>
+                </div>
+            </div>
+        </div>        
+    </form>
 </div>
 {% endblock %}
