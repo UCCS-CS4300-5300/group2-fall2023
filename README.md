@@ -83,6 +83,25 @@ python manage.py test
 
 Tests in each app should be stored in a directory named `tests/`, and each test should follow the naming convention `test_<module_name>.py` (i.e. `Events/tests/test_models.py`). Violating this naming convention may result in the tests not being recognized by Django.
 
-## Django Apps
-* `Events` - Schedule, Display, Join, and Update Events
+## Test Coverage
+Utilize the `coverage` library to evaluate code test coverage. Run the following command:
 
+```
+coverage run ./manage.py test && coverage report
+```
+
+You can evaluate code coverage for a specific app using the following command:
+
+```
+coverage run --source=<APP_NAME> ./manage.py test <APP_NAME> && coverage report
+```
+
+To generate a test coverage report as html use the following command:
+
+```
+coverage run ./manage.py test && coverage report && coverage html && open htmlcov/index.html
+```
+
+
+## Code Quality
+To examine cod quality, utilize the `radon` library (Ensure `radon` is installed, see `requirements.txt`).  
