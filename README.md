@@ -104,4 +104,68 @@ coverage run ./manage.py test && coverage report && coverage html && open htmlco
 
 
 ## Code Quality
-To examine cod quality, utilize the `radon` library (Ensure `radon` is installed, see `requirements.txt`).  
+To examine code quality, utilize the `radon` library. You can evaluate the quality of a module using the following commands:
+
+#### Cyclomatic Complexity:
+```
+radon cc <FILE_NAME | APP_NAME>
+```
+
+#### Maintainability:
+```
+radon mi -i A <FILE_NAME | APP_NAME>
+```
+
+#### Halstead Metrics:
+```
+radon hal <FILE_NAME | APP_NAME>
+```
+
+#### Raw - Lines of Code (LOC), Cohesion/Coupling:
+```
+radon raw <FILE_NAME | APP_NAME>
+```
+
+[More Radon Usage](https://radon.readthedocs.io/en/latest/commandline.html)
+
+### Interpret Radon Results
+
+#### Cyclomatic Complexity [More Information](https://radon.readthedocs.io/en/latest/commandline.html#the-cc-command):
+Each file is given a grade:
+* `A`: Low Complexity (1 - 5)
+* `B`: (6 - 10)
+* `C`: (11 - 20)
+* `D`: (21 - 30)
+* `E`: (31 - 40)
+* `F`: (41 - 50)
+* `G`: High complexity (51+)
+
+Generally, it is best to maintain lower complexity in the interest of readability and maintainability.
+
+
+#### Maintainability [More Information](https://radon.readthedocs.io/en/latest/commandline.html#the-mi-command):
+Once again, each file is given a letter grade:
+* `A`: Very High (20 - 100)
+* `B`: Medium (10-19)
+* `C`: Extremely Low (0 - 9)
+
+For maintainable code, it is best to maintain `A` grades here.
+
+#### Halstead Metrics [More Information](https://en.wikipedia.org/wiki/Halstead_complexity_measures):
+
+The halstead metrics are provided as follows:
+* `h1`: Number of distinct operators
+* `h2`: Number of distinct operands
+* `N1`: Total number of operators
+* `N2`: Total number of operands
+* `vocabulary`: Result of `h1 + h2`
+* `length`: Result of `N1 + N2`
+* `calculated_length`: Result of `h1 log(h1) + h2 log(h2)`
+* `volume`: Result of `length x log(vocabulary)`
+* `difficulty`: Result of `h1/2 + N2/h2`
+* `effort`: Result of `difficulty x volume`
+
+
+#### Raw - Lines of Code (LOC), Cohesion/Coupling [More Information](https://radon.readthedocs.io/en/latest/commandline.html#the-raw-command):
+
+This is an evaluation of number of lines of code and their purpose (i.e. blank, comments, code, etc).
