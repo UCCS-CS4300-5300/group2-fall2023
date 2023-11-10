@@ -29,16 +29,16 @@
                     {{ form.quantity.label }}
                     {{ form.quantity }}
                 </div>
-                <div class="d-flex flex-column">
-                    <button class="harvestly-nav-btn-primary w-100 my-2 py-2" type="submit">
-                        <h4 class="m-0">Update</h4>
-                    </button>
+                <div class="d-flex justify-content-end mt-2">
                     <a
-                        class="harvestly-nav-btn-secondary py-2 d-flex justify-content-center align-items-center"
-                        href="{% url 'product-details' product.id %}"
-                    >
-                        <h4 class="m-0">Cancel</h4>
-                    </a>
+                    class="harvestly-nav-btn-secondary mx-1 py-2 d-flex justify-content-center align-items-center"
+                    href="{% url 'product-details' product.id %}"
+                >
+                    <h4 class="m-0">Cancel</h4>
+                </a>
+                    <button class="harvestly-nav-btn-primary justify-content-center d-flex mx-1 py-2" type="submit">
+                        <h4 class="m-0">Submit</h4>
+                    </button>
                 </div>
             </div>
         </div>

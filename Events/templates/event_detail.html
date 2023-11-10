@@ -10,7 +10,7 @@
                 https://developers.google.com/maps/documentation/javascript/adding-a-google-map
             -->
             {% load static %}
-            <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Event Location Stub" width="100%">
+            <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Market Location Stub" width="100%">
         </div>
         <div class="col-md-6 align-self-center">
             <h3>{{ event.name|title }} Details</h3>
@@ -32,25 +32,25 @@
             <h5>Coming soon.</h5>
         </div>
         <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
-            <h3>Event Organizer Information</h3>
+            <h3>Market Organizer Information</h3>
             <h5>Coming soon.</h5>
         </div>
     </div>
 
     <!-- TODO if the user IS the organizer of this event, display the edit/delete options -->
-    <div class="row mt-5 pt-4">
-        <div class="col-md-6 d-flex flex-column justify-content-center align-self-center">
+    <div class="row mt-5 pt-4 justify-content-end">
+        <div class="col-md-6 d-flex justify-content-end align-self-center">
+            <a
+            href="{% url 'event-delete' event.id %}"
+            class="harvestly-nav-btn-secondary  d-flex justify-content-center align-items-center mx-1 py-2"
+        >
+            <h4 class="m-0">Delete</h4>
+        </a>
             <a 
                 href="{% url 'event-update' event.id %}" 
-                class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center mb-3 py-2"
+                class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center mx-1 py-2"
             >
-                <h4 class="m-0">Edit Event</h4>
-            </a>
-            <a
-                href="{% url 'event-delete' event.id %}"
-                class="harvestly-nav-btn-secondary  d-flex justify-content-center align-items-center py-2"
-            >
-                <h4 class="m-0">Delete Event</h4>
+                <h4 class="m-0">Edit</h4>
             </a>
         </div>
     </div>

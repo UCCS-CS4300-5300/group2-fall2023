@@ -22,16 +22,16 @@
                     {{ form.reserve_quantity.label }}
                     {{ form.reserve_quantity }}
                 </div>
-                <div class="d-flex flex-column">
-                    <button class="harvestly-nav-btn-primary w-100 my-2 py-2" type="submit">
-                        <h4 class="m-0">Confirm Reservation</h4>
-                    </button>
+                <div class="row justify-content-end">
                     <a
-                        class="harvestly-nav-btn-secondary py-2 d-flex justify-content-center align-items-center"
-                        href="{% url 'product-details' product.id %}"
-                    >
-                        <h4 class="m-0">Cancel</h4>
-                    </a>
+                    class="harvestly-nav-btn-secondary py-2 mx-1 d-flex justify-content-center align-items-center"
+                    href="{% url 'product-details' product.id %}"
+                >
+                    <h4 class="m-0">Cancel</h4>
+                </a>
+                    <button class="harvestly-nav-btn-primary d-flex py-2 mx-1 justify-content-center" type="submit">
+                        <h4 class="m-0">Confirm</h4>
+                    </button>
                 </div>
 
                 {% if form.is_bound and form.errors %}

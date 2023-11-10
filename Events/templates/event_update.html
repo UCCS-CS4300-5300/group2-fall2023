@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
-{% block title %}Edit Event{% endblock %}
+{% block title %}Edit Market{% endblock %}
 
 {% block content %}
 <div>
-    <h3 class="subtitle"> Edit Event Details </h3>
+    <h3 class="subtitle"> Edit Market Details </h3>
     <form method="post">
         {% csrf_token %}
         <div class="row mt-4 mb-5">
@@ -14,7 +14,7 @@
                     Make this location updateable in this view
                 -->
                 {% load static %}
-                <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Event Location Stub" width="100%">
+                <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Market Location Stub" width="100%">
             </div>
             <div class="col-md-6 align-self-center">
                 <div class="harvestly-form-item">
@@ -35,7 +35,7 @@
                 </div>
                 <div class="d-flex flex-column">
                     <button class="harvestly-nav-btn-primary mt-2 py-2" type="submit">
-                        <h4 class="m-0">Update</h4>
+                        <h4 class="m-0">Submit</h4>
                     </button>
                     <a
                         class="harvestly-nav-btn-secondary mt-2 py-2 d-flex justify-content-center align-items-center"

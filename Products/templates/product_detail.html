@@ -21,41 +21,38 @@
             </div>
         </div>
     </div>
-
     
-    <!-- TODO if the user is NOT the owner of this product, display the vendor information and reserve options -->
     <div class="row mt-5 pt-4">
         <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
             <h3>Product Vendor Information</h3>
             <h5>Coming soon.</h5>
         </div>
-        <div class="col-md-6  mb-1 d-flex flex-column justify-content-center align-self-center">
-            <a 
-                href="{% url 'product-reserve' product.id %}" 
-                class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center mb-3 py-2"
-            >
-                <h4 class="m-0">Reserve this Product</h4>
-            </a>
-        </div>
+        <!-- Currently mocking some behavior for futher refinement: if not logged in, display the reserve-->
+        {% if not user.is_authenticated %}
+            <div class="col-md-6  mb-1 d-flex flex-column justify-content-center align-self-center">
+                <a 
+                    href="{% url 'product-reserve' product.id %}" 
+                    class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center mb-3 py-2"
+                >
+                    <h4 class="m-0">Reserve this Product</h4>
+                </a>
+            </div>
+        <!-- TODO if the user is the owner of this product, display the edit, delete options -->
+        {% else %}
+            <div class="col-md-6 d-flex justify-content-end align-self-center">
+                <a
+                    href="{% url 'product-delete' product.id %}"
+                    class="harvestly-nav-btn-secondary d-flex justify-content-center align-items-center py-2 mx-1"
+                >
+                    <h4 class="m-0">Delete</h4>
+                </a>
+                <a 
+                    href="{% url 'product-update' product.id %}" 
+                    class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center py-2 mx-1"
+                >
+                    <h4 class="m-0">Edit</h4>
+                </a>
+            </div>
+        {% endif %}
     </div>
-
-    
-    <!-- TODO if the user is the owner of this product, display the edit, delete options -->
-    <div class="row mt-5 pt-4">
-        <div class="col-md-6 d-flex flex-column justify-content-center align-self-center">
-            <a 
-                href="{% url 'product-update' product.id %}" 
-                class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center mb-3 py-2"
-            >
-                <h4 class="m-0">Edit Product</h4>
-            </a>
-            <a
-                href="{% url 'product-delete' product.id %}"
-                class="harvestly-nav-btn-secondary  d-flex justify-content-center align-items-center py-2"
-            >
-                <h4 class="m-0">Delete Product</h4>
-            </a>
-        </div>
-    </div>
-</div>
 {%endblock %}

@@ -1,13 +1,13 @@
 {% extends "layout.html" %}
-{% block title %}Events{% endblock %}
+{% block title %}Markets{% endblock %}
 
 {% block content %}
 
 <div>
     <div class="d-flex align-items-center justify-content-between mb-5">
-        <h1 class="title">Events</h1>
+        <h1 class="title">Markets</h1>
         <a href="{% url 'event-create'%}" class="harvestly-nav-btn-primary">
-            <h3 class="m-0 px-3 py-2">Event +</h3>
+            <h3 class="m-0 px-3 py-2">Add Market</h3>
         </a>
     </div>
     {% if eventlist %}
@@ -26,7 +26,7 @@
         {% endfor %}
         </div>
     {% else %}
-        {% include "empty_list.html" with items="events" %}
+        {% include "empty_list.html" with items="markets" %}
     {% endif %}
 </div>
 {% endblock %}
