@@ -23,11 +23,7 @@
         </div>
         <div class="d-flex">
             <a class="harvestly-nav-btn-secondary d-flex justify-content-center align-items-center mr-2" href="{% url 'products' %}">Cancel</a>
-            {% if user.is_authenticated %}
-                <input class="harvestly-nav-btn-primary" type="submit" value="Add Product" />
-            {% else %}
-                <a class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center" href="{% url 'signup' %}">Add Product</a>
-            {% endif %}
+            <input class="harvestly-nav-btn-primary" type="submit" value="Add Product" />
         </div>
     </form>
 

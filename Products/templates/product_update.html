@@ -30,18 +30,9 @@
                     {{ form.quantity }}
                 </div>
                 <div class="d-flex flex-column">
-                    {% if user.is_authenticated %}
-                        <button class="harvestly-nav-btn-primary w-100 my-2 py-2" type="submit">
-                            <h4 class="m-0">Update</h4>
-                        </button>
-                    {% else %}
-                        <a 
-                            class="harvestly-nav-btn-primary my-2 py-2 d-flex justify-content-center align-items-center"
-                            href="{% url 'signup' %}"
-                        >
-                            <h4 class="m-0">Update</h4>
-                        </a>
-                    {% endif %}
+                    <button class="harvestly-nav-btn-primary w-100 my-2 py-2" type="submit">
+                        <h4 class="m-0">Update</h4>
+                    </button>
                     <a
                         class="harvestly-nav-btn-secondary py-2 d-flex justify-content-center align-items-center"
                         href="{% url 'product-details' product.id %}"
