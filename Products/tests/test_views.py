@@ -4,6 +4,7 @@
 
 from django.test import TestCase
 from django.urls import reverse
+from django.contrib.auth.models import User
 from Products.models import Product
 
 
@@ -81,6 +82,21 @@ class ProductListTests(TestCase):
 
 class ProductCreateTests(TestCase):
     """ Test the product create view """
+
+    def setUp(self):
+        """ Login as user to handle LoginRequired """
+
+        username = "test_user"
+        password = "test_password"
+
+        user = User.objects.create_user(
+            username=username,
+            password=password,
+        )
+
+        user.save()
+        self.client.login(username=username, password=password)
+
 
     def test_product_create_at_url(self):
         """ Verify that the product create exists at `/products/new` """
@@ -318,7 +334,18 @@ class ProductUpdateTests(TestCase):
     """ Test the Product Update view """
 
     def setUp(self):
-        """ Create an object to be updated """
+        """ Login as user to handle LoginRequired and Create an object to be updated """
+
+        username = "test_user"
+        password = "test_password"
+
+        user = User.objects.create_user(
+            username=username,
+            password=password,
+        )
+
+        user.save()
+        self.client.login(username=username, password=password)
 
         self.product_1 = Product.objects.create(
             id=1,
@@ -461,9 +488,19 @@ class ProductUpdateTests(TestCase):
 class ProductDeleteTests(TestCase):
     """ Test the Product Delete view """
 
-
     def setUp(self):
-        """ Create an object to be deleted """
+        """ Login as user to handle LoginRequired and Create an object to be deleted """
+
+        username = "test_user"
+        password = "test_password"
+
+        user = User.objects.create_user(
+            username=username,
+            password=password,
+        )
+
+        user.save()
+        self.client.login(username=username, password=password)
 
         self.product_1 = Product.objects.create(
             id=1,
@@ -528,9 +565,19 @@ class ProductDeleteTests(TestCase):
 class ProductReserveTests(TestCase):
     """ Test the Product Reserve view """
 
-
     def setUp(self):
-        """ Create an object to be reserved """
+        """ Login as user to handle LoginRequired and Create an object to be reserved """
+
+        username = "test_user"
+        password = "test_password"
+
+        user = User.objects.create_user(
+            username=username,
+            password=password,
+        )
+
+        user.save()
+        self.client.login(username=username, password=password)
 
         self.product_1 = Product.objects.create(
             id=1,

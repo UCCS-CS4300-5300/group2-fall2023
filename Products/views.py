@@ -8,6 +8,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Product
 from .forms import ProductForm, ProductReserveForm
@@ -22,7 +23,7 @@ class ProductList(ListView):
     context_object_name = "product_list"
     
 
-class ProductCreate(CreateView):
+class ProductCreate(LoginRequiredMixin, CreateView):
     """ Create View for an Event Object. URL `/products/new/` """
 
     # Establish model type and form class for use
@@ -46,7 +47,7 @@ class ProductDetail(DetailView):
     template_name = "product_detail.html"
 
 
-class ProductUpdate(UpdateView):
+class ProductUpdate(LoginRequiredMixin, UpdateView):
     """ Edit product details of a specific product. URL `/products/edit/<int:pk>/` """
 
     # Establish model type and form class for use
@@ -62,7 +63,7 @@ class ProductUpdate(UpdateView):
         return reverse("product-details", kwargs={"pk": self.object.pk})
 
 
-class ProductDelete(DeleteView):
+class ProductDelete(LoginRequiredMixin, DeleteView):
     """ Delete a specific product. URL `/products/delete/<int:pk>/` """
 
     # Establish the model type and template name for the generic view
@@ -75,7 +76,7 @@ class ProductDelete(DeleteView):
         return reverse("products")
     
 
-class ProductReserve(View):
+class ProductReserve(LoginRequiredMixin, View):
     """ Reserve a quantity of a specific product. URL `/products/reserve/<int:pk>/` """
 
     template_name = "product_reserve.html"

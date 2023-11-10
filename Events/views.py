@@ -8,6 +8,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .forms import EventForm
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class EventList(ListView):
     """ Get a list of Harvestly events. URL `/event-list/` """
@@ -24,14 +25,14 @@ class EventList(ListView):
 
 
 class EventDetail(DetailView):
-    """ Get event/market details. URL `/events/<int:pk>/` """
+    """ Get event/market details. URL `/markets/<int:pk>/` """
 
     model = Event
     template_name = "event_detail.html"
 
 
-class EventCreate(CreateView):
-    """ Create View for an Event Object. URL `/events/new` """
+class EventCreate(LoginRequiredMixin, CreateView):
+    """ Create View for an Event Object. URL `/markets/new` """
 
     # Establish model type and form class for use
     model = Event
@@ -41,8 +42,8 @@ class EventCreate(CreateView):
     template_name = "event_create.html"
 
 
-class EventUpdate(UpdateView):
-    """ Update View for an Event Object. URL `/events/<int:pk>/update` """
+class EventUpdate(LoginRequiredMixin, UpdateView):
+    """ Update View for an Event Object. URL `/markets/edit/<int:pk>` """
 
     # Establish model type and form class for use
     model = Event
@@ -60,8 +61,8 @@ class EventUpdate(UpdateView):
         return kwargs
 
 
-class EventDelete(DeleteView):
-    """ View to delete an Event. URL `/events/<int:pk>/delete` """
+class EventDelete(LoginRequiredMixin, DeleteView):
+    """ View to delete an Event. URL `/markets/delete/<int:pk>` """
 
     # Establish the model type and template name for the generic view
     model = Event

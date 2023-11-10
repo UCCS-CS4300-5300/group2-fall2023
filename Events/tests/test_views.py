@@ -6,6 +6,7 @@ from django.test import TestCase
 from django.urls import reverse
 from Events.models import Event
 from django.utils import timezone
+from django.contrib.auth.models import User
 import datetime
 
 
@@ -13,9 +14,9 @@ class EventListTests(TestCase):
     """Test the Event List View"""
 
     def test_event_list_at_url(self):
-        """Verify that the event list exists at `/events/`"""
+        """Verify that the event list exists at `/markets/`"""
 
-        response = self.client.get("/events/")
+        response = self.client.get("/markets/")
 
         self.assertEqual(response.status_code, 200)
 
@@ -94,14 +95,14 @@ class EventDetailTests(TestCase):
         )
 
     def test_event_detail_at_url(self):
-        """Verify that the event detail exists at `/events/details/<int:pk>`"""
+        """Verify that the event detail exists at `/markets/details/<int:pk>`"""
 
-        response = self.client.get(f"/events/{self.event_1.id}")
+        response = self.client.get(f"/markets/details/{self.event_1.id}")
 
         self.assertEqual(response.status_code, 200)
 
     def test_event_detail_at_reverse_lookup(self):
-        """Verify that the event detail exists with reverse lookup of `product-details`"""
+        """Verify that the event detail exists with reverse lookup of `event-detail`"""
 
         response = self.client.get(reverse("event-detail", args=[self.event_1.id]))
 
@@ -143,10 +144,24 @@ class EventDetailTests(TestCase):
 class EventCreateTests(TestCase):
     """Test the Event Create View"""
 
-    def test_event_create_at_url(self):
-        """ Verify that the event create exists at `/events/new` """
+    def setUp(self):
+        """ Login as user to handle LoginRequired """
 
-        response = self.client.get("/events/new")
+        username = "test_user"
+        password = "test_password"
+
+        user = User.objects.create_user(
+            username=username,
+            password=password,
+        )
+
+        user.save()
+        self.client.login(username=username, password=password)
+
+    def test_event_create_at_url(self):
+        """ Verify that the event create exists at `/markets/new` """
+
+        response = self.client.get("/markets/new")
 
         self.assertEqual(response.status_code, 200)
 
@@ -307,7 +322,18 @@ class EventUpdateTests(TestCase):
     """Test the Event Update View"""
 
     def setUp(self):
-        """Create event object for updating"""
+        """ Login as user to handle LoginRequired and Create event object for updating"""
+
+        username = "test_user"
+        password = "test_password"
+
+        user = User.objects.create_user(
+            username=username,
+            password=password,
+        )
+
+        user.save()
+        self.client.login(username=username, password=password)
 
         self.event_1 = Event.objects.create(
             name="Event 1",
@@ -321,7 +347,7 @@ class EventUpdateTests(TestCase):
         self.res = self.client.get(self.update_url)
 
     def test_event_update_at_url(self):
-        res = self.client.get(f"/events/{self.event_1.id}/update")
+        res = self.client.get(f"/markets/edit/{self.event_1.id}")
         self.assertEqual(res.status_code, 200)
 
     def test_event_update_at_reverse_lookup(self):
@@ -418,7 +444,18 @@ class EventDeleteTests(TestCase):
     """Test the Event Delete View"""
 
     def setUp(self):
-        """Create an event to be deleted"""
+        """Login as user to handle LoginRequired and Create an event to be deleted"""
+
+        username = "test_user"
+        password = "test_password"
+
+        user = User.objects.create_user(
+            username=username,
+            password=password,
+        )
+
+        user.save()
+        self.client.login(username=username, password=password)
 
         self.event_1 = Event.objects.create(
             id=1,
@@ -429,9 +466,9 @@ class EventDeleteTests(TestCase):
         )
 
     def test_event_delete_at_url(self):
-        """Verify that the event delete exists at `/events/<int:pk>/delete/`"""
+        """Verify that the event delete exists at `/markets/delete/<int:pk>/`"""
 
-        response = self.client.get(f"/events/{self.event_1.id}/delete")
+        response = self.client.get(f"/markets/delete/{self.event_1.id}")
 
         self.assertEqual(response.status_code, 200)
 

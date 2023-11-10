@@ -25,6 +25,10 @@
     
     <!-- TODO if the user is NOT the owner of this product, display the vendor information and reserve options -->
     <div class="row mt-5 pt-4">
+        <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
+            <h3>Product Vendor Information</h3>
+            <h5>Coming soon.</h5>
+        </div>
         <div class="col-md-6  mb-1 d-flex flex-column justify-content-center align-self-center">
             <a 
                 href="{% url 'product-reserve' product.id %}" 
@@ -33,15 +37,11 @@
                 <h4 class="m-0">Reserve this Product</h4>
             </a>
         </div>
-        <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
-            <h3>Product Vendor Information</h3>
-            <h5>Coming soon.</h5>
-        </div>
     </div>
 
     
     <!-- TODO if the user is the owner of this product, display the edit, delete options -->
-    <div class="row mt-5 pt-4 justify-content-center">
+    <div class="row mt-5 pt-4">
         <div class="col-md-6 d-flex flex-column justify-content-center align-self-center">
             <a 
                 href="{% url 'product-update' product.id %}" 

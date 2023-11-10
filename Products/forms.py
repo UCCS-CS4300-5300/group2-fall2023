@@ -30,7 +30,7 @@ class ProductForm(forms.ModelForm):
             "price": forms.NumberInput(attrs={
                 "required": "required",
                 "step": "0.01",
-                "placeholder": "Product price"
+                "placeholder": "X.XX"
             }),
             "quantity": forms.NumberInput(attrs={
                 "required": "required",
