@@ -12,7 +12,7 @@
                     https://developers.google.com/maps/documentation/javascript/adding-a-google-map
                 -->
                 {% load static %}
-                <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Event Location Stub" width="100%">
+                <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Market Location Stub" width="100%">
             </div>
             <div class="col-md-6 align-self-center">
                 <h3>{{ event.name|title }} Details</h3>
@@ -24,16 +24,16 @@
                     <h5 class="text-muted">Starts at {{ event.start_time|date:"F j, Y g:iA" }}</h5>
                     <h5 class="text-muted">Ends at {{ event.end_time|date:"F j, Y g:iA" }}</h5>
                 </div>
-                <div class="d-flex flex-column">
-                    <button class="harvestly-nav-btn-primary w-100 my-2 py-2" type="submit">
-                        <h4 class="m-0">Confirm Deletion</h4>
-                    </button>
+                <div class="d-flex justify-content-end">
                     <a
-                        class="harvestly-nav-btn-secondary py-2 d-flex justify-content-center align-items-center"
-                        href="{% url 'event-detail' event.id %}"
-                    >
-                        <h4 class="m-0">Cancel</h4>
-                    </a>
+                    class="harvestly-nav-btn-secondary mx-1 py-2 d-flex justify-content-center align-items-center"
+                    href="{% url 'event-detail' event.id %}"
+                >
+                    <h4 class="m-0">Cancel</h4>
+                </a>
+                    <button class="harvestly-nav-btn-primary mx-1 py-2 d-flex justify-content-center align-items-center" type="submit">
+                        <h4 class="m-0">Confirm</h4>
+                    </button>
                 </div>
             </div>
         </div>
