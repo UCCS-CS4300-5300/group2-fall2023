@@ -6,7 +6,6 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
 from Products.models import Product
-from Products import views
 
 
 class ProductListTests(TestCase):

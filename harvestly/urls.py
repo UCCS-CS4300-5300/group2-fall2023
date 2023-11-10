@@ -28,7 +28,7 @@ urlpatterns = [
     path("", home_views.Home.as_view(), name="index"),
     path("about-us/", home_views.About.as_view(), name="about"),
 
-    path("events/", include("Events.urls")),
+    path("markets/", include("Events.urls")),
     path("products/", include("Products.urls")),
     
     path("admin/", admin.site.urls),
