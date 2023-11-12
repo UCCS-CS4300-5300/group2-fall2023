@@ -30,21 +30,23 @@
         <div class="col-md-6 d-flex flex-column">
             <h3>Products for this Market</h3>
             <div class="harvestly-scrollable-container">
-                {% if event.get_products %}
-                    {% for product in event.get_products %}
-                        <div class="harvestly-scrollable-item">
-                            <h4>{{ product.name|title }}</h4>
-                            <div class="d-flex justify-content-between text-muted">
-                                <h6>${{ product.price|floatformat:"2" }}</h6>
-                                <h6>&times;{{ product.quantity }}</h6>
+                <div class="harvestly-scrollable-content">
+                    {% if event.get_products %}
+                        {% for product in event.get_products %}
+                            <div class="harvestly-scrollable-item flex-column">
+                                <h4>{{ product.name|title }}</h4>
+                                <div class="d-flex justify-content-between text-muted">
+                                    <h5>${{ product.price|floatformat:"2" }}</h5>
+                                    <h5 class="m-0">&times;{{ product.quantity }}</h5>
+                                </div>
                             </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="d-flex align-items-center justify-content-center">
+                            <h4 class="text-muted">No available products.</h4>
                         </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="d-flex text-center align-items-center">
-                        <h4 class="text-muted"> No products available for this market. </h4>
-                    </div>
-                {% endif %}
+                    {% endif %}
+                </div>
             </div>
         </div>
         <div class="col-md-6 d-flex flex-column">
