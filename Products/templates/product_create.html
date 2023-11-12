@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="row pt-2 mb-2">
-            <div class="col-md-6">
+            <div class="col-md-6 d-flex flex-column">
                 <div class="row mb-2">
                     <div class="col harvestly-form-item">
                         {{ form.quantity.label }}
@@ -34,10 +34,12 @@
             <div class="col-md-6 harvestly-form-item">
                 {{ form.product_event.label }}
                 <!-- TODO -->
+                <div class="harvestly-scrollable-container mt-0"> 
                 {% for value, label in form.fields.product_event.choices %}
                     <p> {{ value }} </p>
                     <p> {{ label }} </p>
                 {% endfor %}
+                </div>
             </div>
         </div>
         <div class="d-flex justify-content-end">

@@ -227,10 +227,12 @@ footer .harvestly-nav-link {
     font-size: var(--form-input-size);
     padding: 0.5rem 1rem;
     width: 100%;
-    margin-bottom: 2rem;
     border-color: var(--dark-color);
     border-width: 2px;
     border-radius: 5px;
+}
+.harvestly-form-item textarea {
+    height: 100%;
 }
 
 .harvestly-card-link,
