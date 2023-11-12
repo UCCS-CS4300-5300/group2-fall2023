@@ -22,6 +22,7 @@
     --light-color: rgb(245, 247, 248);
     --dark-color: rgb(0, 21, 42);
     --brand-color: rgb(57, 149, 71);
+    --primary-color-transparent: rgba(121,155,65,0.2);
 }
 
 body {
@@ -256,6 +257,31 @@ footer .harvestly-nav-link {
     color: var(--primary-color);
     transform: scale(1.01);
     box-shadow: 0 0 10px 3px rgba(0,0,0,0.5);
+}
+
+
+.harvestly-scrollable-container {
+    margin: 2rem 0;
+    padding: 2rem 1rem;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    border-radius: 10px;
+    border: solid var(--dark-color) 2px;
+    height: max(300px, 30vh);
+    overflow: auto;
+}
+.harvestly-scrollable-container::-webkit-scrollbar {
+    
+}
+.harvestly-scrollable-item {
+    padding: 1rem;
+    margin: 0.5rem 0.3rem;
+    background-color: transparent;
+    transition: background-color ease 0.3s;
+}
+.harvestly-scrollable-item:hover {
+    background-color: var(--primary-color-transparent);
 }
 
 

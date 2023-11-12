@@ -28,8 +28,24 @@
     <!-- TODO if the user IS NOT the organizer of this event, display the vendor information and products -->
     <div class="row mt-5 pt-4">
         <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
-            <h3>View Products for this Market</h3>
-            <h5>Coming soon.</h5>
+            <h3>Products for this Market</h3>
+            <div class="harvestly-scrollable-container">
+                {% if event.get_products %}
+                    {% for product in event.get_products %}
+                        <div class="harvestly-scrollable-item">
+                            <h4>{{ product.name|title }}</h4>
+                            <div class="d-flex justify-content-between text-muted">
+                                <h6>${{ product.price|floatformat:"2" }}</h6>
+                                <h6>&times;{{ product.quantity }}</h6>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="d-flex text-center align-items-center">
+                        <h4 class="text-muted"> No products available for this market. </h4>
+                    </div>
+                {% endif %}
+            </div>
         </div>
         <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
             <h3>Market Organizer Information</h3>
