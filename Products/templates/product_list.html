@@ -10,28 +10,27 @@
         </a>
     </div>
     {% if product_list %}
-        <div class="row">
-            {% for product in product_list %}
-                <div class="col-md-4 my-3">
-                    <a class="harvestly-card-link" href="{% url 'product-details' product.id %}">
-                        <div class="card">
-                            <!-- TODO image upload -->
-                            {% load static %}
-                            <img src="{% static 'img/product_placeholder.png' %}" alt="Product Image" class="card-img-top ">
-                            <div class="card-body">
-                                <h3 class="card-title">{{ product.name|title }}</h3>
-                                <div class="d-flex justify-content-between">
-                                    <h5>${{ product.price|floatformat:"2" }}</h5>
-                                    <h5>&times;{{ product.quantity }}</h5>
-                                </div>
-                            </div>
+    <div class="row">
+        {% for product in product_list %}
+        <div class="col-md-4 my-3">
+            <a class="harvestly-card-link" href="{% url 'product-details' product.id %}">
+                <div class="card">
+                    <!-- TODO image upload -->
+                    <img src="{{ product.image.url }}" alt="{{ product.name|title}}" class="card-img-top ">
+                    <div class="card-body">
+                        <h3 class="card-title">{{ product.name|title }}</h3>
+                        <div class="d-flex justify-content-between">
+                            <h5>${{ product.price|floatformat:"2" }}</h5>
+                            <h5>&times;{{ product.quantity }}</h5>
                         </div>
-                    </a>
+                    </div>
                 </div>
-            {% endfor %}
+            </a>
         </div>
+        {% endfor %}
+    </div>
     {% else %}
-        {% include "empty_list.html" with items="products" %}
+    {% include "empty_list.html" with items="products" %}
     {% endif %}
 </div>
 {%endblock %}
