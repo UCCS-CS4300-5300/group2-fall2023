@@ -40,7 +40,7 @@ class ProductForm(forms.ModelForm):
                 "min": "1",
                 "placeholder": "Product quantity"
             }),
-            "product_event": forms.Select(), # See `ProductCreate` view for choices
+            "product_event": forms.Select(), # TODO this should be limited to only markets where the user is the organizer or has joined
             "description": forms.Textarea(attrs={
                 "required": "required",
                 "rows": 5,
