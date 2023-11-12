@@ -5,11 +5,12 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.urls import reverse
+
 # from Events.models import Event
 
 
 class Product(models.Model):
-    """ Product model """
+    """Product model"""
 
     # TODO - Install Pillow to work with images
     # TODO - Set up vendors app/model to link vendors to users,products,events
@@ -22,14 +23,15 @@ class Product(models.Model):
         default=1,
         validators=[MinValueValidator(0)],
     )
-
+    # include images for products. 
+    image = models.ImageField(upload_to="products/images", blank=True, null=True)
+    
     # TODO - see above
-    # image = models.ImageField(upload_to='products/images', blank=True, null=True)
     # product_vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     # product_event = models.ForeignKey(Event, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
         return self.name
-    
+
     def get_absolute_url(self):
         return reverse("product-details", args=[str(self.id)])
