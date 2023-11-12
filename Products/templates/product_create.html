@@ -7,19 +7,38 @@
     <form method="post">
         {% csrf_token %}
         <div class="row pt-4 mb-2">
-            {% for field in form %}
-                {% if field.field.widget.input_type == textarea %}
-                    <div class="col-12 harvestly-form-item">
-                        {{ field.label }}
-                        {{ field }}
+            <div class="col-md-6 harvestly-form-item">
+                {{ form.name.label }}
+                {{ form.name }}
+            </div>
+            <div class="col-md-6 harvestly-form-item">
+                {{ form.price.label }}
+                {{ form.price }}
+            </div>
+        </div>
+        <div class="row pt-2 mb-2">
+            <div class="col-md-6">
+                <div class="row mb-2">
+                    <div class="col harvestly-form-item">
+                        {{ form.quantity.label }}
+                        {{ form.quantity }}
                     </div>
-                {% else %}
-                    <div class="col-md-6 harvestly-form-item">
-                        {{ field.label }}
-                        {{ field }}
+                </div>
+                <div class="row pt-2">
+                    <div class="col harvestly-form-item">
+                        {{ form.description.label }}
+                        {{ form.description }}
                     </div>
-                {% endif %}
-            {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-6 harvestly-form-item">
+                {{ form.product_event.label }}
+                <!-- TODO -->
+                {% for value, label in form.fields.product_event.choices %}
+                    <p> {{ value }} </p>
+                    <p> {{ label }} </p>
+                {% endfor %}
+            </div>
         </div>
         <div class="d-flex justify-content-end">
             <a class="harvestly-nav-btn-secondary d-flex justify-content-center align-items-center mr-2" href="{% url 'products' %}">Cancel</a>

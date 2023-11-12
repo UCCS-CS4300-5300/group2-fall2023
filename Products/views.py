@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Product
 from .forms import ProductForm, ProductReserveForm
-
+from Events.models import Event
 
 class ProductList(ListView):
     """ Get a list of Harvestly products. URL `/get-products-list/` """
