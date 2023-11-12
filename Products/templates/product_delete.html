@@ -21,16 +21,16 @@
                     <h5 class="text-muted">${{ product.price|floatformat:"2" }}</h5>
                     <h5 class="text-muted">&times;{{ product.quantity }}</h5>
                 </div>
-                <div class="d-flex flex-column">
-                    <button class="harvestly-nav-btn-primary w-100 my-2 py-2" type="submit">
-                        <h4 class="m-0">Confirm Deletion</h4>
-                    </button>
+                <div class="d-flex mt-3 justify-content-end">
                     <a
-                        class="harvestly-nav-btn-secondary py-2 d-flex justify-content-center align-items-center"
                         href="{% url 'product-details' product.id %}"
+                        class="harvestly-nav-btn-secondary  d-flex justify-content-center align-items-center mr-2 py-2"
                     >
                         <h4 class="m-0">Cancel</h4>
                     </a>
+                    <button class="harvestly-nav-btn-primary px-3" type="submit">
+                        <h4 class="m-0">Confirm Deletion</h4>
+                    </button>
                 </div>
             </div>
         </div>

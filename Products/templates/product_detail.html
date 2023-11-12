@@ -15,6 +15,14 @@
             <div>
                 <h5>{{ product.description }}</h5>
             </div>
+            {% if product.product_event %}
+                <a
+                    class="harvestly-nav-link mt-4" 
+                    href="{% url 'event-detail' product.product_event.id %}"
+                >
+                    <h6>Available at {{ product.product_event.name|title }}</h6>
+                </a>
+            {% endif %}
             <div class="mt-5 w-100 d-flex justify-content-between">
                 <h5 class="text-muted">${{ product.price|floatformat:"2" }}</h5>
                 <h5 class="text-muted">&times;{{ product.quantity }}</h5>

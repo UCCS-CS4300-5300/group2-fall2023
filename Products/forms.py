@@ -30,6 +30,7 @@ class ProductForm(forms.ModelForm):
             }),
             "price": forms.NumberInput(attrs={
                 "required": "required",
+                "min": "0.01",
                 "step": "0.01",
                 "placeholder": "X.XX"
             }),
@@ -39,7 +40,7 @@ class ProductForm(forms.ModelForm):
                 "min": "1",
                 "placeholder": "Product quantity"
             }),
-            "product_event": forms.Select(),
+            "product_event": forms.Select(), # See `ProductCreate` view for choices
             "description": forms.Textarea(attrs={
                 "required": "required",
                 "rows": 5,
