@@ -24,7 +24,7 @@ class Product(models.Model):
         validators=[MinValueValidator(0)],
     )
     # include images for products.
-    image = models.ImageField(upload_to="products/images", blank=True, null=True)
+    image = models.ImageField(upload_to="products/", blank=True, null=True)
 
     # TODO - see above
     # product_vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)

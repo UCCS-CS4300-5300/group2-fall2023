@@ -16,7 +16,11 @@
             <a class="harvestly-card-link" href="{% url 'product-details' product.id %}">
                 <div class="card">
                     <!-- TODO image upload -->
-                    <img src="{{ product.image.url }}" alt="{{ product.name|title}}" class="card-img-top ">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                    {% else %}
+                        <img src="{% static 'path/to/default/image.jpg' %}" class="card-img-top" alt="Default Image">
+                    {% endif %}
                     <div class="card-body">
                         <h3 class="card-title">{{ product.name|title }}</h3>
                         <div class="d-flex justify-content-between">
