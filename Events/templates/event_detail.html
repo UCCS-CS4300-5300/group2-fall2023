@@ -25,23 +25,27 @@
         </div>
     </div>
 
-    {% if user.id != event.organizer.id %}
     <div class="row mt-5 pt-4">
+        <div class="col-md-6 d-flex flex-column">
+            <h3>Market Organizer Information</h3>
+            <h5>{{ event.organizer.username|title }}</h5>
+
+            <!-- TODO develop this as we build out user profile -->
+            <p class="text-muted mt-3">More vendor information coming soon.</p>
+        </div>
         <div class="col-md-6 d-flex flex-column">
             <div class="row">
                 <div class="col-lg-6">
                     <h3>Products for this Market</h3>
                 </div>
-                {% if user.is_authenticated %}
-                    <div class="col-lg-6 d-flex justify-content-end">
-                        <a 
-                            href="{% url 'product-create' %}"
-                            class="harvestly-nav-btn-primary px-2 d-flex align-items-center justify-content-center"
-                        >
-                            <h5 class="m-0">Add Product</h5>
-                        </a>
-                    </div>
-                {% endif %}
+                <div class="col-lg-6 d-flex justify-content-end">
+                    <a 
+                        href="{% url 'product-create' %}"
+                        class="harvestly-nav-btn-primary px-2 d-flex align-items-center justify-content-center"
+                    >
+                        <h5 class="m-0">Add Product</h5>
+                    </a>
+                </div>
             </div>
             <div class="harvestly-scrollable-container">
                 <div class="harvestly-scrollable-content">
@@ -51,9 +55,9 @@
                                 class="harvestly-scrollable-item flex-column"
                                 href="{% url 'product-details' product.id %}"
                             >
-                                <h4>{{ product.name|title }}</h4>
+                                <h4 class="mb-4">{{ product.name|title }}</h4>
                                 <!-- TODO Placeholder value for the product's creator -->
-                                <h5 class="mb-1">Vendor: {{ product.owner.username }}</h5>
+                                <h5 class="mb-2">For sale by {{ product.owner.username|title }}</h5>
                                 <div class="d-flex justify-content-between text-muted">
                                     <h5>${{ product.price|floatformat:"2" }}</h5>
                                     <h5 class="m-0">&times;{{ product.quantity }}</h5>
@@ -68,31 +72,25 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 d-flex flex-column">
-            <!-- TODO Add other user information here. We can grab the info from the event's user object, which we may need to extend -->
-            <h3>Market Organizer Information</h3>
-            <h5>Organizer Name: {{ event.organizer.username }}</h5>
-        </div>
     </div>
-    {% endif %}
 
-    {% if user.id == event.organizer.id %}
-    <div class="row mt-5 pt-4 justify-content-end">
-        <div class="col-md-6 d-flex justify-content-end align-self-center">
-            <a
-            href="{% url 'event-delete' event.id %}"
-            class="harvestly-nav-btn-secondary  d-flex justify-content-center align-items-center mx-1 py-2"
-        >
-            <h4 class="m-0">Delete</h4>
-        </a>
-            <a 
-                href="{% url 'event-update' event.id %}" 
-                class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center mx-1 py-2"
+    {% if user.is_authenticated and user.id == event.organizer.id %}
+        <div class="row mt-5 pt-4 justify-content-end">
+            <div class="col-md-6 d-flex justify-content-end align-self-center">
+                <a
+                href="{% url 'event-delete' event.id %}"
+                class="harvestly-nav-btn-secondary  d-flex justify-content-center align-items-center mx-1 py-2"
             >
-                <h4 class="m-0">Edit</h4>
+                <h4 class="m-0">Delete</h4>
             </a>
+                <a 
+                    href="{% url 'event-update' event.id %}" 
+                    class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center mx-1 py-2"
+                >
+                    <h4 class="m-0">Edit</h4>
+                </a>
+            </div>
         </div>
-    </div>
     {% endif %}
 </div>
 {% endblock %}

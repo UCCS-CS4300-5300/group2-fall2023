@@ -32,9 +32,11 @@
     
     <div class="row mt-5 pt-4">
         <div class="col-md-6 d-flex flex-column">
-            <!-- TODO Add other user information here. We can grab the info from the product's user object -->
             <h3>Product Vendor Information</h3>
-            <h5>Vendor Name: {{ product.owner.username }}</h5>
+            <h5>{{ product.owner.username|title }}</h5>
+
+            <!-- TODO develop this as we build out user profile -->
+            <p class="text-muted mt-3">More vendor information coming soon.</p>
         </div>
         <!-- If user is not logged in OR if they are not the owner -->
         {% if not user.is_authenticated or user.id != product.owner.id %}
