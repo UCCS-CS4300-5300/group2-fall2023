@@ -46,7 +46,7 @@ class EventCreate(LoginRequiredMixin, CreateView):
 
         form.instance.organizer = self.request.user
         return super().form_valid(form)
-
+    
 
 class EventUpdate(LoginRequiredMixin, UpdateView):
     """ Update View for an Event Object. URL `/markets/edit/<int:pk>` """

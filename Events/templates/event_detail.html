@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <!-- TODO if the user IS NOT the organizer of this event, display the vendor information and products -->
+    {% if user.id != event.organizer.id %}
     <div class="row mt-5 pt-4">
         <div class="col-md-6 d-flex flex-column">
             <div class="row">
@@ -69,8 +69,9 @@
             <h5>Coming soon.</h5>
         </div>
     </div>
+    {% endif %}
 
-    <!-- TODO if the user IS the organizer of this event, display the edit/delete options -->
+    {% if user.id == event.organizer.id %}
     <div class="row mt-5 pt-4 justify-content-end">
         <div class="col-md-6 d-flex justify-content-end align-self-center">
             <a
@@ -87,10 +88,6 @@
             </a>
         </div>
     </div>
-
-    <!-- TEMP DEBUG -->
-    <div class="mt-5">
-        <h1> {{ event.organizer.username|title }} </h1>
-    </div>
+    {% endif %}
 </div>
 {% endblock %}
