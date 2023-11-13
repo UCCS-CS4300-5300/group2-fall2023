@@ -306,6 +306,20 @@ footer .harvestly-nav-link {
     background-color: var(--primary-color-transparent);
 }
 
+.product-card-img-container {
+    height: 200px; /* fix height for img container */
+    overflow: hidden;
+}
+
+.product-card-img {
+    width: 100%; /*responsive width */
+    height: 200px;  /* fixed height */
+    object-fit: contain;
+}
+
+.product-card-body {
+    min-height: 150px;
+}
 
 @media screen and (max-width: 768px) {
     :root {

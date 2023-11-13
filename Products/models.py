@@ -9,7 +9,7 @@ from Events.models import Event
 
 
 class Product(models.Model):
-    """ Product model """
+    """Product model"""
 
     # TODO - Install Pillow to work with images
     # TODO - Set up vendors app/model to link vendors to users,products,events
@@ -22,15 +22,18 @@ class Product(models.Model):
         validators=[MinValueValidator(0)],
     )
 
-    product_event = models.ForeignKey(Event, on_delete=models.SET_NULL, blank=True, null=True)
+    product_event = models.ForeignKey(
+        Event, on_delete=models.SET_NULL, blank=True, null=True
+    )
 
     # TODO - see above
+    # product_vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
+    # product_event = models.ForeignKey(Event, on_delete=models.SET_NULL, blank=True, null=True)
     # image = models.ImageField(upload_to='products/images', blank=True, null=True)
     # product_owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    
 
     def __str__(self):
         return self.name
-    
+
     def get_absolute_url(self):
         return reverse("product-details", args=[str(self.id)])

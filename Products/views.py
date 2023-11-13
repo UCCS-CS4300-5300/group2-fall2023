@@ -74,7 +74,6 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         """ Get success URL after post completion. """
-
         return reverse("product-details", kwargs={"pk": self.object.pk})
 
 
