@@ -1,0 +1,34 @@
+### CS 4300 Fall 2023 Group 2
+### Harvestly
+### Events Utilities
+
+import googlemaps
+
+def get_coordinates(api_key, address):
+    """ Given an address string and an the API KEY convert address to coordinates. 
+    
+    returns (latitude, longiutde) | None
+    """
+
+    gm = googlemaps.Client(api_key)
+
+    try:
+        geo = gm.geocode(address)
+
+        if(geo):
+            coordinates = geo[0]["geometry"]["location"]
+            
+            latitude = coordinates["lat"]
+            longitude = coordinates["lng"]
+
+            return (latitude, longitude)
+
+        else:
+            print(f"Unable to map address {address}")
+            return None
+
+    except Exception as e:
+        
+        # print error message and return none
+        print(f"Unable to map addres {address} with error\n{e}")
+        return None

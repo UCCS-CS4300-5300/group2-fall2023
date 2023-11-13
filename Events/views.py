@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 from Events.models import Event
 from Events.forms import EventForm
+from Events.utils import get_coordinates
 
 class EventList(ListView):
     """ Get a list of Harvestly events. URL `/event-list/` """
@@ -58,10 +59,17 @@ class EventCreate(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         """ Update the latitude and longitude fields using the address """
 
-        # TODO
+        coords = get_coordinates(settings.GOOGLE_MAPS_API_KEY, form.instance.location)
 
-        form.instance.latitude = 0.0
-        form.instance.longitude = 0.0
+        if(coords):
+            form.instance.latitude = coords[0]
+            form.instance.longitude = coords[1]
+
+        else:
+
+            # TODO better handling for this case
+            form.instance.latitude = 0.0
+            form.instance.longitude = 0.0
 
         return super().form_valid(form)
 
@@ -100,13 +108,19 @@ class EventUpdate(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         """ Update the latitude and longitude fields using the address """
 
-        # TODO
+        coords = get_coordinates(settings.GOOGLE_MAPS_API_KEY, form.instance.location)
 
-        form.instance.latitude = 0.0
-        form.instance.longitude = 0.0
+        if(coords):
+            form.instance.latitude = coords[0]
+            form.instance.longitude = coords[1]
+
+        else:
+
+            # TODO better handling for this case
+            form.instance.latitude = 0.0
+            form.instance.longitude = 0.0
 
         return super().form_valid(form)
-        
 
 
 class EventDelete(LoginRequiredMixin, DeleteView):
