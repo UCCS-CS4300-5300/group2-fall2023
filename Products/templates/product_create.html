@@ -4,11 +4,11 @@
 {% block content %}
 <div>
     <h3 class="subtitle"> Add New Product </h3>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="row pt-4 mb-2">
             {% for field in form %}
-                {% if field.field.widget.input_type == textarea %}
+                {% if field.field.widget.input_type == 'textarea' %}
                     <div class="col-12 harvestly-form-item">
                         {{ field.label }}
                         {{ field }}

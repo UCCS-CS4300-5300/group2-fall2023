@@ -4,7 +4,11 @@
 
 from django.db import models
 from django.core.validators import MinValueValidator
+
 from django.urls import reverse
+from PIL import Image
+from io import BytesIO
+from django.core.files.base import ContentFile
 
 # from Events.models import Event
 
@@ -24,11 +28,58 @@ class Product(models.Model):
         validators=[MinValueValidator(0)],
     )
     # include images for products.
-    image = models.ImageField(upload_to="products/", blank=True, null=True)
+    image = models.ImageField(
+        upload_to="products/images",
+        blank=True,
+        null=True,
+    )
+    # add thumbnail field for products
+    thumbnail = models.ImageField(
+        upload_to="products/thumbnails", blank=True, null=True
+    )
 
     # TODO - see above
     # product_vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     # product_event = models.ForeignKey(Event, on_delete=models.SET_NULL, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        # check if image is updated/changed before creating new thumbnail.
+
+        if self.image:
+            resized_image = Product.resize_image(self.image, size=(480, 480))
+            if resized_image:
+                self.image.save(self.image.name, resized_image, save=False)
+
+        # create thumbnail if image is updated/changed
+        if self.image and not self.thumbnail:
+            thumbnail_image = Product.resize_image(self.image, size=(128, 128))
+            if thumbnail_image:
+                self.thumbnail.save(
+                    f"thumb_{self.image.name}", thumbnail_image, save=False
+                )
+
+        super().save(*args, **kwargs)
+
+    @staticmethod
+    def resize_image(image, size=(480, 480)):
+        """Resize image to fit within the specified size"""
+
+        if not image:
+            return None
+
+        img = Image.open(image)
+        original_size = img.size
+
+        # return original image if it is smaller than the specified size
+        if original_size[0] <= size[0] and original_size[1] <= size[1]:
+            return image
+
+        # resize image while maintaining aspect ratio
+        img.thumbnail(size)
+        thumb_io = BytesIO()
+        img.save(thumb_io, img.format, quality=85)
+
+        return ContentFile(thumb_io.getvalue())
 
     def __str__(self):
         return self.name
