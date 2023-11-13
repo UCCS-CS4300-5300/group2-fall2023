@@ -55,13 +55,17 @@ class EventListTests(TestCase):
 
     def test_event_list_with_events(self):
         """Test the event list view with event objects"""
-        # TODO this isn't the ideal way to test the feature... check back later
+
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
+
         event_1 = Event.objects.create(
             id=1,
             name="Event 1",
             location="Event 1 Location",
             start_time="2024-12-01T09:00+03:00",
             end_time="2024-12-01T10:00+03:00",
+            organizer=self.user,
         )
 
         event_2 = Event.objects.create(
@@ -70,6 +74,7 @@ class EventListTests(TestCase):
             location="Event 2 Location",
             start_time="2024-12-01T11:00+03:00",
             end_time="2024-12-01T12:00+03:00",
+            organizer=self.user,
         )
 
         response = self.client.get(reverse("events"))
@@ -86,12 +91,16 @@ class EventDetailTests(TestCase):
     def setUp(self):
         """Create an object to view details"""
 
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
+
         self.event_1 = Event.objects.create(
             id=1,
             name="Event 1",
             location="Event 1 Location",
             start_time="2024-12-01T09:00+03:00",
             end_time="2024-12-01T10:00+03:00",
+            organizer=self.user
         )
 
     def test_event_detail_at_url(self):
@@ -195,12 +204,16 @@ class EventCreateTests(TestCase):
     def test_event_creates_object(self):
         """ Verify that the event create view successfully creates an event """
 
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
+
         event_name = "Market 1" 
         data = {
             "name": event_name,
             "location": "Some Location",
             "start_time": "2024-12-01T09:00",
             "end_time": "2024-12-03T09:00",
+            "organizer": self.user
         }
 
         response = self.client.post(reverse("event-create"), data)
@@ -212,10 +225,14 @@ class EventCreateTests(TestCase):
     def test_event_create_missing_name(self):
         """ Test event create view when name is missing """
         
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
+
         data = {
             "location": "Some Location",
             "start_time": "2024-12-01T09:00",
             "end_time": "2024-12-03T09:00",
+            "organizer": self.user
         }
 
         response = self.client.post(reverse("event-create"), data)
@@ -227,10 +244,14 @@ class EventCreateTests(TestCase):
     def test_event_create_missing_location(self):
         """ Test event create view when location is missing """
         
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
+
         data = {
             "name": "Market 1",
             "start_time": "2024-12-01T09:00",
             "end_time": "2024-12-03T09:00",
+            "organizer": self.user
         }
 
         response = self.client.post(reverse("event-create"), data)
@@ -242,10 +263,14 @@ class EventCreateTests(TestCase):
     def test_event_create_missing_start_time(self):
         """ Test event create view when start time is missing """
         
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
+
         data = {
             "name": "Some Event",
             "location": "Some Location",
             "end_time": "2024-12-03T09:00",
+            "organizer": self.user
         }
 
         response = self.client.post(reverse("event-create"), data)
@@ -257,10 +282,14 @@ class EventCreateTests(TestCase):
     def test_event_create_missing_end_time(self):
         """ Test event create view when end time is missing """
         
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
+
         data = {
             "name": "Some Event",
             "location": "Some Location",
             "start_time": "2024-12-01T09:00",
+            "organizer": self.user
         }
 
         response = self.client.post(reverse("event-create"), data)
@@ -272,11 +301,15 @@ class EventCreateTests(TestCase):
     def test_event_create_invalid_start_time(self):
         """ Test the event create when the start time is not in the correct format """
 
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
+
         data = {
             "name": "Some Event",
             "location": "Some Location",
             "start_time": "2024-12",
             "end_time": "2024-12-03T09:00",
+            "organizer": self.user
         }
 
         response = self.client.post(reverse("event-create"), data)
@@ -288,11 +321,15 @@ class EventCreateTests(TestCase):
     def test_event_create_invalid_end_time(self):
         """ Test the event create view when the end time is not in the correct format """
 
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
+
         data = {
             "name": "Some Event",
             "location": "Some Location",
             "start_time": "2024-12-01T09:00",
             "end_time": "T09:00",
+            "organizer": self.user
         }
 
         response = self.client.post(reverse("event-create"), data)
@@ -304,11 +341,15 @@ class EventCreateTests(TestCase):
     def test_event_create_end_time_before_start_time(self):
         """ Test the event create view when the end time is before the start time """
 
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
+
         data = {
             "name": "Some Event",
             "location": "Some Location",
             "start_time": "2024-12-01T09:00",
             "end_time": "2024-12-01T08:59",
+            "organizer": self.user
         }
 
         response = self.client.post(reverse("event-create"), data)
@@ -342,6 +383,7 @@ class EventUpdateTests(TestCase):
                 datetime.datetime(2025, 11, 1, 10, 0)
             ),  # 2025-11-01 10:00
             end_time=timezone.make_aware(datetime.datetime(2025, 11, 1, 12, 0)),
+            organizer=user
         )
         self.update_url = reverse("event-update", kwargs={"pk": self.event_1.pk})
         self.res = self.client.get(self.update_url)
@@ -463,6 +505,7 @@ class EventDeleteTests(TestCase):
             location="Event 1 Location",
             start_time="2024-12-01T09:00+03:00",
             end_time="2024-12-01T10:00+03:00",
+            organizer=user
         )
 
     def test_event_delete_at_url(self):
