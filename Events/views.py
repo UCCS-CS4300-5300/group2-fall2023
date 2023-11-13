@@ -32,6 +32,19 @@ class EventDetail(DetailView):
     model = Event
     template_name = "event_detail.html"
 
+    def get_context_data(self, **kwargs):
+        """ Update context data """
+
+        # Note that we are updating the context data with the Google Maps API Key
+        #   This means that the key is being passed to the client side data. This is 
+        #   crucial in order to implement autocomplete functionality. IT IS IMPERITAVE
+        #   that you protect your API_KEY through Google's resources (see README for more).
+
+        context = super().get_context_data(**kwargs)
+        context["google_maps_api_key"] = settings.GOOGLE_MAPS_API_KEY
+
+        return context
+
 
 class EventCreate(LoginRequiredMixin, CreateView):
     """ Create View for an Event Object. URL `/markets/new` """

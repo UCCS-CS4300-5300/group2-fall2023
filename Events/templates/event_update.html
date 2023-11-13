@@ -7,15 +7,6 @@
     <form method="post">
         {% csrf_token %}
         <div class="row mt-4 mb-5">
-            <div class="col-md-6 mb-2">
-                <!-- TODO replace this image with a location mini-map/preview from Google Maps, similar to this:
-                    https://developers.google.com/maps/documentation/javascript/adding-a-google-map
-
-                    Make this location updateable in this view
-                -->
-                {% load static %}
-                <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Market Location Stub" width="100%">
-            </div>
             <div class="col-md-6 align-self-center">
                 <div class="harvestly-form-item">
                     {{ form.name.label }}

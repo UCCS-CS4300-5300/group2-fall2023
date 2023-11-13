@@ -1,7 +1,6 @@
 $.getScript(`https://maps.googleapis.com/maps/api/js?key=${google_maps_api_key}&libraries=places`) 
 .done(function( _script, _textStatus ) {
     google.maps.event.addEventListener(window, "load", initAutocomplete())
-
 })
 .fail(function(_jqxhr, _settings, _exception) {
     console.log("Failed to load Google Maps Places Script!")

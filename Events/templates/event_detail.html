@@ -6,11 +6,8 @@
     <h3 class="subtitle">{{ event.name|title }}</h3>
     <div class="row mt-4 mb-5">
         <div class="col-md-6 mb-2">
-            <!-- TODO replace this image with a location mini-map/preview from Google Maps, similar to this:
-                https://developers.google.com/maps/documentation/javascript/adding-a-google-map
-            -->
-            {% load static %}
-            <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Market Location Stub" width="100%">
+            <!-- Google Maps Display -->
+            <div class="rounded harvestly-map-display" id="harvestly-map"></div>
         </div>
         <div class="col-md-6 align-self-center">
             <h3>{{ event.name|title }} Details</h3>
@@ -88,9 +85,12 @@
         </div>
     </div>
 
-
-    <!-- TEMP DEBUG -->
-    <h1>{{ event.latitude }}</h1>
-    <h1>{{ event.longitude }}</h1>
+    {% load static %}
+    <script>
+        let google_maps_api_key = "{{ google_maps_api_key|safe }}";
+        let latitude = {{ event.latitude }};
+        let longitude = {{ event.longitude }};
+    </script>
+    <script src="{% static 'js/googleMapsMap.js' %}"></script>
 </div>
 {% endblock %}

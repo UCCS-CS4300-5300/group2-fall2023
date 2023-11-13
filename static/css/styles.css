@@ -28,7 +28,7 @@
 
 body {
     font-family: 'Roboto', sans-serif;
-    /* background-color: rgba(0,0,0,0.1); */
+    font-weight: 400 !important;
 }
 
 main {
@@ -306,6 +306,11 @@ footer .harvestly-nav-link {
     background-color: var(--primary-color-transparent);
 }
 
+
+.harvestly-map-display {
+    width: 100% !important;
+    height: max(500px, 20vh) !important;
+}
 
 @media screen and (max-width: 768px) {
     :root {
