@@ -1,4 +1,4 @@
-$.getScript(`https://maps.googleapis.com/maps/api/js?key=${google_maps_api_key}&libraries=places`) 
+$.getScript(`https://maps.googleapis.com/maps/api/js?key=${google_maps_api_key}`) 
 .done(function( _script, _textStatus ) {
     initMap()
 })
