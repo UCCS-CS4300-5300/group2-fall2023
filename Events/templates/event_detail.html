@@ -32,14 +32,16 @@
                 <div class="col-lg-6">
                     <h3>Products for this Market</h3>
                 </div>
-                <div class="col-lg-6 d-flex justify-content-end">
-                    <a 
-                        href="{% url 'product-create' %}"
-                        class="harvestly-nav-btn-primary px-2 d-flex align-items-center justify-content-center"
-                    >
-                        <h5 class="m-0">Add Product</h5>
-                    </a>
-                </div>
+                {% if user.is_authenticated %}
+                    <div class="col-lg-6 d-flex justify-content-end">
+                        <a 
+                            href="{% url 'product-create' %}"
+                            class="harvestly-nav-btn-primary px-2 d-flex align-items-center justify-content-center"
+                        >
+                            <h5 class="m-0">Add Product</h5>
+                        </a>
+                    </div>
+                {% endif %}
             </div>
             <div class="harvestly-scrollable-container">
                 <div class="harvestly-scrollable-content">
