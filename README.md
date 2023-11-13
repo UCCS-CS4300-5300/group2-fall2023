@@ -169,3 +169,13 @@ The halstead metrics are provided as follows:
 #### Raw - Lines of Code (LOC), Cohesion/Coupling [More Information](https://radon.readthedocs.io/en/latest/commandline.html#the-raw-command):
 
 This is an evaluation of number of lines of code and their purpose (i.e. blank, comments, code, etc).
+
+
+## Google Maps API Key Configuration
+
+This app uses the [Google Maps API](https://developers.google.com/maps) to store set location information for events. You must first create a Google Maps API key. [See more information from Google](https://developers.google.com/maps/get-started).
+
+After acquiring an API key, set the API key in the `.env` file:
+```
+GOOGLE_MAPS_API_KEY='<YOUR API KEY>'
+```

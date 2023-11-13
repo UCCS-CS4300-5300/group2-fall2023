@@ -3,12 +3,13 @@
 ### Events Views
 
 from django.shortcuts import render
-from .models import Event
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .forms import EventForm
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.conf import settings
+from Events.models import Event
+from Events.forms import EventForm
 
 class EventList(ListView):
     """ Get a list of Harvestly events. URL `/event-list/` """
@@ -40,6 +41,19 @@ class EventCreate(LoginRequiredMixin, CreateView):
 
     # Establish the target template for use
     template_name = "event_create.html"
+
+    def get_context_data(self, **kwargs):
+        """ Update context data """
+
+        # Note that we are updating the context data with the Google Maps API Key
+        #   This means that the key is being passed to the client side data. This is 
+        #   crucial in order to implement autocomplete functionality. IT IS IMPERITAVE
+        #   that you protect your API_KEY through Google's resources (see README for more).
+
+        context = super().get_context_data(**kwargs)
+        context["google_maps_api_key"] = settings.GOOGLE_MAPS_API_KEY
+
+        return context
 
 
 class EventUpdate(LoginRequiredMixin, UpdateView):

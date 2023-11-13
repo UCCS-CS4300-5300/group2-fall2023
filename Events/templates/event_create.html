@@ -7,12 +7,22 @@
     <form method="post">
         {% csrf_token %}
         <div class="row pt-4 mb-2">
-            {% for field in form %}
-                <div class="col-md-6 harvestly-form-item">
-                    <div>{{ field.label }}</div>
-                    <div class="mb-1">{{ field }}</div>
-                </div>
-            {% endfor %}
+            <div class="col-md-6 harvestly-form-item">
+                {{ form.name.label }}
+                {{ form.name }}
+            </div>
+            <div class="col-md-6 harvestly-form-item">
+                {{ form.location.label }}
+                <input type="text" name="location" maxlength="255" required id="id_location">
+            </div>
+            <div class="col-md-6 harvestly-form-item">
+                {{ form.start_time.label }}
+                {{ form.start_time }}
+            </div>
+            <div class="col-md-6 harvestly-form-item">
+                {{ form.end_time.label }}
+                {{ form.end_time }}
+            </div>
         </div>
         <div class="d-flex justify-content-end">
             <a class="harvestly-nav-btn-secondary d-flex justify-content-center align-items-center mr-2" href="{% url 'events' %}">Cancel</a>
@@ -31,5 +41,9 @@
             </div>
         {% endif %}
     </form>
+
+    {% load static %}
+    <script>var google_maps_api_key = "{{ google_maps_api_key|safe }}";</script>
+    <script src="{% static 'js/googleMapsForm.js' %}"></script>
 </div>
 {% endblock %}

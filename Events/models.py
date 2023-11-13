@@ -9,7 +9,9 @@ from django.core.exceptions import ValidationError
 
 class Event(models.Model):
     name = models.CharField(max_length=200)
-    location = models.CharField(max_length=200)
+    location = models.CharField(max_length=255)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     

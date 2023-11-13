@@ -8,23 +8,23 @@ from django import forms
 from .models import Event
 
 class DateTimeInput(forms.DateInput):
-    input_type = 'datetime-local'
+    input_type = "datetime-local"
 
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = [
-            'name',
-            'location',
-            'start_time',
-            'end_time'
+            "name",
+            "location",
+            "start_time",
+            "end_time"
         ]
         
         widgets = {
-            'name': forms.TextInput(),
-            'location': forms.TextInput(),
-            'start_time': DateTimeInput(format='%Y-%m-%dT%H:%M'),
-            'end_time': DateTimeInput(format='%Y-%m-%dT%H:%M')
+            "name": forms.TextInput(attrs={"placeholder": "Event name (max 255 characters)"}),
+            "location": forms.TextInput(),
+            "start_time": DateTimeInput(format="%Y-%m-%dT%H:%M"),
+            "end_time": DateTimeInput(format="%Y-%m-%dT%H:%M")
         }
 
         labels = {
