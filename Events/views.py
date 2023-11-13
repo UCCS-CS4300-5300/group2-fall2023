@@ -31,8 +31,6 @@ class EventDetail(DetailView):
     template_name = "event_detail.html"
 
 
-# TODO create new create view, inherit from `View` class
-
 class EventCreate(LoginRequiredMixin, CreateView):
     """ Create View for an Event Object. URL `/markets/new` """
 
@@ -43,17 +41,11 @@ class EventCreate(LoginRequiredMixin, CreateView):
     # Establish the target template for use
     template_name = "event_create.html"
 
-    # TODO prototype method for getting the view arguments
-    # https://stackoverflow.com/questions/5806224/sending-request-user-object-to-modelform-from-class-based-generic-view-in-django
-    def dispatch(self, *args, **kwargs):
-        return super(EventCreate, self).dispatch(*args, **kwargs)
-    
-    # TODO prototype method for sending the user to the form
-    # https://stackoverflow.com/questions/5806224/sending-request-user-object-to-modelform-from-class-based-generic-view-in-django
-    def get_form_kwargs(self):
-        kwargs = super(EventCreate, self).get_form_kwargs()
-        kwargs.update({'organizer': self.request.user.id})
-        return kwargs
+    def form_valid(self, form):
+        """ Update the `organizer` field after submission """
+
+        form.instance.organizer = self.request.user
+        return super().form_valid(form)
 
 
 class EventUpdate(LoginRequiredMixin, UpdateView):

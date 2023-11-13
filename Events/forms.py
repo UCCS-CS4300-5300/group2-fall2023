@@ -21,8 +21,6 @@ class EventForm(forms.ModelForm):
             'location',
             'start_time',
             'end_time',
-            # Temporary form field
-            'organizer',
         ]
         
         widgets = {
@@ -30,8 +28,6 @@ class EventForm(forms.ModelForm):
             'location': forms.TextInput(),
             'start_time': DateTimeInput(format='%Y-%m-%dT%H:%M'),
             'end_time': DateTimeInput(format='%Y-%m-%dT%H:%M'),
-            # Temporary form field
-            'organizer': forms.TextInput(),
         }
 
         labels = {
@@ -40,14 +36,6 @@ class EventForm(forms.ModelForm):
             "start_time": "Start Time:",
             "end_time": "End Time:",
         }
-
-    # TODO This is the prototype method for getting the user when the form is initialized
-    # https://stackoverflow.com/questions/5806224/sending-request-user-object-to-modelform-from-class-based-generic-view-in-django
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('organizer')
-        super(EventForm, self).__init__(*args, **kwargs)
-        # TODO this is the problem line... Not sure if we should dig into this or switch to the non-generic view approach
-        self.fields['organizer'].queryset = Event.objects.filter()
 
 
     def clean_start_time(self):
