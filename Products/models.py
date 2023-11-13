@@ -8,6 +8,7 @@ from django.core.validators import MinValueValidator
 from django.urls import reverse
 from PIL import Image
 from io import BytesIO
+import os
 from django.core.files.base import ContentFile
 
 # from Events.models import Event
@@ -17,6 +18,8 @@ class Product(models.Model):
     """Product model"""
 
     # TODO - [x] Install Pillow to work with images
+    # TODO - [] tweak image sizing to fit needs. 
+        # ? currently 480x480 and 128x128 (thumb)
     # TODO - [] Set up vendors app/model to link vendors to users,products,events
     # TODO - [] Set up link between events and products
 
@@ -54,9 +57,9 @@ class Product(models.Model):
         if self.image and not self.thumbnail:
             thumbnail_image = Product.resize_image(self.image, size=(128, 128))
             if thumbnail_image:
-                self.thumbnail.save(
-                    f"thumb_{self.image.name}", thumbnail_image, save=False
-                )
+                # extract filename from image name
+                filename = os.path.basename(self.image.name)
+                self.thumbnail.save(f"thumb_{filename}", thumbnail_image, save=False)
 
         super().save(*args, **kwargs)
 
