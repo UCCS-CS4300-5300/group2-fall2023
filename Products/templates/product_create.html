@@ -7,21 +7,57 @@
     <form method="post">
         {% csrf_token %}
         <div class="row pt-4 mb-2">
-            {% for field in form %}
-                {% if field.field.widget.input_type == textarea %}
-                    <div class="col-12 harvestly-form-item">
-                        {{ field.label }}
-                        {{ field }}
-                    </div>
-                {% else %}
-                    <div class="col-md-6 harvestly-form-item">
-                        {{ field.label }}
-                        {{ field }}
-                    </div>
-                {% endif %}
-            {% endfor %}
+            <div class="col-md-6 harvestly-form-item">
+                {{ form.name.label }}
+                {{ form.name }}
+            </div>
+            <div class="col-md-6 harvestly-form-item">
+                {{ form.price.label }}
+                {{ form.price }}
+            </div>
         </div>
-        <div class="d-flex justify-content-end">
+        <div class="row pt-2 mb-2">
+            <div class="col-md-6 d-flex flex-column">
+                <div class="row mb-2">
+                    <div class="col harvestly-form-item">
+                        {{ form.quantity.label }}
+                        {{ form.quantity }}
+                    </div>
+                </div>
+                <div class="row pt-2">
+                    <div class="col harvestly-form-item">
+                        {{ form.description.label }}
+                        {{ form.description }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 harvestly-form-item">
+                {{ form.product_event.label }}
+                <input type="hidden" name="{{ form.product_event.name }}" id="product-event" value=""/>
+                <div class="harvestly-scrollable-container m-0"> 
+                    {% load filters %}
+                    <div class="harvestly-scrollable-content">
+                        {% if event_list %}
+                            {% for event in event_list %}
+                                <div
+                                    class="harvestly-scrollable-item flex-column"
+                                    onclick="selectEvent(this, '{{ event.pk }}')"
+                                >
+                                    <h4 class="mb-2">{{ event.name|title }}</h4>
+                                    <h5 class="text-muted m-0">{{ event.start_time|format_date_range:event.end_time }}</h5>
+                                    <h5 class="text-muted m-0">{{ event.location|title }}</h5>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="d-flex align-items-center justify-content-center">
+                                <h4 class="text-muted">You must join a market before adding products to it.</h4>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end pt-2">
             <a class="harvestly-nav-btn-secondary d-flex justify-content-center align-items-center mr-2" href="{% url 'products' %}">Cancel</a>
             <input class="harvestly-nav-btn-primary" type="submit" value="Add Product" />
         </div>
@@ -30,7 +66,18 @@
     {% if form.errors %}
         <div class="error-message">
             Please correct the errors.
+            <ul>
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
         </div>
     {% endif %}
 </div>
-{%endblock %}
+
+{% load static %}
+<script src="{% static 'js/harvestlySelect.js' %}"></script>
+
+{% endblock %}

@@ -22,6 +22,8 @@
     --light-color: rgb(245, 247, 248);
     --dark-color: rgb(0, 21, 42);
     --brand-color: rgb(57, 149, 71);
+    --primary-color-transparent: rgba(121,155,65,0.5);
+    --dark-color-transparent: rgba(0, 21, 42, 0.5);
 }
 
 body {
@@ -226,10 +228,12 @@ footer .harvestly-nav-link {
     font-size: var(--form-input-size);
     padding: 0.5rem 1rem;
     width: 100%;
-    margin-bottom: 2rem;
     border-color: var(--dark-color);
     border-width: 2px;
     border-radius: 5px;
+}
+.harvestly-form-item textarea {
+    height: 100%;
 }
 
 .harvestly-card-link,
@@ -259,8 +263,56 @@ footer .harvestly-nav-link {
 }
 
 
-@media screen and (max-width: 400px) {
+.harvestly-scrollable-container {
+    margin: 2rem 0;
+    padding: 1rem 0.5rem;
+    display: flex;
+    border-radius: 10px;
+    border: solid var(--dark-color) 2px;
+    height: max(300px, 30vh);
+}
+.harvestly-scrollable-content {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+    overflow-y: auto;
+}
+.harvestly-scrollable-content::-webkit-scrollbar {
+    width: 10px;
+	background-color: white;
+}
+.harvestly-scrollable-content::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+    border: 3px solid white;
+    background-color: var(--dark-color-transparent);
+    cursor: pointer;
+}
+.harvestly-scrollable-item {
+    text-decoration: none !important;
+    color: var(--dark-color) !important;
+    border-radius: 10px;
+    width: 100%;
+    height: fit-content;
+    cursor: pointer;
+    display: flex;
+    padding: 1.5rem 1rem;
+    margin: 0.5rem 0.3rem;
+    background-color: transparent;
+    transition: background-color ease 0.3s;
+}
+.harvestly-scrollable-item.selected-event,
+.harvestly-scrollable-item:hover {
+    background-color: var(--primary-color-transparent);
+}
+
+
+@media screen and (max-width: 768px) {
     :root {
         --footer-pad: 0;
+    }
+
+    .harvestly-form-item textarea {
+        height: auto;
     }
 }

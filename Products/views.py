@@ -2,6 +2,7 @@
 ### Harvestly
 ### Products Views
 
+from typing import Any
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views import View
@@ -12,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Product
 from .forms import ProductForm, ProductReserveForm
-
+from Events.models import Event
 
 class ProductList(ListView):
     """ Get a list of Harvestly products. URL `/get-products-list/` """
@@ -37,6 +38,20 @@ class ProductCreate(LoginRequiredMixin, CreateView):
         """ Get success URL after post completion. """
 
         return reverse("product-details", kwargs={"pk": self.object.pk})
+    
+
+    def get_context_data(self, **kwargs):
+        """ Include list of events in context data """
+        
+        # In order to iterate over the model options, we need to provide the list in 
+        #   the context. Unfortunately, iterating through Choice Select options is not
+        #   supported in this version of Django.
+
+        context = super().get_context_data(**kwargs)
+        context["event_list"] = Event.objects.all()     # TODO update to be only the objects the user has access to
+
+        return context
+
 
 
 class ProductDetail(DetailView):

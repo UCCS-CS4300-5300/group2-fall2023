@@ -3,14 +3,14 @@
 ### Product Form
 
 from django import forms
-from .models import Product
+from Products.models import Product
+from Events.models import Event
 
 class ProductForm(forms.ModelForm):
     """ Product upload form information """
 
     # TODO need to add validators
     # TODO need to add image upload
-    # TODO need to link back to vendor
 
     class Meta:
         model = Product
@@ -18,6 +18,7 @@ class ProductForm(forms.ModelForm):
             "name",
             "price",
             "quantity",
+            "product_event",
             "description",
         ]
 
@@ -29,6 +30,7 @@ class ProductForm(forms.ModelForm):
             }),
             "price": forms.NumberInput(attrs={
                 "required": "required",
+                "min": "0.01",
                 "step": "0.01",
                 "placeholder": "X.XX"
             }),
@@ -38,6 +40,7 @@ class ProductForm(forms.ModelForm):
                 "min": "1",
                 "placeholder": "Product quantity"
             }),
+            "product_event": forms.Select(), # TODO this should be limited to only markets where the user is the organizer or has joined
             "description": forms.Textarea(attrs={
                 "required": "required",
                 "rows": 5,
@@ -49,8 +52,10 @@ class ProductForm(forms.ModelForm):
             "name": "Product name",
             "price": "Product price",
             "quantity": "Product quantity",
+            "product_event": "Market for Product (optional)",
             "description": "Product description",
         }
+
 
     def clean_quantity(self):
         """ Clean quantity field, ensure it is at least 1 """

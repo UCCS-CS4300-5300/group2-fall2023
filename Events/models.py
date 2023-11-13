@@ -6,20 +6,20 @@ from django.db import models
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 
-# TENTATIVE MODEL CONTENTS
-# ID
-# Name
-# Location
-# Date
-# Start Time
-# End Time
-
 
 class Event(models.Model):
     name = models.CharField(max_length=200)
     location = models.CharField(max_length=200)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
+    
+    def get_products(self):
+        """ Query the `Product` model to get all products associated with this event """
+
+        from Products.models import Product # import goes here to avoid a cirular import error
+
+        return Product.objects.filter(product_event=self.id)
+
 
     def get_absolute_url(self):
         return reverse("event-detail", args=[str(self.id)])

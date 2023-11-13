@@ -17,8 +17,8 @@ class EventFormTests(TestCase):
         data = {
             "name": "Some Event",
             "location": "Some Location",
-            "start_time": "2023-12-01T09:00",
-            "end_time": "2023-12-03T09:00",
+            "start_time": "2025-12-01T09:00",
+            "end_time": "2025-12-03T09:00",
         }
 
         form = forms.EventForm(data=data)
@@ -30,8 +30,8 @@ class EventFormTests(TestCase):
         
         data = {
             "location": "Some Location",
-            "start_time": "2023-12-01T09:00",
-            "end_time": "2023-12-03T09:00",
+            "start_time": "2025-12-01T09:00",
+            "end_time": "2025-12-03T09:00",
         }
 
         form = forms.EventForm(data=data)
@@ -44,8 +44,8 @@ class EventFormTests(TestCase):
         
         data = {
             "name": "Some Event",
-            "start_time": "2023-12-01T09:00",
-            "end_time": "2023-12-03T09:00",
+            "start_time": "2025-12-01T09:00",
+            "end_time": "2025-12-03T09:00",
         }
 
         form = forms.EventForm(data=data)
@@ -59,7 +59,7 @@ class EventFormTests(TestCase):
         data = {
             "name": "Some Event",
             "location": "Some Location",
-            "end_time": "2023-12-03T09:00",
+            "end_time": "2025-12-03T09:00",
         }
 
         form = forms.EventForm(data=data)
@@ -73,7 +73,7 @@ class EventFormTests(TestCase):
         data = {
             "name": "Some Event",
             "location": "Some Location",
-            "start_time": "2023-12-01T09:00",
+            "start_time": "2025-12-01T09:00",
         }
 
         form = forms.EventForm(data=data)
@@ -87,8 +87,8 @@ class EventFormTests(TestCase):
         data = {
             "name": "Some Event",
             "location": "Some Location",
-            "start_time": "2023-12",
-            "end_time": "2023-12-03T09:00",
+            "start_time": "2025-12",
+            "end_time": "2025-12-03T09:00",
         }
 
         form = forms.EventForm(data=data)
@@ -103,7 +103,7 @@ class EventFormTests(TestCase):
             "name": "Some Event",
             "location": "Some Location",
             "start_time": "2020-12-01T00:00",
-            "end_time": "2023-12-03T09:00",
+            "end_time": "2025-12-03T09:00",
         }
 
         form = forms.EventForm(data=data)
@@ -133,8 +133,8 @@ class EventFormTests(TestCase):
         data = {
             "name": "Some Event",
             "location": "Some Location",
-            "start_time": "2023-12-01T09:00",
-            "end_time": "2023-12-01T08:00",
+            "start_time": "2025-12-01T09:00",
+            "end_time": "2025-12-01T08:00",
         }
 
         form = forms.EventForm(data=data)

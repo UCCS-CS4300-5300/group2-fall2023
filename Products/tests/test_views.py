@@ -6,6 +6,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
 from Products.models import Product
+from Events.models import Event
 
 
 class ProductListTests(TestCase):
@@ -148,6 +149,30 @@ class ProductCreateTests(TestCase):
         self.assertTrue(Product.objects.filter(name="Product 1").exists())
 
 
+    def test_product_creates_object_with_event(self):
+        """ Test that the product create view creates an object with an event """
+
+        event = Event.objects.create(
+            name="Event 1",
+            location="Some Location",
+            start_time="2025-04-12T00:00-00:00",
+            end_time="2025-04-15T00:00-00:00",
+        )
+
+        data = {
+            "name": "Product 1",
+            "description": "Product 1 Description",
+            "price": 3.45,
+            "quantity": 10,
+            "product_event": event.pk,
+        }
+
+        response = self.client.post(reverse("product-create"), data)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Product.objects.filter(name="Product 1").exists())
+
+
     def test_product_create_missing_name(self):
         """ Test the product create view post with missing name in data """
 
@@ -258,6 +283,23 @@ class ProductCreateTests(TestCase):
         
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Please correct the errors.")
+
+
+    def test_product_create_invalid_event(self):
+        """ Test the product create view post with an invalid event ID """
+
+        data = {
+            "name": "Product 1",
+            "description": "Product 1 Description",
+            "price": 3.45,
+            "quantity": 10,
+            "product_event": 999,
+        }
+
+        response = self.client.post(reverse("product-create"), data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Select a valid choice. That choice is not one of the available choices.")
 
 
 class ProductDetailTests(TestCase):

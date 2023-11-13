@@ -15,6 +15,14 @@
             <div>
                 <h5>{{ product.description }}</h5>
             </div>
+            {% if product.product_event %}
+                <a
+                    class="harvestly-nav-link mt-4" 
+                    href="{% url 'event-detail' product.product_event.id %}"
+                >
+                    <h6>Available at {{ product.product_event.name|title }}</h6>
+                </a>
+            {% endif %}
             <div class="mt-5 w-100 d-flex justify-content-between">
                 <h5 class="text-muted">${{ product.price|floatformat:"2" }}</h5>
                 <h5 class="text-muted">&times;{{ product.quantity }}</h5>
@@ -23,13 +31,13 @@
     </div>
     
     <div class="row mt-5 pt-4">
-        <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
+        <div class="col-md-6 d-flex flex-column">
             <h3>Product Vendor Information</h3>
             <h5>Coming soon.</h5>
         </div>
         <!-- Currently mocking some behavior for futher refinement: if not logged in, display the reserve-->
         {% if not user.is_authenticated %}
-            <div class="col-md-6  mb-1 d-flex flex-column justify-content-center align-self-center">
+            <div class="col-md-6  mb-1 d-flex flex-column">
                 <a 
                     href="{% url 'product-reserve' product.id %}" 
                     class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center mb-3 py-2"

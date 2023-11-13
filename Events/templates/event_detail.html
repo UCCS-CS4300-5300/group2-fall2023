@@ -27,11 +27,44 @@
 
     <!-- TODO if the user IS NOT the organizer of this event, display the vendor information and products -->
     <div class="row mt-5 pt-4">
-        <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
-            <h3>View Products for this Market</h3>
-            <h5>Coming soon.</h5>
+        <div class="col-md-6 d-flex flex-column">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h3>Products for this Market</h3>
+                </div>
+                <div class="col-lg-6 d-flex justify-content-end">
+                    <a 
+                        href="{% url 'product-create' %}"
+                        class="harvestly-nav-btn-primary px-2 d-flex align-items-center justify-content-center"
+                    >
+                        <h5 class="m-0">Add Product</h5>
+                    </a>
+                </div>
+            </div>
+            <div class="harvestly-scrollable-container">
+                <div class="harvestly-scrollable-content">
+                    {% if event.get_products %}
+                        {% for product in event.get_products %}
+                            <a 
+                                class="harvestly-scrollable-item flex-column"
+                                href="{% url 'product-details' product.id %}"
+                            >
+                                <h4>{{ product.name|title }}</h4>
+                                <div class="d-flex justify-content-between text-muted">
+                                    <h5>${{ product.price|floatformat:"2" }}</h5>
+                                    <h5 class="m-0">&times;{{ product.quantity }}</h5>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    {% else %}
+                        <div class="d-flex align-items-center justify-content-center">
+                            <h4 class="text-muted">No available products.</h4>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-        <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
+        <div class="col-md-6 d-flex flex-column">
             <h3>Market Organizer Information</h3>
             <h5>Coming soon.</h5>
         </div>

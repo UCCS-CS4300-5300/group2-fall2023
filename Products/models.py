@@ -5,7 +5,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.urls import reverse
-# from Events.models import Event
+from Events.models import Event
 
 
 class Product(models.Model):
@@ -13,7 +13,6 @@ class Product(models.Model):
 
     # TODO - Install Pillow to work with images
     # TODO - Set up vendors app/model to link vendors to users,products,events
-    # TODO - Set up link between events and products
 
     name = models.CharField(max_length=255)
     description = models.TextField()
@@ -23,10 +22,12 @@ class Product(models.Model):
         validators=[MinValueValidator(0)],
     )
 
+    product_event = models.ForeignKey(Event, on_delete=models.SET_NULL, blank=True, null=True)
+
     # TODO - see above
     # image = models.ImageField(upload_to='products/images', blank=True, null=True)
-    # product_vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
-    # product_event = models.ForeignKey(Event, on_delete=models.SET_NULL, blank=True, null=True)
+    # product_owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    
 
     def __str__(self):
         return self.name
