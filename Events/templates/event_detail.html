@@ -67,8 +67,9 @@
             </div>
         </div>
         <div class="col-md-6 d-flex flex-column">
+            <!-- TODO Add other user information here. We can grab the info from the event's user object, which we may need to extend -->
             <h3>Market Organizer Information</h3>
-            <h5>Coming soon.</h5>
+            <h5>Organizer Name: {{ event.organizer.username }}</h5>
         </div>
     </div>
     {% endif %}
