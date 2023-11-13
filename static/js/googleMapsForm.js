@@ -1,29 +1,35 @@
-// called when the HTML content is first loaded
-document.addEventListener("DOMContentLoaded", function() {
-    console.log(google_maps_api_key)
+$.getScript(`https://maps.googleapis.com/maps/api/js?key=${google_maps_api_key}&libraries=places`) 
+.done(function( _script, _textStatus ) {
+    google.maps.event.addEventListener(window, "load", initAutocomplete())
 
-    // include the Google Maps Places API
-    let script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${google_maps_api_key}&libraries=places`;
-    script.defer = true;
-    script.async = true;
-
-    // function runs once the google maps script has been loaded
-    script.onload = function() {
-        // initialize the autocomplete field
-        var autocomplete = new google.maps.places.Autocomplete(document.getElementById("id_location"));
-
-        // Listen for the place selection event
-        autocomplete.addListener("place_changed", function () {
-            var place = autocomplete.getPlace();
-
-            // Log the selected place details (you can customize this part)
-            console.log("Place Name:", place.name);
-            console.log("Address:", place.formatted_address);
-            console.log("Latitude:", place.geometry.location.lat());
-            console.log("Longitude:", place.geometry.location.lng());
-        });
-    }
-
-    document.head.appendChild(script);
+})
+.fail(function(_jqxhr, _settings, _exception) {
+    console.log("Failed to load Google Maps Places Script!")
 });
+
+function initAutocomplete() {
+    // get existing input
+    let existing = document.getElementById("id_location").value
+
+    // initialize the autocomplete field
+    let autocomplete = new google.maps.places.Autocomplete(
+        document.getElementById("id_location"),
+        {
+            componentRestrictions: {
+                country: ["US", "CA", "MX", "FR", "DE", "IT", "ES", "GB", "NL", "BE"]
+            },
+        },
+    );
+
+    // restore the existing value back to the input field
+    if(existing !== null && existing !== "")
+        document.getElementById("id_location").value = existing;
+
+    // listen for the place selection event
+    autocomplete.addListener("place_changed", function () {
+        var place = autocomplete.getPlace();
+
+        // log the selected place details
+        console.log("Place Name:", place.name);
+    });
+}

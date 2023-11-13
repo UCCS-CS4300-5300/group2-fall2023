@@ -55,6 +55,16 @@ class EventCreate(LoginRequiredMixin, CreateView):
 
         return context
 
+    def form_valid(self, form):
+        """ Update the latitude and longitude fields using the address """
+
+        # TODO
+
+        form.instance.latitude = 0.0
+        form.instance.longitude = 0.0
+
+        return super().form_valid(form)
+
 
 class EventUpdate(LoginRequiredMixin, UpdateView):
     """ Update View for an Event Object. URL `/markets/edit/<int:pk>` """
@@ -73,6 +83,30 @@ class EventUpdate(LoginRequiredMixin, UpdateView):
             'end_time': self.object.end_time
         }
         return kwargs
+
+    def get_context_data(self, **kwargs):
+        """ Update context data """
+
+        # Note that we are updating the context data with the Google Maps API Key
+        #   This means that the key is being passed to the client side data. This is 
+        #   crucial in order to implement autocomplete functionality. IT IS IMPERITAVE
+        #   that you protect your API_KEY through Google's resources (see README for more).
+
+        context = super().get_context_data(**kwargs)
+        context["google_maps_api_key"] = settings.GOOGLE_MAPS_API_KEY
+
+        return context
+
+    def form_valid(self, form):
+        """ Update the latitude and longitude fields using the address """
+
+        # TODO
+
+        form.instance.latitude = 0.0
+        form.instance.longitude = 0.0
+
+        return super().form_valid(form)
+        
 
 
 class EventDelete(LoginRequiredMixin, DeleteView):

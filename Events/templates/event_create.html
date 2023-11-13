@@ -13,7 +13,7 @@
             </div>
             <div class="col-md-6 harvestly-form-item">
                 {{ form.location.label }}
-                <input type="text" name="location" maxlength="255" required id="id_location">
+                {{ form.location }}
             </div>
             <div class="col-md-6 harvestly-form-item">
                 {{ form.start_time.label }}
@@ -43,7 +43,7 @@
     </form>
 
     {% load static %}
-    <script>var google_maps_api_key = "{{ google_maps_api_key|safe }}";</script>
+    <script>let google_maps_api_key = "{{ google_maps_api_key|safe }}";</script>
     <script src="{% static 'js/googleMapsForm.js' %}"></script>
 </div>
 {% endblock %}
