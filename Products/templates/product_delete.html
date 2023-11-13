@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block title %}Delete {{ product.name|title }}{% endblock %}
 
+{% load static %}
 {% block content %}
 <div>
     <h3 class="subtitle">{{ product.name|title }}</h3>
@@ -8,9 +9,19 @@
         {% csrf_token %}
         <div class="row mt-4 mb-5">
             <div class="col-md-6 mb-2">
-                <!-- TODO load image -->
-                {% load static %}
-                <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Product Image" width="100%">
+                {% if product.image %}
+                    <img 
+                        src="{{ product.image.url }}" 
+                        class="rounded" 
+                        alt="{{ product.name }}"
+                    >
+                {% else %}
+                    <img 
+                        src="{% static 'img/product_placeholder.png' %}" 
+                        class="rounded" 
+                        alt="Default Image"
+                    >
+                {% endif %}
             </div>
             <div class="col-md-6 align-self-center">
                 <h3>Delete {{ product.name|title }}</h3>
