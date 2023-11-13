@@ -13,8 +13,6 @@
     {% if eventlist %}
         <div class="row pt-4 mb-2">
         {% for event in eventlist %}
-            <!-- DEBUG TEST: Only displays the events that the currently logged-in user created. Displays nothing if the user is not logged in -->
-            {% if event.organizer.id == user.id %}
             <div class="col-md-4 my-3">
                 <a class="harvestly-card-link" href="{% url 'event-detail' event.id %}">
                     <div class="card">
@@ -25,7 +23,6 @@
                     </div>
                 </a>
             </div>
-            {% endif %}
         {% endfor %}
         </div>
     {% else %}
