@@ -146,4 +146,15 @@ class EventDelete(LoginRequiredMixin, DeleteView):
     # Establish the success url to redirect back to the events homepage
     success_url = reverse_lazy('events')
 
+    def get_context_data(self, **kwargs):
+        """ Update context data """
 
+        # Note that we are updating the context data with the Google Maps API Key
+        #   This means that the key is being passed to the client side data. This is 
+        #   crucial in order to implement autocomplete functionality. IT IS IMPERITAVE
+        #   that you protect your API_KEY through Google's resources (see README for more).
+
+        context = super().get_context_data(**kwargs)
+        context["google_maps_api_key"] = settings.GOOGLE_MAPS_API_KEY
+
+        return context
