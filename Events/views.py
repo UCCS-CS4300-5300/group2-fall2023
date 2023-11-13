@@ -31,6 +31,8 @@ class EventDetail(DetailView):
     template_name = "event_detail.html"
 
 
+# TODO create new create view, inherit from `View` class
+
 class EventCreate(LoginRequiredMixin, CreateView):
     """ Create View for an Event Object. URL `/markets/new` """
 

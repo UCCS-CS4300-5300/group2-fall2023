@@ -24,6 +24,8 @@ class ProductList(ListView):
     context_object_name = "product_list"
     
 
+# TODO create new create view, inherit from `View` class
+
 class ProductCreate(LoginRequiredMixin, CreateView):
     """ Create View for an Event Object. URL `/products/new/` """
 
