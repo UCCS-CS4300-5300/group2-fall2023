@@ -4,13 +4,14 @@
 
 from django.test import TestCase
 from Products import forms
+from Events.models import Event
 
 # TODO - Update when image upload is available
 
 class ProductFormTest(TestCase):
     """ Test the ProductForm form class """
 
-    def test_valid_product_form(self):
+    def test_valid_product_form_without_market(self):
         """ Test the product form is recognized as valid """
 
         data = {
@@ -18,6 +19,28 @@ class ProductFormTest(TestCase):
             "price": 2.12,
             "quantity": 17,
             "description": "Some Product Description",
+        }
+
+        form = forms.ProductForm(data=data)
+        self.assertTrue(form.is_valid())
+
+
+    def test_valid_product_form_with_market(self):
+        """ Test the product form is recognized as valid """
+
+        event = Event.objects.create(
+            name="Event 1",
+            location="Some Location",
+            start_time="2025-04-12T00:00-00:00",
+            end_time="2025-04-15T00:00-00:00",
+        )
+
+        data = {
+            "name": "Some Product",
+            "price": 2.12,
+            "quantity": 17,
+            "description": "Some Product Description",
+            "product_event": event.pk,
         }
 
         form = forms.ProductForm(data=data)
@@ -112,6 +135,22 @@ class ProductFormTest(TestCase):
         form = forms.ProductForm(data=data)
         self.assertFalse(form.is_valid())
         self.assertIn("description", form.errors)
+
+
+    def test_product_form_invalid_event(self):
+        """ Test product form when event is invalid """
+
+        data = {
+            "name": "Some Product",
+            "price": 2.12,
+            "quantity": 17,
+            "description": "Some Product Description",
+            "product_event": 999,
+        }
+
+        form = forms.ProductForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertIn("product_event", form.errors)
 
 
 class ProductReserveFormTests(TestCase):

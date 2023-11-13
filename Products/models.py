@@ -26,7 +26,7 @@ class Product(models.Model):
 
     # TODO - see above
     # image = models.ImageField(upload_to='products/images', blank=True, null=True)
-    # product_vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
+    # product_owner = models.ForeignKey(User, on_delete=models.CASCADE)
     
 
     def __str__(self):
