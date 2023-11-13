@@ -4,7 +4,6 @@
 
 from django import forms
 from .models import Product
-from PIL import Image  # new 11/12 - for image upload
 
 
 class ProductForm(forms.ModelForm):

@@ -48,29 +48,28 @@ class Product(models.Model):
         self.update_image_and_thumbnail()
         super().save(*args, **kwargs)
 
-    def update_image_and_thumbnail(self):
-        if not self.image and self.pk:
-            original = Product.objects.get(pk=self.pk)
-            if original.image:
-                original.image.delete(save=False)  # delete original image
-                self.thumbnail.delete(save=False)  # delete original thumbnail
-                self.image = None  # set image to None
-                self.thumbnail = None  # set thumbnail to None
-        else:
-            # resize primary image
-            resized_image = Product.resize_image(self.image, size=(480, 480))
-            if resized_image:
-                filename = os.path.basename(self.image.name)
-                self.image.name = filename
-                self.image.save(self.image.name, resized_image, save=False)
+    def __str__(self):
+        return self.name
 
-            # update/create thumbnail
-            thumbnail_image = Product.resize_image(self.image, size=(128, 128))
-            if thumbnail_image:
-                # extract filename from image name
-                filename = os.path.basename(self.image.name)
-                self.thumbnail.name = filename
-                self.thumbnail.save(self.thumbnail.name, thumbnail_image, save=False)
+    def get_absolute_url(self):
+        return reverse("product-details", args=[str(self.id)])
+
+    def update_image_and_thumbnail(self):
+        """creates or updates the image and thumbnail for the product"""
+        # resize primary image
+        resized_image = Product.resize_image(self.image, size=(480, 480))
+        if resized_image:
+            filename = os.path.basename(self.image.name)
+            self.image.name = filename
+            self.image.save(self.image.name, resized_image, save=False)
+
+        # update/create thumbnail
+        thumbnail_image = Product.resize_image(self.image, size=(128, 128))
+        if thumbnail_image:
+            # extract filename from image name
+            filename = os.path.basename(self.image.name)
+            self.thumbnail.name = filename
+            self.thumbnail.save(self.thumbnail.name, thumbnail_image, save=False)
 
     @staticmethod
     def resize_image(image, size=(480, 480)):
@@ -81,6 +80,9 @@ class Product(models.Model):
 
         # open image
         img = Image.open(image)
+        (width, height) = img.size
+        if (width, height) <= size:
+            return None
 
         # resize image while maintaining aspect ratio
         img.thumbnail(size)
@@ -88,9 +90,3 @@ class Product(models.Model):
         img.save(thumb_io, img.format, quality=85)
 
         return ContentFile(thumb_io.getvalue())
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse("product-details", args=[str(self.id)])

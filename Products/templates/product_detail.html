@@ -3,68 +3,80 @@
 
 {% load static %}
 {% block content %}
-<div>
-    <h3 class="subtitle">{{ product.name|title }}</h3>
-    <div class="row mt-4 mb-5">
-        <div class="col-md-6">
-            <!-- if image exists, display image. else display placeholder -->
-            {% if product.image %}
-                <img 
-                    src="{{ product.image.url }}" 
-                    class="rounded" 
-                    alt="{{ product.name }}"
+<div class="d-flex flex-column justify-content-between ">
+    <div class="mb-4 p-2">
+        <h3 class="subtitle text-center">{{ product.name|title }}</h3>
+    </div>
+    <div class="container text-center p-2">
+        <div class="row row-cols-2 d-flex flex-column flex-md-row" >
+            <div class="col-md d-flex justify-content-center align-items-center ">
+                <!-- if image exists, display image. else display placeholder -->
+                {% if product.image %}
+                
+                    <img 
+                        src="{{ product.image.url }}" 
+                        class="rounded mh-25 w-50 img-fluid mx-auto d-block" 
+                        alt="{{ product.name }}"
+                    >
+                {% else %}
+                    <img 
+                        src="{% static 'img/product_placeholder.png' %}" 
+                        class="rounded h-50 w-auto" 
+                        alt="Default Image"
+                    >
+                {% endif %}
+            </div>
+            <div class="col-md d-flex justify-content-center align-items-center flex-column mt-4 mt-md-0">
+                <div>
+                    <h3>{{ product.name|title }} Details</h3>
+                    <h5>{{ product.description }}</h5>
+                </div>
+                <div class="justify-right w-100">
+                    <h5 class="text-muted">${{ product.price|floatformat:"2" }}</h5>
+                    <h5 class="text-muted">In Stock: {{ product.quantity }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container text-center mt-4 p-2 d-flex flex-column ">
+        <div class="row">
+            <div class="col mb-4">
+                <h3>Product Vendor Information</h3>
+                <h5>Coming soon.</h5>
+            </div>
+            <!-- Currently mocking some behavior for futher refinement: if not logged in, display the reserve-->
+        </div>
+        <div class="row row-cols-2">
+            {% if not user.is_authenticated %}
+                <div 
+                    class="col  mb-1 d-flex flex-column justify-content-center align-self-center"
                 >
+                    <a 
+                        href="{% url 'product-reserve' product.id %}" 
+                        class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center mb-3 py-2"
+                    >
+                        <h4 class="m-0">Reserve this Product</h4>
+                    </a>
+                </div>
+            <!-- TODO if the user is the owner of this product, display the edit, delete options -->
             {% else %}
-                <img 
-                    src="{% static 'img/product_placeholder.png' %}" 
-                    class="rounded" 
-                    alt="Default Image"
-                >
+                <div class="col">
+                    <a
+                        href="{% url 'product-delete' product.id %}"
+                        class="harvestly-nav-btn-secondary py-2 mx-1"
+                    >
+                        <h4 class="m-0">Delete</h4>
+                    </a>
+                    <a 
+                        href="{% url 'product-update' product.id %}" 
+                        class="harvestly-nav-btn-primary py-2 mx-1"
+                    >
+                        <h4 class="m-0">Edit</h4>
+                    </a>
+                </div>
             {% endif %}
         </div>
-        <div class="col-md-6 align-self-center">
-            <h3>{{ product.name|title }} Details</h3>
-            <div>
-                <h5>{{ product.description }}</h5>
-            </div>
-            <div class="mt-5 w-100 d-flex justify-content-between">
-                <h5 class="text-muted">${{ product.price|floatformat:"2" }}</h5>
-                <h5 class="text-muted">&times;{{ product.quantity }}</h5>
-            </div>
-        </div>
+        
     </div>
-    
-    <div class="row mt-5 pt-4">
-        <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
-            <h3>Product Vendor Information</h3>
-            <h5>Coming soon.</h5>
-        </div>
-        <!-- Currently mocking some behavior for futher refinement: if not logged in, display the reserve-->
-        {% if not user.is_authenticated %}
-            <div class="col-md-6  mb-1 d-flex flex-column justify-content-center align-self-center">
-                <a 
-                    href="{% url 'product-reserve' product.id %}" 
-                    class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center mb-3 py-2"
-                >
-                    <h4 class="m-0">Reserve this Product</h4>
-                </a>
-            </div>
-        <!-- TODO if the user is the owner of this product, display the edit, delete options -->
-        {% else %}
-            <div class="col-md-6 d-flex justify-content-end align-self-center">
-                <a
-                    href="{% url 'product-delete' product.id %}"
-                    class="harvestly-nav-btn-secondary d-flex justify-content-center align-items-center py-2 mx-1"
-                >
-                    <h4 class="m-0">Delete</h4>
-                </a>
-                <a 
-                    href="{% url 'product-update' product.id %}" 
-                    class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center py-2 mx-1"
-                >
-                    <h4 class="m-0">Edit</h4>
-                </a>
-            </div>
-        {% endif %}
-    </div>
+</div>
 {%endblock %}

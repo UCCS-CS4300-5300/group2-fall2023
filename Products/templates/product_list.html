@@ -24,13 +24,13 @@
                             {% if product.image %}
                                 <img 
                                     src="{{ product.thumbnail.url }}" 
-                                    class="card-img-top product-card-img" 
+                                    class="card-img-top product-card-img img-thumbnail" 
                                     alt="{{ product.name }}"
                                 >
                             {% else %}
                                 <img 
                                     src="{% static 'img/product_placeholder.png' %}" 
-                                    class="card-img-top product-card-img" alt="Default Image"
+                                    class="card-img-top product-card-img img-thumbnail" alt="Default Image"
                                 >
                             {% endif %}
                         </div>
