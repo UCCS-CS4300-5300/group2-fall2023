@@ -52,8 +52,8 @@ class ProductForm(forms.ModelForm):
             ),
             "image": forms.ClearableFileInput(
                 attrs={
-                    "accept": "image/*",
-                    "aria-label": "Product image upload",
+                    "accept": "image/*",  # accept only images
+                    "aria-label": "Product image upload",  # accessibility
                 }
             ),
         }
