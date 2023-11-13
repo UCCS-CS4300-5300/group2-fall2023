@@ -2,17 +2,53 @@
 {% block title %}Harvestly{% endblock %}
 
 {% block content %}
+    <div class="d-flex align-items-center justify-content-between mb-5">
+        <h1 class="title">{{ user.username }} Profile</h1>
+    </div>
+    <div class="d-flex align-items-center justify-content-between mb-5">
+        <h6 class="title">Markets</h6>
+    </div>
+    <div class="row">
+        {% for event in event_list %}
+            {% if user.id == event.organizer.id %}
+                <div class="col-md-4 my-3">
+                    <a class="harvestly-card-link" href="{% url 'event-detail' event.id %}">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ event.name|title }}</h3>
+                                <h5>{{ event.start_time|date:"F j, Y" }} - {{ event.end_time|date:"F j, Y" }}</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
 
-    {% for event in event_list %}
-        {% if user.id == event.organizer.id %}
-            <p>{{ event.name }}</p><br>
-        {% endif %}
-    {% endfor %}
-
-    {% for product in product_list %}
-        {% if user.id == product.owner.id %}
-            <p>{{ product.name }}</p><br>
-        {% endif %}
-    {% endfor %}
+    <div class="d-flex align-items-center justify-content-between mb-5">
+        <h6 class="title">Products</h6>
+    </div>
+    <div class="row">
+        {% for product in product_list %}
+            {% if user.id == product.owner.id %}
+                <div class="col-md-4 my-3">
+                    <a class="harvestly-card-link" href="{% url 'product-details' product.id %}">
+                        <div class="card">
+                            <!-- TODO image upload -->
+                            {% load static %}
+                            <img src="{% static 'img/product_placeholder.png' %}" alt="Product Image" class="card-img-top ">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ product.name|title }}</h3>
+                                <div class="d-flex justify-content-between">
+                                    <h5>${{ product.price|floatformat:"2" }}</h5>
+                                    <h5>&times;{{ product.quantity }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
 
 {% endblock %}
