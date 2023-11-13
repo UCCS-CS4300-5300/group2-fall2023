@@ -52,6 +52,8 @@
                                 href="{% url 'product-details' product.id %}"
                             >
                                 <h4>{{ product.name|title }}</h4>
+                                <!-- TODO Placeholder value for the product's creator -->
+                                <h5 class="mb-1">Vendor: {{ product.owner.username }}</h5>
                                 <div class="d-flex justify-content-between text-muted">
                                     <h5>${{ product.price|floatformat:"2" }}</h5>
                                     <h5 class="m-0">&times;{{ product.quantity }}</h5>
