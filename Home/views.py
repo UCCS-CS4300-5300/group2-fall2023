@@ -9,6 +9,8 @@ from django.urls import reverse_lazy
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+from Events.models import Event
+from Products.models import Product
 
 
 @login_required
@@ -46,4 +48,12 @@ class SignUp(CreateView):
     template_name = "registration/signup.html"
     success_url = reverse_lazy("login")
 
+
+class Profile(View):
+    """ User profile page for seeing events and products """
+    
+    def get(self, request):
+        event_list = Event.objects.all
+        product_list = Product.objects.all
+        return render(request, "profile.html", {"event_list": event_list, "product_list": product_list})
 

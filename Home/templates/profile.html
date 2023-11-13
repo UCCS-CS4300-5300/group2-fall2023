@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block title %}Harvestly{% endblock %}
+
+{% block content %}
+
+    {% for event in event_list %}
+        {% if user.id == event.organizer.id %}
+            <p>{{ event.name }}</p><br>
+        {% endif %}
+    {% endfor %}
+
+    {% for product in product_list %}
+        {% if user.id == product.owner.id %}
+            <p>{{ product.name }}</p><br>
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}

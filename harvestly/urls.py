@@ -27,6 +27,7 @@ from Products import views as products_views
 urlpatterns = [
     path("", home_views.Home.as_view(), name="index"),
     path("about-us/", home_views.About.as_view(), name="about"),
+    path("profile/", home_views.Profile.as_view(), name="profile"),
 
     path("markets/", include("Events.urls")),
     path("products/", include("Products.urls")),
