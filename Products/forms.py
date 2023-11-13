@@ -80,15 +80,15 @@ class ProductForm(forms.ModelForm):
         """Validate image size, ensure it is less than 5 MB"""
         image = self.cleaned_data.get("image")
 
-        if not image:
-            return None
+        if image is None:
+            return image
 
         max_file_size = 5242880  # file size: 5 MB
         min_file_size = 10240  # file size: 1 KB
 
-        if image.size > max_file_size:
+        if image and image.size > max_file_size:
             raise forms.ValidationError("Image file too large. max size is 5 MB")
-        elif image.size < min_file_size:
+        elif image and image.size < min_file_size:
             raise forms.ValidationError("Image file too small. min size is 10 KB")
 
         return image

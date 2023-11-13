@@ -4,7 +4,7 @@
 {% block content %}
 <div>
     <h3 class="subtitle">Edit Product Details</h3>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data"> <!-- allow file upload-->
         {% csrf_token %}
         <div class="row mt-4 mb-5">
             <div class="col-md-6 mb-1">
@@ -23,6 +23,10 @@
                         alt="Default Image"
                     >
                 {% endif %}
+                <div class="form-group">
+                    {{ form.image.label_tag }}
+                    {{ form.image }}
+                </div>
             </div>
             <div class="col-md-6 align-self-center">
                 <div class="harvestly-form-item">
