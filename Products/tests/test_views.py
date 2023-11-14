@@ -59,11 +59,15 @@ class ProductListTests(TestCase):
     def test_product_list_with_products(self):
         """ Test the product list view with product instances """
 
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
+
         product_1 = Product.objects.create(
             name="Product 1",
             description="Product 1 Description",
             price=3.45,
             quantity=10,
+            owner=self.user
         )
 
         product_2 = Product.objects.create(
@@ -71,6 +75,7 @@ class ProductListTests(TestCase):
             description="Product 2 Description",
             price=12.00,
             quantity=11,
+            owner=self.user
         )
 
         response = self.client.get(reverse("products"))
@@ -136,11 +141,15 @@ class ProductCreateTests(TestCase):
     def test_product_creates_object(self):
         """ Verify that the product create view successfully creates a product """
 
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
+
         data = {
             "name": "Product 1",
             "description": "Product 1 Description",
             "price": 3.45,
             "quantity": 10,
+            "owner": self.user
         }
 
         response = self.client.post(reverse("product-create"), data)
@@ -152,11 +161,15 @@ class ProductCreateTests(TestCase):
     def test_product_creates_object_with_event(self):
         """ Test that the product create view creates an object with an event """
 
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
+
         event = Event.objects.create(
             name="Event 1",
             location="Some Location",
             start_time="2025-04-12T00:00-00:00",
             end_time="2025-04-15T00:00-00:00",
+            organizer=self.user
         )
 
         data = {
@@ -165,6 +178,7 @@ class ProductCreateTests(TestCase):
             "price": 3.45,
             "quantity": 10,
             "product_event": event.pk,
+            "owner": self.user
         }
 
         response = self.client.post(reverse("product-create"), data)
@@ -176,10 +190,14 @@ class ProductCreateTests(TestCase):
     def test_product_create_missing_name(self):
         """ Test the product create view post with missing name in data """
 
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
+
         data = {
             "description": "Product 1 Description",
             "price": 3.45,
             "quantity": 10,
+            "owner": self.user.pk
         }
 
         response = self.client.post(reverse("product-create"), data)
@@ -191,10 +209,14 @@ class ProductCreateTests(TestCase):
     def test_product_create_missing_description(self):
         """ Test the product create view post with missing description in data """
 
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
+
         data = {
             "name": "Product 1",
             "price": 3.45,
             "quantity": 10,
+            "owner": self.user.pk
         }
 
         response = self.client.post(reverse("product-create"), data)
@@ -309,12 +331,16 @@ class ProductDetailTests(TestCase):
     def setUp(self):
         """ Create an object to view details """
         
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
+
         self.product_1 = Product.objects.create(
             id=1,
             name="Product 1",
             description="Product 1 Description",
             price=3.45,
             quantity=10,
+            owner=self.user
         )
 
     
@@ -395,6 +421,7 @@ class ProductUpdateTests(TestCase):
             description="Product 1 Description",
             price=3.45,
             quantity=10,
+            owner=user
         )
 
     def test_product_update_at_url(self):
@@ -550,6 +577,7 @@ class ProductDeleteTests(TestCase):
             description="Product 1 Description",
             price=3.45,
             quantity=10,
+            owner=user
         )
 
 
@@ -627,6 +655,7 @@ class ProductReserveTests(TestCase):
             description="Product 1 Description",
             price=3.45,
             quantity=10,
+            owner=user
         )
 
 

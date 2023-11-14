@@ -41,6 +41,12 @@ class EventCreate(LoginRequiredMixin, CreateView):
     # Establish the target template for use
     template_name = "event_create.html"
 
+    def form_valid(self, form):
+        """ Update the `organizer` field after submission """
+
+        form.instance.organizer = self.request.user
+        return super().form_valid(form)
+    
 
 class EventUpdate(LoginRequiredMixin, UpdateView):
     """ Update View for an Event Object. URL `/markets/edit/<int:pk>` """

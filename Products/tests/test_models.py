@@ -6,6 +6,7 @@ from django.test import TestCase
 from decimal import Decimal
 from Products.models import Product
 from Events.models import Event
+from django.contrib.auth.models import User
 
 # TODO - update this when image imports are available
 
@@ -14,6 +15,9 @@ class ProductTests(TestCase):
 
     def test_product_creation(self):
         """ Test valid product creation """
+
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
 
         name = "Product 1"
         description = "Product 1 Description"
@@ -25,6 +29,7 @@ class ProductTests(TestCase):
             description=description,
             price=price,
             quantity=quantity,
+            owner=self.user
         )
 
         self.assertTrue(Product.objects.filter(name=name).exists())
@@ -39,6 +44,9 @@ class ProductTests(TestCase):
     def test_product_creation_with_market(self):
         """ Test valid product creation """
 
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
+
         name = "Product 1"
         description = "Product 1 Description"
         price = 3.45
@@ -48,6 +56,7 @@ class ProductTests(TestCase):
             location="Some Location",
             start_time="2025-04-12T00:00-00:00",
             end_time="2025-04-15T00:00-00:00",
+            organizer=self.user
         )
 
         Product.objects.create(
@@ -56,6 +65,7 @@ class ProductTests(TestCase):
             price=price,
             quantity=quantity,
             product_event=event,
+            owner=self.user
         )
 
         self.assertTrue(Product.objects.filter(name=name).exists())
@@ -71,6 +81,9 @@ class ProductTests(TestCase):
     def test_product_str(self):
         """ Test the product `__str__` method """
 
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
+
         name = "Product 1"
 
         product_1 = Product.objects.create(
@@ -78,6 +91,7 @@ class ProductTests(TestCase):
             description="Product 1 Description",
             price=3.45,
             quantity=10,
+            owner=self.user
         )
 
         self.assertEqual(product_1.name, name)
