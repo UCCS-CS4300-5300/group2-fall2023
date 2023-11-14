@@ -5,7 +5,9 @@
 from django.db import models
 from django.urls import reverse
 from django.core.exceptions import ValidationError
+from django.conf import settings
 
+User = settings.AUTH_USER_MODEL
 
 class Event(models.Model):
     name = models.CharField(max_length=200)
@@ -15,6 +17,8 @@ class Event(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     
+    organizer = models.ForeignKey(User, on_delete=models.CASCADE)
+
     def get_products(self):
         """ Query the `Product` model to get all products associated with this event """
 

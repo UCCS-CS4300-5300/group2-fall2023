@@ -72,6 +72,10 @@ class EventCreate(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         """ Update the latitude and longitude fields using the address """
 
+        # set organizer from current user
+        form.instance.organizer = self.request.user
+
+
         coords = get_coordinates(settings.GOOGLE_MAPS_API_KEY, form.instance.location)
 
         if(coords):

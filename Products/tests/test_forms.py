@@ -5,6 +5,7 @@
 from django.test import TestCase
 from Products import forms
 from Events.models import Event
+from django.contrib.auth.models import User
 
 # TODO - Update when image upload is available
 
@@ -28,11 +29,15 @@ class ProductFormTest(TestCase):
     def test_valid_product_form_with_market(self):
         """ Test the product form is recognized as valid """
 
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
+
         event = Event.objects.create(
             name="Event 1",
             location="Some Location",
             start_time="2025-04-12T00:00-00:00",
             end_time="2025-04-15T00:00-00:00",
+            organizer=self.user
         )
 
         data = {

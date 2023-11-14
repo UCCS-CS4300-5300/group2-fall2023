@@ -6,6 +6,9 @@ from datetime import datetime
 from django.utils import timezone
 from django import forms
 from .models import Event
+from django.conf import settings
+
+User = settings.AUTH_USER_MODEL
 
 class DateTimeInput(forms.DateInput):
     input_type = "datetime-local"
