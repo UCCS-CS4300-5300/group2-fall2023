@@ -172,10 +172,37 @@ This is an evaluation of number of lines of code and their purpose (i.e. blank, 
 
 
 ## Google Maps API Key Configuration
+This app uses the [Google Maps API](https://developers.google.com/maps) to store set location information for events. You must first create a Google Maps API key.
 
-This app uses the [Google Maps API](https://developers.google.com/maps) to store set location information for events. You must first create a Google Maps API key. [See more information from Google](https://developers.google.com/maps/get-started).
 
+### Generate a Google Maps API Key [More Information](https://developers.google.com/maps/get-started):
+
+
+#### Set Up Google Cloud Project
+Navigate to the Google Cloud Console's [Project Selector](https://console.cloud.google.com/projectselector2/home) page. Select `Create Project` to begin creating a new cloud project. Make sure that [billing](https://console.cloud.google.com/projectselector2/billing) is enabled for your Cloud project. 
+
+
+#### Enable APIs
+Navigate to the [Maps API Library](https://console.cloud.google.com/projectselector2/google/maps-apis/api-list) page. Ensure that `Maps JavaScript API` and `Places API` are enabled.
+
+
+#### Get API Key
+Navigate to the Google Cloud Console's [Credentials](https://console.cloud.google.com/projectselector2/google/maps-apis/credentials) page. Select `Create credentials` and then select `API key`. The API key created dialog displays the newly created API key.
+
+
+#### Insert API Key Into .env
 After acquiring an API key, set the API key in the `.env` file:
 ```
 GOOGLE_MAPS_API_KEY='<YOUR API KEY>'
 ```
+
+
+### Restrict your Google Maps API [More Information](https://developers.google.com/maps/api-security-best-practices#restricting-api-keys):
+
+You might want to restrict your Google Maps API key so that it is imited to use on certain websites or certain IP addresses.
+
+To achieve this, navigate to the Google Cloud Console's [Google Maps Platform Credentials](https://console.cloud.google.com/projectselector2/google/maps-apis) page. Select the Google Cloud project for which you created to generate your API key. Select the API key that you want to restrict. On the Edit API key page, under Key restrictions, select `Set an application restriction`. Here, you can select the type of application restriction that you wish to add to your api key. The restriction types are as follows:
+* `Websites`: Specify one or more referrer websites. Always provide the full referrer URI, including the protocol scheme, hostname and optional port (e.g., https://google.com)
+* `IP addresses`: Specify one or more IPv4 or IPv6 addresses, or subnets using CIDR notation.
+
+
