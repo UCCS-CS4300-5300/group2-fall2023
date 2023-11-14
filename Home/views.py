@@ -50,7 +50,7 @@ class SignUp(CreateView):
     success_url = reverse_lazy("login")
 
 
-class Profile(View, LoginRequiredMixin):
+class Profile(LoginRequiredMixin, View):
     """ User profile page for seeing events and products """
     
     def get(self, request):
