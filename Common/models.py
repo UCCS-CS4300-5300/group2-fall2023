@@ -20,20 +20,23 @@ IMAGE_QUALITY = 85
 ACCEPTED_FILE_TYPES = ["JPEG", "JPG", "PNG"]
 MIN_FILE_SIZE = 10240  # file size: 10 KB
 MAX_FILE_SIZE = 5242880  # file size: 5 MB
-PLACEHOLDER_IMAGE = "defaults/images/product_placeholder.png"
+PLACEHOLDER_IMAGE_PATH = "defaults/images/product_placeholder.png"
 
 
 class ImageUpload(models.Model):
-    file = models.ImageField(upload_to="images/")
+    file = models.ImageField(upload_to="images/", blank=True, null=True)
     thumbnail = models.ImageField(upload_to="thumbnails/", blank=True, null=True)
     alt_text = models.CharField(max_length=255, blank=True, null=True)
 
+    class Meta:
+        abstract = True
+
     def __str__(self):
-        return self.alt_text
+        return self.file.name if self.file else "No File"
 
     def save(self, *args, **kwargs):
         if self.file:
-            self.update_image_field("image", DEFAULT_IMAGE_SIZE)
+            self.update_image_field("file", DEFAULT_IMAGE_SIZE)
             self.update_image_field("thumbnail", DEFAULT_THUMBNAIL_SIZE)
         super().save(*args, **kwargs)
 
@@ -88,6 +91,7 @@ class ImageUpload(models.Model):
 
         return thumb_io
 
+    @staticmethod
     def generate_unique_filename(filename):
         """Generate unique filename"""
         name, extension = os.path.splitext(filename)
@@ -103,12 +107,10 @@ class ImageUpload(models.Model):
             raise ValueError("size must contain positive integers")
 
 
-class ProductImage(models.Model):
+class ProductImage(ImageUpload):
     product = models.ForeignKey(
         "Products.Product", related_name="image", on_delete=models.CASCADE
     )
-    image = models.ForeignKey(ImageUpload, on_delete=models.CASCADE)
 
     def __str__(self):
-        # TODO - switch to alt text once implemented.
-        return f"{self.product.name} Image"
+        return self.product.name

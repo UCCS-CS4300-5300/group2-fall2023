@@ -21,20 +21,18 @@
                 >
                     <div class="card h-100">
                         <div class="product-card-img-container">
-                        {%with product.image.first as product_image %}
-                            {% if product_image %}
+                            {% if product.has_image %}
                                 <img 
-                                    src="{{ product_image.image.thumbnail.url }}" 
+                                    src="{{ product.get_img_url }}" 
                                     class="card-img-top product-card-img img-thumbnail" 
-                                    alt="{{ product_image.image.alt_text }}"
+                                    alt="{{ product.get_img_text }}"
                                 >
                             {% else %}
                                 <img 
                                     src="{% static 'img/product_placeholder.png' %}" 
-                                    class="card-img-top product-card-img img-thumbnail" alt="Default Image"
+                                    class="card-img-top product-card-img img-thumbnail" alt="Placeholder Image"
                                 >
                             {% endif %}
-                        {% endwith %}
                         </div>
                         <div class="card-body product-card-body">
                             <h3 class="card-title">{{ product.name|title }}</h3>

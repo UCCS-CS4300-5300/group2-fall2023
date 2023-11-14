@@ -7,12 +7,14 @@ from django.core.validators import MinValueValidator
 from django.urls import reverse
 from django.conf import settings
 from Events.models import Event
+from Common.models import PLACEHOLDER_IMAGE_PATH
 
 User = settings.AUTH_USER_MODEL
 
+
 class Product(models.Model):
     """Product model"""
-    
+
     # TODO - Set up vendors app/model to link vendors to users,products,events
 
     name = models.CharField(max_length=255)
@@ -24,18 +26,16 @@ class Product(models.Model):
     )
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    product_event = models.ForeignKey(Event, on_delete=models.SET_NULL, blank=True, null=True)
+    product_event = models.ForeignKey(
+        Event, on_delete=models.SET_NULL, blank=True, null=True
+    )
 
     # TODO - see above
     # product_vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     # product_event = models.ForeignKey(Event, on_delete=models.SET_NULL, blank=True, null=True)
-    # image = models.ImageField(upload_to='products/images', blank=True, null=True)
-    
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
         return reverse("product-details", args=[str(self.id)])
-
-    

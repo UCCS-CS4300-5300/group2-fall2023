@@ -19,9 +19,9 @@ class ImageUploadForm(forms.ModelForm):
 
     class Meta:
         model = ImageUpload
-        fields = ["image", "alt_text"]
+        fields = ["file", "alt_text"]
         widgets = {
-            "image": forms.ClearableFileInput(
+            "file": forms.ClearableFileInput(
                 attrs={
                     "accept": "image/*",
                     "aria-label": "Upload an image",
@@ -36,45 +36,45 @@ class ImageUploadForm(forms.ModelForm):
         }
 
         labels = {
-            "image": "Image",
+            "file": "Upload File",
             "alt_text": "Image description",
         }
 
-    def clean_image(self):
+    def clean_file(self):
         """Performs various validations on image file, returning it if valid"""
-        image = self.cleaned_data.get("image")
+        file = self.cleaned_data.get("file")
 
-        if image is None:
-            return image
-
-        # validate image file size
-        self.validate_image(image)
+        if file is None:
+            return file
 
         # validate image file size
-        self.validate_file_size(image)
+        self.validate_file(file)
+
+        # validate image file size
+        self.validate_file_size(file)
 
         # validate image dimensions (width, height)
-        self.validate_image_dimensions(image)
+        self.validate_image_dimensions(file)
 
-        return image
+        return file
 
     @staticmethod
-    def validate_image(image):
+    def validate_file(file):
         """validate image file contents, format, max and min size"""
         # return since image upload is optional
-        if not image:
+        if not file:
             return
 
         # validate image file contents
         try:
-            with PIL.open(image) as img:
+            with PIL.open(file) as image:
                 # check image is valid and readable
-                img.verify()
+                image.verify()
                 # check image format is supported
-                if img.format not in ACCEPTED_FILE_TYPES:
-                    raise forms.ValidationError("Invalid image file format.")
+                if image.format not in ACCEPTED_FILE_TYPES:
+                    raise forms.ValidationError("Invalid file format provided.")
         except Exception as e:
-            raise forms.ValidationError("Invalid image file.")
+            raise forms.ValidationError("Invalid file.")
 
     @staticmethod
     def validate_image_dimensions(image):
@@ -96,18 +96,18 @@ class ImageUploadForm(forms.ModelForm):
             raise forms.ValidationError("Invalid image file.")
 
     @staticmethod
-    def validate_file_size(image):
-        if not image:
+    def validate_file_size(file):
+        if not file:
             return
 
         max_in_mb = MAX_FILE_SIZE / 1000000
         min_in_kb = MIN_FILE_SIZE / 1000
 
-        if image.size > MAX_FILE_SIZE:
+        if file.size > MAX_FILE_SIZE:
             raise forms.ValidationError(
                 f"Image file too large. max size is {max_in_mb} MB"
             )
-        elif image.size < MIN_FILE_SIZE:
+        elif file.size < MIN_FILE_SIZE:
             raise forms.ValidationError(
                 f"Image file too small. min size is {min_in_kb} KB"
             )

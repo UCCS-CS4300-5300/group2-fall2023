@@ -10,23 +10,28 @@
             <div class="col-md-6 mb-1">
                 <!-- render image -->
                 {% load static %}
-                {% if product.image %}
+                {% if product.has_image %}
                     <img 
-                        src="{{ product.image.url }}" 
-                        class="rounded" 
-                        alt="{{ product.name }}"
+                        src="{{ product.get_img_url }}" 
+                        class="card-img-top product-card-img img-thumbnail" 
+                        alt="{{ product.get_img_text }}"
                     >
                 {% else %}
                     <img 
                         src="{% static 'img/product_placeholder.png' %}" 
-                        class="rounded" 
-                        alt="Default Image"
+                        class="card-img-top product-card-img img-thumbnail" alt="Placeholder Image"
                     >
                 {% endif %}
                 <!-- image control group -->
                 <div class="form-group">
-                    {{ form.image.label_tag }}
-                    {{ form.image }}
+                    <div>
+                    {{ image_form.file }}
+                    {{ image_form.file.as_p }}
+                    </div>
+                    <div>
+                        {{image_form.alt_text.label }}
+                        {{ image_form.alt_text }}
+                    </div>
                 </div>
             </div>
             <div class="col-md-6 align-self-center">

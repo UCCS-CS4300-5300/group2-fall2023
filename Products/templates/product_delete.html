@@ -10,21 +10,18 @@
         <div class="row mt-4 mb-5">
             <!-- ImageSection -->
             <div class="col-md-6 mb-2">
-                {% with product.image.first as product_image %}
-                    {% if product_image.image %}
-                        <img 
-                            src="{{ product_image.image.url }}" 
-                            class="rounded" 
-                            alt="{{ product_image.image.alt_text }}"
-                        >
-                    {% else %}
-                        <img 
-                            src="{% static 'img/product_placeholder.png' %}" 
-                            class="rounded" 
-                            alt="Placeholder Image"
-                        >
-                    {% endif %}
-                {% endwith %}
+                {% if product.has_image %}
+                    <img 
+                        src="{{ product.get_img_url }}" 
+                        class="card-img-top product-card-img img-thumbnail" 
+                        alt="{{ product.get_img_text }}"
+                    >
+                {% else %}
+                    <img 
+                        src="{% static 'img/product_placeholder.png' %}" 
+                        class="card-img-top product-card-img img-thumbnail" alt="Placeholder Image"
+                    >
+                {% endif %}
             </div>
             <div class="col-md-6 align-self-center">
                 <h3>Delete {{ product.name|title }}</h3>

@@ -8,17 +8,16 @@
         <div class="col-md-6">
             <!-- render image -->
             {% load static %}
-            {% if product.image %}
+            {% if product.has_image %}
                 <img 
-                    src="{{ product.image.url }}" 
-                    class="rounded" 
-                    alt="{{ product.name }}"
+                    src="{{ product.get_img_url }}" 
+                    class="card-img-top product-card-img img-thumbnail" 
+                    alt="{{ product.get_img_text }}"
                 >
             {% else %}
                 <img 
                     src="{% static 'img/product_placeholder.png' %}" 
-                    class="rounded" 
-                    alt="Default Image"
+                    class="card-img-top product-card-img img-thumbnail" alt="Placeholder Image"
                 >
             {% endif %}
         </div>
