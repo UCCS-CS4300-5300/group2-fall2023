@@ -321,4 +321,8 @@ footer .harvestly-nav-link {
     .harvestly-form-item textarea {
         height: auto;
     }
+
+    .harvestly-map-display {
+        margin-bottom: 2rem;
+    }
 }
