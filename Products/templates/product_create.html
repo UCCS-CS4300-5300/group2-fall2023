@@ -6,6 +6,7 @@
     <h3 class="subtitle"> Add New Product </h3>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
+        <!-- Base Product form input -->
         <div class="row pt-4 mb-2">
             <div class="col-md-6 harvestly-form-item">
                 {{ form.name.label }}
@@ -31,6 +32,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Event Section -->
             <div class="col-md-6 harvestly-form-item">
                 {{ form.product_event.label }}
                 <input type="hidden" name="{{ form.product_event.name }}" id="product-event" value=""/>
@@ -57,6 +59,18 @@
                 </div>
             </div>
         </div>
+        <!-- Image upload section -->
+        <div class="row pt-2 mb-2">
+            <div class="col-md-12 harvestly-form-item">
+                {{ image_form.image.label }}
+                {{ image_form.image }}
+            </div>
+            <div class="col-md-12 harvestly-form-item">
+                {{ image_form.alt_text.label }}
+                {{ image_form.alt_text }}
+            </div>
+        </div>
+        <!-- Submit and Cancel buttons -->
         <div class="d-flex justify-content-end pt-2">
             <a class="harvestly-nav-btn-secondary d-flex justify-content-center align-items-center mr-2" href="{% url 'products' %}">Cancel</a>
             <input class="harvestly-nav-btn-primary" type="submit" value="Add Product" />
@@ -68,6 +82,19 @@
             Please correct the errors.
             <ul>
                 {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    {%if image_form.errors %}
+        <div class="error-message">
+            Image upload errors. Please Correct. 
+            <ul>
+                {% for field, errors in image_form.errors.items %}
                     {% for error in errors %}
                         <li>{{ error }}</li>
                     {% endfor %}

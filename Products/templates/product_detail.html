@@ -8,20 +8,21 @@
     <div class="row mt-4 mb-5">
         <div class="col-md-6">
             <!-- render product image or placeholder -->
-            {% if product.image %}
-            
-                <img 
-                    src="{{ product.image.url }}" 
-                    class="rounded" 
-                    alt="{{ product.name }}"
-                >
-            {% else %}
-                <img 
-                    src="{% static 'img/product_placeholder.png' %}" 
-                    class="rounded" 
-                    alt="Default Image"
-                >
-            {% endif %}
+            {% with product.image.first as product_image %}
+                {% if product_image.image %}
+                    <img 
+                        src="{{ product_image.image.url }}" 
+                        class="rounded" 
+                        alt="{{ product_image.image.alt_text }}"
+                    >
+                {% else %}
+                    <img 
+                        src="{% static 'img/product_placeholder.png' %}" 
+                        class="rounded" 
+                        alt="Placeholder Image"
+                    >
+                {% endif %}
+            {% endwith %}
         </div>
         <div class="col-md-6 align-self-center">
             <h3>{{ product.name|title }} Details</h3>

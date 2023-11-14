@@ -8,20 +8,23 @@
     <form method="post">
         {% csrf_token %}
         <div class="row mt-4 mb-5">
+            <!-- ImageSection -->
             <div class="col-md-6 mb-2">
-                {% if product.image %}
-                    <img 
-                        src="{{ product.image.url }}" 
-                        class="rounded" 
-                        alt="{{ product.name }}"
-                    >
-                {% else %}
-                    <img 
-                        src="{% static 'img/product_placeholder.png' %}" 
-                        class="rounded" 
-                        alt="Default Image"
-                    >
-                {% endif %}
+                {% with product.image.first as product_image %}
+                    {% if product_image.image %}
+                        <img 
+                            src="{{ product_image.image.url }}" 
+                            class="rounded" 
+                            alt="{{ product_image.image.alt_text }}"
+                        >
+                    {% else %}
+                        <img 
+                            src="{% static 'img/product_placeholder.png' %}" 
+                            class="rounded" 
+                            alt="Placeholder Image"
+                        >
+                    {% endif %}
+                {% endwith %}
             </div>
             <div class="col-md-6 align-self-center">
                 <h3>Delete {{ product.name|title }}</h3>
@@ -32,6 +35,7 @@
                     <h5 class="text-muted">${{ product.price|floatformat:"2" }}</h5>
                     <h5 class="text-muted">&times;{{ product.quantity }}</h5>
                 </div>
+                <!-- Form Submission Section -->
                 <div class="d-flex mt-3 justify-content-end">
                     <a
                         href="{% url 'product-details' product.id %}"

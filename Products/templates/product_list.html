@@ -21,11 +21,12 @@
                 >
                     <div class="card h-100">
                         <div class="product-card-img-container">
-                            {% if product.image %}
+                        {%with product.image.first as product_image %}
+                            {% if product_image %}
                                 <img 
-                                    src="{{ product.thumbnail.url }}" 
+                                    src="{{ product_image.image.thumbnail.url }}" 
                                     class="card-img-top product-card-img img-thumbnail" 
-                                    alt="{{ product.name }}"
+                                    alt="{{ product_image.image.alt_text }}"
                                 >
                             {% else %}
                                 <img 
@@ -33,6 +34,7 @@
                                     class="card-img-top product-card-img img-thumbnail" alt="Default Image"
                                 >
                             {% endif %}
+                        {% endwith %}
                         </div>
                         <div class="card-body product-card-body">
                             <h3 class="card-title">{{ product.name|title }}</h3>

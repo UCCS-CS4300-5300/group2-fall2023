@@ -5,7 +5,6 @@
 from django import forms
 from Products.models import Product
 from Events.models import Event
-from Common.models import Image
 
 
 class ProductForm(forms.ModelForm):

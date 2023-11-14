@@ -12,7 +12,7 @@ User = settings.AUTH_USER_MODEL
 
 class Product(models.Model):
     """Product model"""
-
+    
     # TODO - Set up vendors app/model to link vendors to users,products,events
 
     name = models.CharField(max_length=255)
@@ -37,3 +37,5 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse("product-details", args=[str(self.id)])
+
+    
