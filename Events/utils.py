@@ -24,11 +24,7 @@ def get_coordinates(api_key, address):
             return (latitude, longitude)
 
         else:
-            print(f"Unable to map address {address}")
             return None
 
     except Exception as e:
-        
-        # print error message and return none
-        print(f"Unable to map addres {address} with error\n{e}")
         return None

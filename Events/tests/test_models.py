@@ -54,7 +54,7 @@ class EventTests(TestCase):
         location_max_length = event._meta.get_field("location").max_length
 
         self.assertEqual(name_max_length, 200)
-        self.assertEqual(location_max_length, 200)
+        self.assertEqual(location_max_length, 255)
 
     def test_get_absolute_url(self):
         """Test that get_absolute_url returns the correct url"""

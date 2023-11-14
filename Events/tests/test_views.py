@@ -62,7 +62,7 @@ class EventListTests(TestCase):
         event_1 = Event.objects.create(
             id=1,
             name="Event 1",
-            location="Event 1 Location",
+            location="1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             start_time="2024-12-01T09:00+03:00",
             end_time="2024-12-01T10:00+03:00",
             organizer=self.user,
@@ -71,7 +71,7 @@ class EventListTests(TestCase):
         event_2 = Event.objects.create(
             id=2,
             name="Event 2",
-            location="Event 2 Location",
+            location="1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             start_time="2024-12-01T11:00+03:00",
             end_time="2024-12-01T12:00+03:00",
             organizer=self.user,
@@ -97,7 +97,7 @@ class EventDetailTests(TestCase):
         self.event_1 = Event.objects.create(
             id=1,
             name="Event 1",
-            location="Event 1 Location",
+            location="1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             start_time="2024-12-01T09:00+03:00",
             end_time="2024-12-01T10:00+03:00",
             organizer=self.user
@@ -210,7 +210,7 @@ class EventCreateTests(TestCase):
         event_name = "Market 1" 
         data = {
             "name": event_name,
-            "location": "Some Location",
+            "location": "1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             "start_time": "2024-12-01T09:00",
             "end_time": "2024-12-03T09:00",
             "organizer": self.user
@@ -229,7 +229,7 @@ class EventCreateTests(TestCase):
         self.user.save()
 
         data = {
-            "location": "Some Location",
+            "location": "1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             "start_time": "2024-12-01T09:00",
             "end_time": "2024-12-03T09:00",
             "organizer": self.user
@@ -268,7 +268,7 @@ class EventCreateTests(TestCase):
 
         data = {
             "name": "Some Event",
-            "location": "Some Location",
+            "location": "1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             "end_time": "2024-12-03T09:00",
             "organizer": self.user
         }
@@ -287,7 +287,7 @@ class EventCreateTests(TestCase):
 
         data = {
             "name": "Some Event",
-            "location": "Some Location",
+            "location": "1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             "start_time": "2024-12-01T09:00",
             "organizer": self.user
         }
@@ -306,7 +306,7 @@ class EventCreateTests(TestCase):
 
         data = {
             "name": "Some Event",
-            "location": "Some Location",
+            "location": "1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             "start_time": "2024-12",
             "end_time": "2024-12-03T09:00",
             "organizer": self.user
@@ -326,7 +326,7 @@ class EventCreateTests(TestCase):
 
         data = {
             "name": "Some Event",
-            "location": "Some Location",
+            "location": "1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             "start_time": "2024-12-01T09:00",
             "end_time": "T09:00",
             "organizer": self.user
@@ -346,7 +346,7 @@ class EventCreateTests(TestCase):
 
         data = {
             "name": "Some Event",
-            "location": "Some Location",
+            "location": "1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             "start_time": "2024-12-01T09:00",
             "end_time": "2024-12-01T08:59",
             "organizer": self.user
@@ -377,8 +377,9 @@ class EventUpdateTests(TestCase):
         self.client.login(username=username, password=password)
 
         self.event_1 = Event.objects.create(
+            id=1,
             name="Event 1",
-            location="Event 1 Location",
+            location="1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             start_time=timezone.make_aware(
                 datetime.datetime(2025, 11, 1, 10, 0)
             ),  # 2025-11-01 10:00
@@ -435,7 +436,7 @@ class EventUpdateTests(TestCase):
         self.assertEqual(updated_event.name, new_name)
 
     def test_event_update_change_location(self):
-        new_location = "New Location"
+        new_location = "3650 N Nevada Ave, Colorado Springs, CO 80907, USA"
         data = {
             "name": self.event_1.name,
             "location": new_location,
@@ -502,7 +503,7 @@ class EventDeleteTests(TestCase):
         self.event_1 = Event.objects.create(
             id=1,
             name="Event 1",
-            location="Event 1 Location",
+            location="1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             start_time="2024-12-01T09:00+03:00",
             end_time="2024-12-01T10:00+03:00",
             organizer=user
