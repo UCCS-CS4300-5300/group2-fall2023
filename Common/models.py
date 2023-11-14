@@ -8,16 +8,21 @@ from django.core.files.base import ContentFile
 # TODO - [x] Migrate image logic from product model
 # todo - [x] create image model
 # TODO - [] abstraction inherited productImage model.
-# TODO - [] implement image update logic
-# TODO - [] implement unique_filename method
-# TODO - [] implement image validation
+# TODO - [x] implement image update logic
+# TODO - [x] implement unique_filename method
+# TODO - [x] implement image validation
+# TODO - [] handle alt text for images
 
 
 class Image(models.Model):
     # Constant values - possibly refactor later
-    MAX_IMAGE_SIZE = (480, 480)
-    MAX_THUMBNAIL_SIZE = (128, 128)
+    MAX_IMAGE_SIZE = (1920, 1920)
+    DEFAULT_IMAGE_SIZE = (480, 480)
+    DEFAULT_THUMBNAIL_SIZE = (128, 128)
     IMAGE_QUALITY = 85
+    ACCEPTED_FILE_TYPES = ["JPEG", "JPG", "PNG"]
+    MIN_FILE_SIZE = 10240  # file size: 10 KB
+    MAX_FILE_SIZE = 5242880  # file size: 5 MB
 
     image = models.ImageField(upload_to="images/")
     thumbnail = models.ImageField(upload_to="thumbnails/", blank=True, null=True)
@@ -28,13 +33,9 @@ class Image(models.Model):
         return self.alt_text
 
     def save(self, *args, **kwargs):
-        # resize image
-        # create thumbnail
-        # save image
-        # generate alt_text
         if self.image:
-            self.update_image_field("image", self.MAX_IMAGE_SIZE)
-            self.update_image_field("thumbnail", self.MAX_THUMBNAIL_SIZE)
+            self.update_image_field("image", self.DEFAULT_IMAGE_SIZE)
+            self.update_image_field("thumbnail", self.DEFAULT_THUMBNAIL_SIZE)
         super().save(*args, **kwargs)
 
     def update_image_field(self, field_name, size):
@@ -64,6 +65,7 @@ class Image(models.Model):
             new_file = ContentFile(resized_image.getvalue(), filename)
             setattr(self, field_name, new_file)
 
+            # TODO - refactor to generic delete file method
             if old_file_path:
                 # delete old file
                 os.remove(old_file_path)
@@ -101,15 +103,13 @@ class Image(models.Model):
         if not all(isinstance(n, int) and n > 0 for n in size):
             raise ValueError("size must contain positive integers")
 
-    # def update_image_field(self, field_name, size):
-    #     """creates or updates the image and thumbnail for the product"""
-    #     self.validate_image_size_parameter(size)
 
-    #     image_field = getattr(self, field_name)
-    #     # resize primary image
-    #     resized_image = Image.resize_image(image_field, size)
-    #     if resized_image:
-    #         filename = os.path.basename(image_field.name)
-    #         # TODO - generate unique filename
-    #         new_file = ContentFile(resized_image.getvalue(), filename)
-    #         setattr(self, field_name, new_file)
+class ProductImage(models.Model):
+    product = models.ForeignKey(
+        "Products.Product", related_name="image", on_delete=models.CASCADE
+    )
+    image = models.ForeignKey(Image, on_delete=models.CASCADE)
+
+    def __str__(self):
+        # TODO - switch to alt text once implemented.
+        return f"{self.product.name} Image"

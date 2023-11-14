@@ -5,7 +5,7 @@
 from django import forms
 from Products.models import Product
 from Events.models import Event
-from Common.shared_models import Image
+from Common.models import Image
 
 
 class ProductForm(forms.ModelForm):
@@ -75,23 +75,6 @@ class ProductForm(forms.ModelForm):
             raise forms.ValidationError("Value must be greater than or equal to 1")
 
         return quantity
-
-    def clean_image(self):
-        """Validate image size, ensure it is less than 5 MB"""
-        image = self.cleaned_data.get("image")
-
-        if image is None:
-            return image
-
-        max_file_size = 5242880  # file size: 5 MB
-        min_file_size = 10240  # file size: 1 KB
-
-        if image and image.size > max_file_size:
-            raise forms.ValidationError("Image file too large. max size is 5 MB")
-        elif image and image.size < min_file_size:
-            raise forms.ValidationError("Image file too small. min size is 10 KB")
-
-        return image
 
 
 class ProductReserveForm(forms.Form):
