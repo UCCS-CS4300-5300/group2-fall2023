@@ -5,6 +5,7 @@
 from django import forms
 from Products.models import Product
 from Events.models import Event
+from Common.shared_models import Image
 
 
 class ProductForm(forms.ModelForm):
@@ -21,7 +22,6 @@ class ProductForm(forms.ModelForm):
             "quantity",
             "product_event",
             "description",
-            "image",
         ]
 
         widgets = {
@@ -56,12 +56,6 @@ class ProductForm(forms.ModelForm):
                     "Placeholder": "Product description",
                 }
             ),
-            "image": forms.ClearableFileInput(
-                attrs={
-                    "accept": "image/*",  # accept only images
-                    "aria-label": "Product image upload",  # accessibility
-                }
-            ),
         }
 
         labels = {
@@ -70,7 +64,6 @@ class ProductForm(forms.ModelForm):
             "quantity": "Product quantity",
             "product_event": "Market for Product (optional)",
             "description": "Product description",
-            "image": "Upload product image",
         }
 
     def clean_quantity(self):

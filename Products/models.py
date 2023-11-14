@@ -11,7 +11,6 @@ from Events.models import Event
 class Product(models.Model):
     """Product model"""
 
-    # TODO - Install Pillow to work with images
     # TODO - Set up vendors app/model to link vendors to users,products,events
 
     name = models.CharField(max_length=255)
