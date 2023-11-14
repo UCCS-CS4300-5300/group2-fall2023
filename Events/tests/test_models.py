@@ -9,6 +9,7 @@ from Events.models import Event
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.contrib.auth.models import User
 import datetime
 
 
@@ -16,6 +17,10 @@ class EventTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         # set up data for the whole TestCase
+
+        cls.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        cls.user.save()
+
         cls.event = Event.objects.create(
             name="Test Event",
             location="Test Location",
@@ -25,6 +30,7 @@ class EventTests(TestCase):
             end_time=timezone.make_aware(
                 datetime.datetime(2023, 11, 1, 12, 0)
             ),  # 2023-11-01 12:00
+            organizer=cls.user,
         )
 
     def test_event_creation(self):

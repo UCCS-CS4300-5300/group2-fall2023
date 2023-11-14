@@ -5,8 +5,10 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.urls import reverse
+from django.conf import settings
 from Events.models import Event
 
+User = settings.AUTH_USER_MODEL
 
 class Product(models.Model):
     """Product model"""
@@ -21,15 +23,14 @@ class Product(models.Model):
         validators=[MinValueValidator(0)],
     )
 
-    product_event = models.ForeignKey(
-        Event, on_delete=models.SET_NULL, blank=True, null=True
-    )
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    product_event = models.ForeignKey(Event, on_delete=models.SET_NULL, blank=True, null=True)
 
     # TODO - see above
     # product_vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     # product_event = models.ForeignKey(Event, on_delete=models.SET_NULL, blank=True, null=True)
     # image = models.ImageField(upload_to='products/images', blank=True, null=True)
-    # product_owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    
 
     def __str__(self):
         return self.name

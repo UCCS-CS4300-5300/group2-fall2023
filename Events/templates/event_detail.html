@@ -25,8 +25,14 @@
         </div>
     </div>
 
-    <!-- TODO if the user IS NOT the organizer of this event, display the vendor information and products -->
     <div class="row mt-5 pt-4">
+        <div class="col-md-6 d-flex flex-column">
+            <h3>Market Organizer Information</h3>
+            <h5>{{ event.organizer.username|title }}</h5>
+
+            <!-- TODO develop this as we build out user profile -->
+            <p class="text-muted mt-3">More vendor information coming soon.</p>
+        </div>
         <div class="col-md-6 d-flex flex-column">
             <div class="row">
                 <div class="col-lg-6">
@@ -49,7 +55,9 @@
                                 class="harvestly-scrollable-item flex-column"
                                 href="{% url 'product-details' product.id %}"
                             >
-                                <h4>{{ product.name|title }}</h4>
+                                <h4 class="mb-4">{{ product.name|title }}</h4>
+                                <!-- TODO Placeholder value for the product's creator -->
+                                <h5 class="mb-2">For sale by {{ product.owner.username|title }}</h5>
                                 <div class="d-flex justify-content-between text-muted">
                                     <h5>${{ product.price|floatformat:"2" }}</h5>
                                     <h5 class="m-0">&times;{{ product.quantity }}</h5>
@@ -64,28 +72,25 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 d-flex flex-column">
-            <h3>Market Organizer Information</h3>
-            <h5>Coming soon.</h5>
-        </div>
     </div>
 
-    <!-- TODO if the user IS the organizer of this event, display the edit/delete options -->
-    <div class="row mt-5 pt-4 justify-content-end">
-        <div class="col-md-6 d-flex justify-content-end align-self-center">
-            <a
-            href="{% url 'event-delete' event.id %}"
-            class="harvestly-nav-btn-secondary  d-flex justify-content-center align-items-center mx-1 py-2"
-        >
-            <h4 class="m-0">Delete</h4>
-        </a>
-            <a 
-                href="{% url 'event-update' event.id %}" 
-                class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center mx-1 py-2"
+    {% if user.is_authenticated and user.id == event.organizer.id %}
+        <div class="row mt-5 pt-4 justify-content-end">
+            <div class="col-md-6 d-flex justify-content-end align-self-center">
+                <a
+                href="{% url 'event-delete' event.id %}"
+                class="harvestly-nav-btn-secondary  d-flex justify-content-center align-items-center mx-1 py-2"
             >
-                <h4 class="m-0">Edit</h4>
+                <h4 class="m-0">Delete</h4>
             </a>
+                <a 
+                    href="{% url 'event-update' event.id %}" 
+                    class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center mx-1 py-2"
+                >
+                    <h4 class="m-0">Edit</h4>
+                </a>
+            </div>
         </div>
-    </div>
+    {% endif %}
 </div>
 {% endblock %}

@@ -24,6 +24,8 @@ class ProductList(ListView):
     context_object_name = "product_list"
     
 
+# TODO create new create view, inherit from `View` class
+
 class ProductCreate(LoginRequiredMixin, CreateView):
     """ Create View for an Event Object. URL `/products/new/` """
 
@@ -34,6 +36,12 @@ class ProductCreate(LoginRequiredMixin, CreateView):
     # Establish the target template for use
     template_name = "product_create.html"
 
+    def form_valid(self, form):
+        """ Update the `owner` field after submission """
+
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+    
     def get_success_url(self):
         """ Get success URL after post completion. """
 

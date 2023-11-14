@@ -46,10 +46,13 @@
     <div class="row mt-5 pt-4">
         <div class="col-md-6 d-flex flex-column">
             <h3>Product Vendor Information</h3>
-            <h5>Coming soon.</h5>
+            <h5>{{ product.owner.username|title }}</h5>
+
+            <!-- TODO develop this as we build out user profile -->
+            <p class="text-muted mt-3">More vendor information coming soon.</p>
         </div>
-        <!-- Currently mocking some behavior for futher refinement: if not logged in, display the reserve-->
-        {% if not user.is_authenticated %}
+        <!-- If user is not logged in OR if they are not the owner -->
+        {% if not user.is_authenticated or user.id != product.owner.id %}
             <div class="col-md-6  mb-1 d-flex flex-column">
                 <a 
                     href="{% url 'product-reserve' product.id %}" 
@@ -58,7 +61,7 @@
                     <h4 class="m-0">Reserve this Product</h4>
                 </a>
             </div>
-        <!-- TODO if the user is the owner of this product, display the edit, delete options -->
+        <!-- If the user is the owner of this product, display the edit, delete options -->
         {% else %}
             <div class="col-md-6 d-flex justify-content-end align-self-center">
                 <a
