@@ -27,8 +27,8 @@
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
-    /* background-color: rgba(0,0,0,0.1); */
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
 }
 
 main {
@@ -321,6 +321,12 @@ footer .harvestly-nav-link {
     min-height: 150px;
 }
 
+.harvestly-map-display {
+    width: 100% !important;
+    height: max(500px, 20vh) !important;
+    font-weight: 400;
+}
+
 @media screen and (max-width: 768px) {
     :root {
         --footer-pad: 0;
@@ -328,5 +334,9 @@ footer .harvestly-nav-link {
 
     .harvestly-form-item textarea {
         height: auto;
+    }
+
+    .harvestly-map-display {
+        margin-bottom: 2rem;
     }
 }

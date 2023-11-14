@@ -3,12 +3,14 @@
 ### Events Views
 
 from django.shortcuts import render
-from .models import Event
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .forms import EventForm
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.conf import settings
+from Events.models import Event
+from Events.forms import EventForm
+from Events.utils import get_coordinates
 
 class EventList(ListView):
     """ Get a list of Harvestly events. URL `/event-list/` """
@@ -30,6 +32,19 @@ class EventDetail(DetailView):
     model = Event
     template_name = "event_detail.html"
 
+    def get_context_data(self, **kwargs):
+        """ Update context data """
+
+        # Note that we are updating the context data with the Google Maps API Key
+        #   This means that the key is being passed to the client side data. This is 
+        #   crucial in order to implement autocomplete functionality. IT IS IMPERITAVE
+        #   that you protect your API_KEY through Google's resources (see README for more).
+
+        context = super().get_context_data(**kwargs)
+        context["google_maps_api_key"] = settings.GOOGLE_MAPS_API_KEY
+
+        return context
+
 
 class EventCreate(LoginRequiredMixin, CreateView):
     """ Create View for an Event Object. URL `/markets/new` """
@@ -41,12 +56,40 @@ class EventCreate(LoginRequiredMixin, CreateView):
     # Establish the target template for use
     template_name = "event_create.html"
 
-    def form_valid(self, form):
-        """ Update the `organizer` field after submission """
+    def get_context_data(self, **kwargs):
+        """ Update context data """
 
+        # Note that we are updating the context data with the Google Maps API Key
+        #   This means that the key is being passed to the client side data. This is 
+        #   crucial in order to implement autocomplete functionality. IT IS IMPERITAVE
+        #   that you protect your API_KEY through Google's resources (see README for more).
+
+        context = super().get_context_data(**kwargs)
+        context["google_maps_api_key"] = settings.GOOGLE_MAPS_API_KEY
+
+        return context
+
+    def form_valid(self, form):
+        """ Update the latitude and longitude fields using the address """
+
+        # set organizer from current user
         form.instance.organizer = self.request.user
+
+
+        coords = get_coordinates(settings.GOOGLE_MAPS_API_KEY, form.instance.location)
+
+        if(coords):
+            form.instance.latitude = coords[0]
+            form.instance.longitude = coords[1]
+
+        else:
+
+            # TODO better handling for this case
+            form.instance.latitude = 0.0
+            form.instance.longitude = 0.0
+
         return super().form_valid(form)
-    
+
 
 class EventUpdate(LoginRequiredMixin, UpdateView):
     """ Update View for an Event Object. URL `/markets/edit/<int:pk>` """
@@ -66,6 +109,36 @@ class EventUpdate(LoginRequiredMixin, UpdateView):
         }
         return kwargs
 
+    def get_context_data(self, **kwargs):
+        """ Update context data """
+
+        # Note that we are updating the context data with the Google Maps API Key
+        #   This means that the key is being passed to the client side data. This is 
+        #   crucial in order to implement autocomplete functionality. IT IS IMPERITAVE
+        #   that you protect your API_KEY through Google's resources (see README for more).
+
+        context = super().get_context_data(**kwargs)
+        context["google_maps_api_key"] = settings.GOOGLE_MAPS_API_KEY
+
+        return context
+
+    def form_valid(self, form):
+        """ Update the latitude and longitude fields using the address """
+
+        coords = get_coordinates(settings.GOOGLE_MAPS_API_KEY, form.instance.location)
+
+        if(coords):
+            form.instance.latitude = coords[0]
+            form.instance.longitude = coords[1]
+
+        else:
+
+            # TODO better handling for this case
+            form.instance.latitude = 0.0
+            form.instance.longitude = 0.0
+
+        return super().form_valid(form)
+
 
 class EventDelete(LoginRequiredMixin, DeleteView):
     """ View to delete an Event. URL `/markets/delete/<int:pk>` """
@@ -77,4 +150,15 @@ class EventDelete(LoginRequiredMixin, DeleteView):
     # Establish the success url to redirect back to the events homepage
     success_url = reverse_lazy('events')
 
+    def get_context_data(self, **kwargs):
+        """ Update context data """
 
+        # Note that we are updating the context data with the Google Maps API Key
+        #   This means that the key is being passed to the client side data. This is 
+        #   crucial in order to implement autocomplete functionality. IT IS IMPERITAVE
+        #   that you protect your API_KEY through Google's resources (see README for more).
+
+        context = super().get_context_data(**kwargs)
+        context["google_maps_api_key"] = settings.GOOGLE_MAPS_API_KEY
+
+        return context
