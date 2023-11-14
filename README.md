@@ -199,7 +199,7 @@ GOOGLE_MAPS_API_KEY='<YOUR API KEY>'
 
 ### Restrict your Google Maps API [More Information](https://developers.google.com/maps/api-security-best-practices#restricting-api-keys):
 
-You might want to restrict your Google Maps API key so that it is imited to use on certain websites or certain IP addresses.
+You need to restrict your Google Maps API key so that it is limited to use on certain websites or certain IP addresses.
 
 To achieve this, navigate to the Google Cloud Console's [Google Maps Platform Credentials](https://console.cloud.google.com/projectselector2/google/maps-apis) page. Select the Google Cloud project for which you created to generate your API key. Select the API key that you want to restrict. On the Edit API key page, under Key restrictions, select `Set an application restriction`. Here, you can select the type of application restriction that you wish to add to your api key. The restriction types are as follows:
 * `Websites`: Specify one or more referrer websites. Always provide the full referrer URI, including the protocol scheme, hostname and optional port (e.g., https://google.com)
