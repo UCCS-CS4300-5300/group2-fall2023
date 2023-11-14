@@ -30,6 +30,13 @@ if SECRET_KEY is None:
   print("Please setup a SECRET_KEY in the Secrets (Environment variables) tab. See README.md for more.")
   exit(1)
 
+# SECURITY WARNING: keep the google maps api key used in production secret!
+GOOGLE_MAPS_API_KEY = os.getenv('GOOGLE_MAPS_API_KEY')
+
+if GOOGLE_MAPS_API_KEY is None:
+  print("Please setup a GOOGLE_MAPS_API_KEY in the Secrets (Environment variables) tab. See README.md for more.")
+  exit(1)
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 

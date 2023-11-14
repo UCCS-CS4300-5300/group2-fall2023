@@ -7,45 +7,38 @@
     <form method="post">
         {% csrf_token %}
         <div class="row mt-4 mb-5">
-            <div class="col-md-6 mb-2">
-                <!-- TODO replace this image with a location mini-map/preview from Google Maps, similar to this:
-                    https://developers.google.com/maps/documentation/javascript/adding-a-google-map
-
-                    Make this location updateable in this view
-                -->
-                {% load static %}
-                <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Market Location Stub" width="100%">
+            <div class="col-md-6 align-self-center harvestly-form-item">
+                {{ form.name.label }}
+                {{ form.name }}
             </div>
-            <div class="col-md-6 align-self-center">
-                <div class="harvestly-form-item">
-                    {{ form.name.label }}
-                    {{ form.name }}
-                </div>
-                <div class="harvestly-form-item">
-                    {{ form.location.label }}
-                    {{ form.location }}
-                </div>
-                <div class="harvestly-form-item">
-                    {{ form.start_time.label }}
-                    {{ form.start_time }}
-                </div>
-                <div class="harvestly-form-item">
-                    {{ form.end_time.label }}
-                    {{ form.end_time }}
-                </div>
-                <div class="d-flex flex-column">
-                    <button class="harvestly-nav-btn-primary mt-2 py-2" type="submit">
-                        <h4 class="m-0">Submit</h4>
-                    </button>
-                    <a
-                        class="harvestly-nav-btn-secondary mt-2 py-2 d-flex justify-content-center align-items-center"
-                        href="{% url 'event-detail' event.id %}"
-                    >
-                        <h4 class="m-0">Cancel</h4>
-                    </a>
-                </div>
+            <div class="col-md-6 align-self-center harvestly-form-item">
+                {{ form.location.label }}
+                {{ form.location }}
             </div>
-        </div>        
+            <div class="col-md-6 align-self-center harvestly-form-item">
+                {{ form.start_time.label }}
+                {{ form.start_time }}
+            </div>
+            <div class="col-md-6 align-self-center harvestly-form-item">
+                {{ form.end_time.label }}
+                {{ form.end_time }}
+            </div>
+        </div>
+        <div class="d-flex justify-content-end mt-2">
+            <a
+                class="harvestly-nav-btn-secondary mx-1 py-2 d-flex justify-content-center align-items-center"
+                href="{% url 'event-detail' event.id %}"
+            >
+                <h4 class="m-0">Cancel</h4>
+            </a>
+            <button class="harvestly-nav-btn-primary justify-content-center d-flex mx-1 py-2" type="submit">
+                <h4 class="m-0">Submit</h4>
+            </button>
+        </div>      
     </form>
+
+    {% load static %}
+    <script>let google_maps_api_key = "{{ google_maps_api_key|safe }}";</script>
+    <script src="{% static 'js/googleMapsForm.js' %}"></script>
 </div>
 {% endblock %}
