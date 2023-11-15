@@ -3,6 +3,9 @@
 # Add new apps with models to this list
 APPS=("Events" "Products" "Common")
 
+# Go to project root
+cd ../ 
+
 # Make migrations
 python3 manage.py makemigrations ${APPS[@]}
 

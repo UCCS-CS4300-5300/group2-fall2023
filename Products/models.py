@@ -7,7 +7,6 @@ from django.core.validators import MinValueValidator
 from django.urls import reverse
 from django.conf import settings
 from Events.models import Event
-from Common.models import PLACEHOLDER_IMAGE_PATH
 
 User = settings.AUTH_USER_MODEL
 

@@ -13,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Product
 from .forms import ProductForm, ProductReserveForm
-from Common.forms import ImageUploadForm
+from Common.forms import ProductImageForm
 from Events.models import Event
 from Common.models import ProductImage
 from Common.mixins import ImageHandlingMixin
@@ -37,20 +37,21 @@ class ProductCreate(LoginRequiredMixin, ImageHandlingMixin, CreateView):
     # Establish model type and form class for use
     model = Product
     form_class = ProductForm
-    image_form_class = ImageUploadForm
+    image_form_class = ProductImageForm
 
     # Establish the target template for use
     template_name = "product_create.html"
 
     def form_valid(self, form):
         """Update the `owner` field after submission"""
-        product = form.save(commit=False)
-        product.owner = self.request.user
-        product.save()
+        self.object = form.save(commit=False)
+        self.object.owner = self.request.user
+        self.object.save()
 
-        image_form = self.image_form_class(self.request.POST, self.request.FILES)
-
-        self.handle_image_form(product, image_form)
+        if self.image_form and self.image_form.is_valid():
+            image = self.image_form.save(commit=False)
+            image.product = self.object
+            image.save()
 
         return super().form_valid(form)
 
@@ -75,10 +76,19 @@ class ProductCreate(LoginRequiredMixin, ImageHandlingMixin, CreateView):
 
         return context
 
-    def handle_image_form(self, model_instance, image_form):
-        if 'file' in image_form.cleaned_data:
-            image_upload = image_form.save()
-            ProductImage.objects.create(product=model_instance, image=image_upload)
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+
+        if "file" in request.FILES:
+            self.image_form = self.image_form_class(request.POST, request.FILES)
+        else:
+            self.image_form = None
+
+        if form.is_valid() and (self.image_form is None or self.image_form.is_valid()):
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form, self.image_form)
+
 
 class ProductDetail(DetailView):
     """Product Details about a specific product. URL `/products/details/<int:pk>/`"""
@@ -94,19 +104,15 @@ class ProductUpdate(LoginRequiredMixin, ImageHandlingMixin, UpdateView):
     # Establish model type and form class for use
     model = Product
     form_class = ProductForm
-    image_form_class = ImageUploadForm
+    image_form_class = ProductImageForm
 
     # Establish the target template for use
     template_name = "product_update.html"
 
     def form_valid(self, form):
-        product = form.save()
+        self.object = form.save()
 
-        image_form = self.image_form_class(
-            self.request.POST, self.request.FILES, instance=self.get_image_instance()
-        )
-
-        self.handle_image_form(product, image_form)
+        self.handle_image_update(self.image_form)
 
         return super().form_valid(form)
 
@@ -115,14 +121,31 @@ class ProductUpdate(LoginRequiredMixin, ImageHandlingMixin, UpdateView):
 
         return reverse("product-details", kwargs={"pk": self.object.pk})
 
-    def handle_image_form(self, model_instance, image_form):
-        if image_form.is_valid(): 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+
+        self.image_form = self.image_form_class(
+            request.POST, request.FILES, instance=self.get_image_instance()
+        )
+
+        if form.is_valid() and self.image_form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form, self.image_form)
+
+    def handle_image_update(self, image_form):
+        if image_form and image_form.is_valid():
             file = image_form.cleaned_data.get("file")
+            alt_text = image_form.cleaned_data.get("alt_text")
+
             if file:
-                image_upload = image_form.save()
-                ProductImage.objects.update_or_create(product=model_instance, image=image_upload)
+                product_image, created = ProductImage.objects.update_or_create(
+                    product=self.object, defaults={"file": file, "alt_text": alt_text}
+                )
             elif file is None and not image_form.instance.file:
-                ProductImage.objects.filter(product=model_instance).delete()
+                ProductImage.objects.filter(product=self.object).delete()
+
 
 class ProductDelete(LoginRequiredMixin, DeleteView):
     """Delete a specific product. URL `/products/delete/<int:pk>/`"""

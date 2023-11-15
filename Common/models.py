@@ -20,7 +20,6 @@ IMAGE_QUALITY = 85
 ACCEPTED_FILE_TYPES = ["JPEG", "JPG", "PNG"]
 MIN_FILE_SIZE = 10240  # file size: 10 KB
 MAX_FILE_SIZE = 5242880  # file size: 5 MB
-PLACEHOLDER_IMAGE_PATH = "defaults/images/product_placeholder.png"
 
 
 class ImageUpload(models.Model):
@@ -36,6 +35,7 @@ class ImageUpload(models.Model):
 
     def save(self, *args, **kwargs):
         if self.file:
+            print("in image model save method")
             self.update_image_field("file", DEFAULT_IMAGE_SIZE)
             self.update_image_field("thumbnail", DEFAULT_THUMBNAIL_SIZE)
         super().save(*args, **kwargs)
@@ -72,21 +72,28 @@ class ImageUpload(models.Model):
                 # delete old file
                 os.remove(old_file_path)
 
+    
+
     @staticmethod
     def resize_image(image, size):
         """Resize image to fit within the specified size"""
+        print("in resize image method")
         # check for image
         if not image:
             return None
 
+        print("image exists in resize_image")
         # open image
         img = PILImage.open(image)
+        thumb_io = BytesIO()
+
         if img.size <= size:
-            return None
+            return img.save(thumb_io, img.format, quality=IMAGE_QUALITY)
+
+        print("image is larger than size")
 
         # resize image while maintaining aspect ratio
         img.thumbnail(size)
-        thumb_io = BytesIO()
         img.save(thumb_io, img.format, quality=IMAGE_QUALITY)
 
         return thumb_io

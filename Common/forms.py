@@ -3,7 +3,8 @@
 ### Common Forms
 
 from django import forms
-from Common.models import ImageUpload
+from django.forms import modelform_factory
+from Common.models import ProductImage
 from Common.models import (
     MAX_IMAGE_SIZE,
     ACCEPTED_FILE_TYPES,
@@ -18,7 +19,6 @@ class ImageUploadForm(forms.ModelForm):
     """Image upload form information"""
 
     class Meta:
-        model = ImageUpload
         fields = ["file", "alt_text"]
         widgets = {
             "file": forms.ClearableFileInput(
@@ -111,3 +111,11 @@ class ImageUploadForm(forms.ModelForm):
             raise forms.ValidationError(
                 f"Image file too small. min size is {min_in_kb} KB"
             )
+
+
+# Dynamic forms for adding images to models
+
+# for products
+ProductImageForm = modelform_factory(
+    ProductImage, form=ImageUploadForm, fields=["file", "alt_text"]
+)

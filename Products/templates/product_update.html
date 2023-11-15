@@ -10,11 +10,12 @@
             <div class="col-md-6 mb-1">
                 <!-- render image -->
                 {% load static %}
-                {% if product.has_image %}
+                {% for image in product.image.all %}
+                {% if image.file %}
                     <img 
-                        src="{{ product.get_img_url }}" 
+                        src="{{ image.file.url }}" 
                         class="card-img-top product-card-img img-thumbnail" 
-                        alt="{{ product.get_img_text }}"
+                        alt="{{ image.alt_text }}"
                     >
                 {% else %}
                     <img 
@@ -22,6 +23,7 @@
                         class="card-img-top product-card-img img-thumbnail" alt="Placeholder Image"
                     >
                 {% endif %}
+                {% endfor %}
                 <!-- image control group -->
                 <div class="form-group">
                     <div>
