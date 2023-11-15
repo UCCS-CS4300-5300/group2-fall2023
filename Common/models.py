@@ -34,11 +34,8 @@ class ImageUpload(models.Model):
         return self.file.name if self.file else "No File"
 
     def save(self, *args, **kwargs):
-        print(f"self.file: {self.file}")
         if not self.file:
-            print("clearing old file")
             old_instance = type(self).objects.get(id=self.id)
-            print("old_instance", old_instance)
             if old_instance.file:
                 old_instance.file.delete(save=False)
             if old_instance.thumbnail:
