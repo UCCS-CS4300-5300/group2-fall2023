@@ -112,7 +112,7 @@ class EventUpdate(LoginRequiredMixin, UpdateView):
         if not request.user.id == event.organizer.id:
             raise PermissionDenied()
         
-        form = self.form_class
+        form = self.form_class(instance=event)
         return render(request, self.template_name, {"form": form, "event": event})
 
 
@@ -120,7 +120,7 @@ class EventUpdate(LoginRequiredMixin, UpdateView):
         """ Handle post request """
 
         event = get_object_or_404(Event, pk=pk)
-        form = self.form_class(request.POST)
+        form = self.form_class(request.POST, instance=event)
 
         if not request.user.id == event.organizer.id:
             raise PermissionDenied()
@@ -129,14 +129,14 @@ class EventUpdate(LoginRequiredMixin, UpdateView):
             form.save()
             return redirect(reverse("event-detail", kwargs={"pk": pk}))
         else:
-            form = self.form_class
+            form = self.form_class(instance=event)
         return render(request, self.template_name, {"form": form, "event": event})
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['initial'] = {
-            'start_time': self.object.start_time,
-            'end_time': self.object.end_time
+            'start_time': self.get_object().start_time,
+            'end_time': self.get_object().end_time
         }
         return kwargs
 

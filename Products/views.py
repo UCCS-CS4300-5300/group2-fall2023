@@ -90,7 +90,7 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
         if not request.user.id == product.owner.id:
             raise PermissionDenied()
         
-        form = self.form_class
+        form = self.form_class(instance=product)
         return render(request, self.template_name, {"form": form, "product": product})
 
 
@@ -98,7 +98,7 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
         """ Handle post request """
 
         product = get_object_or_404(Product, pk=pk)
-        form = self.form_class(request.POST)
+        form = self.form_class(request.POST, instance=product)
 
         #Only the Product's owner can get the form
         if not request.user.id == product.owner.id:
@@ -106,16 +106,16 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
 
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(self.get_success_url(pk))
+            return HttpResponseRedirect(self.get_success_url())
         else:
-            form = self.form_class
+            form = self.form_class(instance=product)
 
         return render(request, self.template_name, {"form": form, "product": product})
 
     def get_success_url(self):
         """ Get success URL after post completion. """
 
-        return reverse("product-details", kwargs={"pk": self.object.pk})
+        return reverse("product-details", kwargs={"pk": self.get_object().pk})
 
 
 class ProductDelete(LoginRequiredMixin, DeleteView):
