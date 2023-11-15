@@ -166,7 +166,7 @@ class ProductCreateTests(TestCase):
 
         event = Event.objects.create(
             name="Event 1",
-            =location"1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
+            location="1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             start_time="2025-04-12T00:00-00:00",
             end_time="2025-04-15T00:00-00:00",
             organizer=self.user
