@@ -45,11 +45,6 @@ class ImageUploadForm(forms.ModelForm):
             "alt_text": False,
         }
 
-    def __init__(self, *args, **kwargs):
-        super(ImageUploadForm, self).__init__(*args, **kwargs)
-        self.fields["file"].required = False
-        self.fields["alt_text"].required = False
-
     def save(self, commit=True):
         """Override save method to perform additional actions"""
         instance = super().save(commit=False)

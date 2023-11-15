@@ -21,20 +21,8 @@
                 >
                     <div class="card h-100">
                         <div class="product-card-img-container">
-                            {% if product.image.all.exists %}
-                            {% if product.image.first.thumbnail %}
-                                <img 
-                                    src="{{ product.image.first.thumbnail.url }}" 
-                                    class="card-img-top product-card-img img-thumbnail" 
-                                    alt="{{ image.alt_text }}"
-                                >
-                            {% endif %}
-                            {% else %}
-                                <img 
-                                    src="{% static 'img/product_placeholder.png' %}" 
-                                    class="card-img-top product-card-img img-thumbnail" alt="Placeholder Image"
-                                >
-                            {% endif %}
+                            <!-- Render image thumbnail -->
+                            {% include "_product_thumbnail.html" %}
                         </div>
                         <div class="card-body product-card-body">
                             <h3 class="card-title">{{ product.name|title }}</h3>

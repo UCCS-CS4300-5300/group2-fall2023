@@ -10,31 +10,9 @@
             <div class="col-md-6 mb-1">
                 <!-- render image -->
                 {% load static %}
-                {% if product.image.all.exists %}
-                {% if product.image.first.thumbnail %}
-                    <img 
-                        src="{{ product.image.first.file.url }}" 
-                        class="card-img-top product-card-img img-thumbnail" 
-                        alt="{{ image.alt_text }}"
-                    >
-                {% endif %}
-                {% else %}
-                    <img 
-                        src="{% static 'img/product_placeholder.png' %}" 
-                        class="card-img-top product-card-img img-thumbnail" alt="Placeholder Image"
-                    >
-                {% endif %}
+                {% include "_product_image.html" %}
                 <!-- image control group -->
-                <div class="form-group">
-                    <div>
-                    {{ image_form.file }}
-                    {{ image_form.file.as_p }}
-                    </div>
-                    <div>
-                        {{image_form.alt_text.label }}
-                        {{ image_form.alt_text }}
-                    </div>
-                </div>
+                {% include "_image_form.html" with form=image_form %}
             </div>
             <div class="col-md-6 align-self-center">
                 <div class="harvestly-form-item">

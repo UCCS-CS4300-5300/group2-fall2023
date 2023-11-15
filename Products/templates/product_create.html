@@ -60,16 +60,7 @@
             </div>
         </div>
         <!-- Image upload section -->
-        <div class="row pt-2 mb-2">
-            <div class="col-md-12 harvestly-form-item">
-                {{ image_form.file.label }}
-                {{ image_form.file }}
-            </div>
-            <div class="col-md-12 harvestly-form-item">
-                {{ image_form.alt_text.label }}
-                {{ image_form.alt_text }}
-            </div>
-        </div>
+            {% include "_image_form.html" with form=image_form %}
         <!-- Submit and Cancel buttons -->
         <div class="d-flex justify-content-end pt-2">
             <a class="harvestly-nav-btn-secondary d-flex justify-content-center align-items-center mr-2" href="{% url 'products' %}">Cancel</a>
