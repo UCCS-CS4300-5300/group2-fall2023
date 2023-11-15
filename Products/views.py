@@ -145,10 +145,7 @@ class ProductUpdate(LoginRequiredMixin, ImageHandlingMixin, UpdateView):
                 )
             elif not file:
                 print("Deleting ProductImage:", self.image_form.instance)
-                # ProductImage.objects.filter(product=self.object).delete()
-                product_images = ProductImage.objects.filter(product=self.object)
-                print("Deleting ProductImages:", product_images.count())
-                product_images.delete()
+                ProductImage.objects.filter(product=self.object).delete()
 
 
 class ProductDelete(LoginRequiredMixin, DeleteView):

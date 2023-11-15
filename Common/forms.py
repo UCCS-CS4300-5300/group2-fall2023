@@ -40,6 +40,20 @@ class ImageUploadForm(forms.ModelForm):
             "alt_text": "Image description",
         }
 
+    def save(self, commit=True):
+        """Override save method to perform additional actions"""
+        instance = super().save(commit=False)
+
+        if not self.cleaned_data["file"] and instance.id:
+            if instance.file:
+                instance.file.delete(save=False)
+            if instance.thumbnail:
+                instance.thumbnail.delete(save=False)
+
+        if commit:
+            instance.save()
+        return instance
+
     def clean_file(self):
         """Performs various validations on image file, returning it if valid"""
         file = self.cleaned_data.get("file")

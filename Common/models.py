@@ -49,6 +49,17 @@ class ImageUpload(models.Model):
             self.create_thumbnail()
         super().save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        # If there's a file associated with this instance, delete it
+        # TODO - Deletion still not fully working
+        print("deleting image")
+        if self.file:
+            self.file.delete(save=False)
+        if self.thumbnail:
+            self.thumbnail.delete(save=False)
+
+        super().delete(*args, **kwargs)
+
     def create_image(self):
         """Create image from image field"""
         if not self.file:
@@ -132,3 +143,13 @@ class ProductImage(ImageUpload):
 
     def __str__(self):
         return self.product.name
+
+    def delete(self, *args, **kwargs):
+        # If there's a file associated with this instance, delete it
+        print("deleting product image")
+        if self.file:
+            self.file.delete(save=False)
+        if self.thumbnail:
+            self.thumbnail.delete(save=False)
+
+        super().delete(*args, **kwargs)

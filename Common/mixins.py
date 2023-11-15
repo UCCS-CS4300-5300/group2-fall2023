@@ -1,10 +1,3 @@
-# from django.shortcuts import redirect
-# from django.urls import reverse
-# from django.forms import ModelForm
-# from .models import ImageUpload, ProductImage
-# from .forms import ImageUploadForm
-
-
 class ImageHandlingMixin:
     image_form_class = None
 

@@ -24,7 +24,7 @@
                             {% if product.image.all.exists %}
                             {% if product.image.first.thumbnail %}
                                 <img 
-                                    src="{{ image.thumbnail.url }}" 
+                                    src="{{ product.image.first.thumbnail.url }}" 
                                     class="card-img-top product-card-img img-thumbnail" 
                                     alt="{{ image.alt_text }}"
                                 >

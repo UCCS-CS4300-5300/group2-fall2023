@@ -38,3 +38,12 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse("product-details", args=[str(self.id)])
+
+    def delete(self, *args, **kwargs):
+        for image in self.image.all():
+            if image.file:
+                image.file.delete(save=False)
+            if image.thumbnail:
+                image.thumbnail.delete(save=False)
+            image.delete()
+        super().delete(*args, **kwargs)
