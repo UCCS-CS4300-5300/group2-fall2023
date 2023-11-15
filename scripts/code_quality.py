@@ -77,7 +77,6 @@ def get_total_halstead(file_paths):
     h1, h2 = 0.0, 0.0
     N1, N2 = 0.0, 0.0
 
-
     for file_path in file_paths:
         with open(file_path, "r") as f:
             content = f.read()
