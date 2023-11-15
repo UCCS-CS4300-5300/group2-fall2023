@@ -2,13 +2,14 @@
 ### Harvestly
 ### Events Views
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseRedirect
 from Events.models import Event
 from Events.forms import EventForm
 from Events.utils import get_coordinates
@@ -126,7 +127,7 @@ class EventUpdate(LoginRequiredMixin, UpdateView):
 
         if form.is_valid():
             form.save()
-            return reverse_lazy("event-detail", kwargs={"pk": pk})
+            return redirect(reverse("event-detail", kwargs={"pk": pk}))
         else:
             form = self.form_class
         return render(request, self.template_name, {"form": form, "event": event})
@@ -200,7 +201,7 @@ class EventDelete(LoginRequiredMixin, DeleteView):
             raise PermissionDenied()
         
         event.delete()
-        return reverse_lazy("events")
+        return redirect(reverse("events"))
 
     def get_context_data(self, **kwargs):
         """ Update context data """
