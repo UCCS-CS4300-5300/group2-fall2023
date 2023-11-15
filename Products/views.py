@@ -10,6 +10,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 
 from .models import Product
 from .forms import ProductForm, ProductReserveForm
@@ -80,10 +81,41 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
     # Establish the target template for use
     template_name = "product_update.html"
 
+    def get(self, request, pk):
+        """ Handle get request to delete product """
+        
+        product = get_object_or_404(Product, pk=pk)
+
+        #Only the Product's owner can get the form
+        if not request.user.id == product.owner.id:
+            raise PermissionDenied()
+        
+        form = self.form_class(instance=product)
+        return render(request, self.template_name, {"form": form, "product": product})
+
+
+    def post(self, request, pk):
+        """ Handle post request """
+
+        product = get_object_or_404(Product, pk=pk)
+        form = self.form_class(request.POST, instance=product)
+
+        #Only the Product's owner can get the form
+        if not request.user.id == product.owner.id:
+            raise PermissionDenied()
+
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            form = self.form_class(instance=product)
+
+        return render(request, self.template_name, {"form": form, "product": product})
+
     def get_success_url(self):
         """ Get success URL after post completion. """
 
-        return reverse("product-details", kwargs={"pk": self.object.pk})
+        return reverse("product-details", kwargs={"pk": self.get_object().pk})
 
 
 class ProductDelete(LoginRequiredMixin, DeleteView):
@@ -92,6 +124,30 @@ class ProductDelete(LoginRequiredMixin, DeleteView):
     # Establish the model type and template name for the generic view
     model = Product
     template_name = "product_delete.html"
+
+    def get(self, request, pk):
+        """ Handle get request to delete product """
+        
+        product = get_object_or_404(Product, pk=pk)
+
+        #Only the Product's owner can access the page
+        if not request.user.id == product.owner.id:
+            raise PermissionDenied()
+
+        return render(request, self.template_name, {"product": product})
+
+
+    def post(self, request, pk):
+        """ Handle post request """
+
+        product = get_object_or_404(Product, pk=pk)
+
+        #Only the Product's owner can create the object
+        if not request.user.id == product.owner.id:
+            raise PermissionDenied()
+        
+        product.delete()
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         """ Get success URL after post completion """
