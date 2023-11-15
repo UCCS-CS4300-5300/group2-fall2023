@@ -1,8 +1,8 @@
-from django.shortcuts import redirect
-from django.urls import reverse
-from django.forms import ModelForm
-from .models import ImageUpload, ProductImage
-from .forms import ImageUploadForm
+# from django.shortcuts import redirect
+# from django.urls import reverse
+# from django.forms import ModelForm
+# from .models import ImageUpload, ProductImage
+# from .forms import ImageUploadForm
 
 
 class ImageHandlingMixin:
@@ -26,7 +26,6 @@ class ImageHandlingMixin:
             self.object = form.save()
             image = self.image_form.save(commit=False)
             image.related_object = self.object
-            image.save()
         return super(ImageHandlingMixin, self).form_valid(form)
 
     def form_invalid(self, form, image_form):

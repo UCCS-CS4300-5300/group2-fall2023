@@ -112,7 +112,7 @@ class ProductUpdate(LoginRequiredMixin, ImageHandlingMixin, UpdateView):
     def form_valid(self, form):
         self.object = form.save()
 
-        self.handle_image_update(self.image_form)
+        self.handle_image_update()
 
         return super().form_valid(form)
 
@@ -134,17 +134,21 @@ class ProductUpdate(LoginRequiredMixin, ImageHandlingMixin, UpdateView):
         else:
             return self.form_invalid(form, self.image_form)
 
-    def handle_image_update(self, image_form):
-        if image_form and image_form.is_valid():
-            file = image_form.cleaned_data.get("file")
-            alt_text = image_form.cleaned_data.get("alt_text")
-
+    def handle_image_update(self):
+        if self.image_form and self.image_form.is_valid():
+            file = self.image_form.cleaned_data.get("file")
+            alt_text = self.image_form.cleaned_data.get("alt_text")
+            print("file:", file)
             if file:
                 product_image, created = ProductImage.objects.update_or_create(
                     product=self.object, defaults={"file": file, "alt_text": alt_text}
                 )
-            elif file is None and not image_form.instance.file:
-                ProductImage.objects.filter(product=self.object).delete()
+            elif not file:
+                print("Deleting ProductImage:", self.image_form.instance)
+                # ProductImage.objects.filter(product=self.object).delete()
+                product_images = ProductImage.objects.filter(product=self.object)
+                print("Deleting ProductImages:", product_images.count())
+                product_images.delete()
 
 
 class ProductDelete(LoginRequiredMixin, DeleteView):

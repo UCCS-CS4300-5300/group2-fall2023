@@ -4,7 +4,7 @@
 APPS=("Events" "Products" "Common")
 
 # Go to project root
-cd ../ 
+# cd ../ 
 
 # Make migrations
 python3 manage.py makemigrations ${APPS[@]}

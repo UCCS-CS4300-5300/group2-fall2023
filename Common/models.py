@@ -34,50 +34,58 @@ class ImageUpload(models.Model):
         return self.file.name if self.file else "No File"
 
     def save(self, *args, **kwargs):
+        print(f"self.file: {self.file}")
+        if not self.file:
+            print("clearing old file")
+            old_instance = type(self).objects.get(id=self.id)
+            print("old_instance", old_instance)
+            if old_instance.file:
+                old_instance.file.delete(save=False)
+            if old_instance.thumbnail:
+                old_instance.thumbnail.delete(save=False)
+
         if self.file:
-            print("in image model save method")
-            self.update_image_field("file", DEFAULT_IMAGE_SIZE)
-            self.update_image_field("thumbnail", DEFAULT_THUMBNAIL_SIZE)
+            self.create_image()
+            self.create_thumbnail()
         super().save(*args, **kwargs)
 
-    def update_image_field(self, field_name, size):
-        """
-        Update image field specified by field_name to the given size
-        :param field_name: name of image field to update (image, or thumb)
-        :param size: The size in tuple (width, height) to rezise the img to.
-        """
-        # validate size paramater is a tuple
-        self.validate_image_size_parameter(size)
+    def create_image(self):
+        """Create image from image field"""
+        if not self.file:
+            return
 
-        # get image field
-        image_field = getattr(self, field_name)
-        # save current file path to delete later if it's updated
-        old_file_path = (
-            image_field.path
-            if image_field and os.path.isfile(image_field.path)
-            else None
-        )
+        # resize main image to create a thumbnail.
+        image_size = DEFAULT_IMAGE_SIZE
+        resized_image = self.resize_image(self.file, image_size)
 
-        # resize image to fit within the specified size
-        resized_image = self.resize_image(image_field, size)
+        # ensure thumbnail is created, even if it's same size or smaller
+        if resized_image is None:
+            resized_image = self.file
 
-        # if resized image exists, create new file and set image field to it
-        if resized_image:
-            filename = self.generate_unique_filename(image_field.name)
-            new_file = ContentFile(resized_image.getvalue(), filename)
-            setattr(self, field_name, new_file)
+        # save thumbnail
+        image_filename = self.generate_unique_filename(self.file.name)
+        self.file = ContentFile(resized_image.read(), image_filename)
 
-            # TODO - refactor to generic delete file method
-            if old_file_path:
-                # delete old file
-                os.remove(old_file_path)
+    def create_thumbnail(self):
+        """Create thumbnail from image field"""
+        if not self.file:
+            return
 
-    
+        # resize main image to create a thumbnail.
+        thumbnail_size = DEFAULT_THUMBNAIL_SIZE
+        resized_thumbnail = self.resize_image(self.file, thumbnail_size)
+
+        # ensure thumbnail is created, even if it's same size or smaller
+        if resized_thumbnail is None:
+            resized_thumnail = self.file
+
+        # save thumbnail
+        thumbnail_filename = self.generate_unique_filename(self.file.name)
+        self.thumbnail = ContentFile(resized_thumbnail.read(), thumbnail_filename)
 
     @staticmethod
-    def resize_image(image, size):
+    def resize_image(image, size, quality=IMAGE_QUALITY):
         """Resize image to fit within the specified size"""
-        print("in resize image method")
         # check for image
         if not image:
             return None
@@ -85,23 +93,23 @@ class ImageUpload(models.Model):
         print("image exists in resize_image")
         # open image
         img = PILImage.open(image)
-        thumb_io = BytesIO()
 
-        if img.size <= size:
-            return img.save(thumb_io, img.format, quality=IMAGE_QUALITY)
-
-        print("image is larger than size")
+        if img.size > size:
+            img.thumbnail(size)
 
         # resize image while maintaining aspect ratio
-        img.thumbnail(size)
-        img.save(thumb_io, img.format, quality=IMAGE_QUALITY)
+
+        thumb_io = BytesIO()
+        img.save(thumb_io, img.format, quality=quality)
+        thumb_io.seek(0)
 
         return thumb_io
 
     @staticmethod
     def generate_unique_filename(filename):
         """Generate unique filename"""
-        name, extension = os.path.splitext(filename)
+        file = os.path.basename(filename)
+        name, extension = os.path.splitext(file)
         return f"{name}_{uuid.uuid4()}{extension}"
 
     @staticmethod
@@ -112,6 +120,9 @@ class ImageUpload(models.Model):
         # validate size elements are positive integers
         if not all(isinstance(n, int) and n > 0 for n in size):
             raise ValueError("size must contain positive integers")
+
+    def delete_old_files():
+        pass
 
 
 class ProductImage(ImageUpload):

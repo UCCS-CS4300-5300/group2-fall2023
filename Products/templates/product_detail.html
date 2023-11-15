@@ -8,20 +8,20 @@
     <div class="row mt-4 mb-5">
         <div class="col-md-6">
             <!-- render product image or placeholder -->
-            {% for image in product.image.all %}
-            {% if image.file %}
+            {% if product.image.all.exists %}
+            {% if product.image.first.thumbnail %}
                 <img 
-                    src="{{ image.file.url }}" 
+                    src="{{ image.thumbnail.url }}" 
                     class="card-img-top product-card-img img-thumbnail" 
                     alt="{{ image.alt_text }}"
                 >
+            {% endif %}
             {% else %}
                 <img 
                     src="{% static 'img/product_placeholder.png' %}" 
                     class="card-img-top product-card-img img-thumbnail" alt="Placeholder Image"
                 >
             {% endif %}
-            {% endfor %}
         </div>
         <div class="col-md-6 align-self-center">
             <h3>{{ product.name|title }} Details</h3>
