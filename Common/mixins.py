@@ -3,14 +3,18 @@ class ImageHandlingMixin:
 
     def get_image_instance(self):
         """Gets relevant class instance for image"""
-        if self.object is None or not hasattr(self.object, "image"):
+        item = self.get_object() or None
+        if item is None:
             return None
-        return self.object.image.first()
+        return item.image.first()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if "image_form" not in context:
-            image_instance = self.get_image_instance()
+            if hasattr(self.object, "image"):
+                image_instance = self.get_image_instance()
+            else:
+                image_instance = None
             context["image_form"] = self.image_form_class(instance=image_instance)
         return context
 

@@ -110,24 +110,25 @@ class ProductUpdate(LoginRequiredMixin, ImageHandlingMixin, UpdateView):
     # Establish the target template for use
     template_name = "product_update.html"
 
-    def form_valid(self, form):
-        self.object = form.save()
-
-        self.handle_image_update()
-
-        return super().form_valid(form)
-
     def get(self, request, pk):
-        """Handle get request to delete product"""
+        """Handle get request to update/edit product"""
 
         product = get_object_or_404(Product, pk=pk)
-
+        image = self.get_image_instance()
         # Only the Product's owner can get the form
         if not request.user.id == product.owner.id:
             raise PermissionDenied()
 
         form = self.form_class(instance=product)
-        return render(request, self.template_name, {"form": form, "product": product})
+        image_form = self.image_form_class(instance=image)
+
+        context = {
+            "form": form,
+            "product": product,
+            "image_form": image_form,
+        }
+
+        return render(request, self.template_name, context)
 
     def post(self, request, pk):
         """Handle post request"""
@@ -138,6 +139,8 @@ class ProductUpdate(LoginRequiredMixin, ImageHandlingMixin, UpdateView):
         # Only the Product's owner can get the form
         if not request.user.id == product.owner.id:
             raise PermissionDenied()
+
+        self.handle_image_update(request, product)
 
         if form.is_valid():
             form.save()
@@ -152,57 +155,18 @@ class ProductUpdate(LoginRequiredMixin, ImageHandlingMixin, UpdateView):
 
         return reverse("product-details", kwargs={"pk": self.get_object().pk})
 
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.get_form()
-
-        self.image_form = self.image_form_class(
-            request.POST, request.FILES, instance=self.get_image_instance()
-        )
-
-        if form.is_valid() and self.image_form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form, self.image_form)
-
-    def handle_image_update(self):
-        if self.image_form and self.image_form.is_valid():
-            file = self.image_form.cleaned_data.get("file")
-            alt_text = self.image_form.cleaned_data.get("alt_text")
-            print("file:", file)
+    def handle_image_update(self, request, product):
+        image = self.get_image_instance()
+        image_form = self.image_form_class(request.POST, request.FILES, instance=image)
+        if image_form and image_form.is_valid():
+            file = image_form.cleaned_data.get("file")
+            alt_text = image_form.cleaned_data.get("alt_text")
             if file:
-                product_image, created = ProductImage.objects.update_or_create(
-                    product=self.object, defaults={"file": file, "alt_text": alt_text}
+                ProductImage.objects.update_or_create(
+                    product=product, defaults={"file": file, "alt_text": alt_text}
                 )
             elif not file:
-                print("Deleting ProductImage:", self.image_form.instance)
-                ProductImage.objects.filter(product=self.object).delete()
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.get_form()
-
-        self.image_form = self.image_form_class(
-            request.POST, request.FILES, instance=self.get_image_instance()
-        )
-
-        if form.is_valid() and self.image_form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form, self.image_form)
-
-    def handle_image_update(self):
-        if self.image_form and self.image_form.is_valid():
-            file = self.image_form.cleaned_data.get("file")
-            alt_text = self.image_form.cleaned_data.get("alt_text")
-            print("file:", file)
-            if file:
-                product_image, created = ProductImage.objects.update_or_create(
-                    product=self.object, defaults={"file": file, "alt_text": alt_text}
-                )
-            elif not file:
-                print("Deleting ProductImage:", self.image_form.instance)
-                ProductImage.objects.filter(product=self.object).delete()
+                ProductImage.objects.filter(product=product).delete()
 
 
 class ProductDelete(LoginRequiredMixin, DeleteView):
