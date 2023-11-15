@@ -2,12 +2,14 @@
 ### Harvestly
 ### Events Views
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseRedirect
 from Events.models import Event
 from Events.forms import EventForm
 from Events.utils import get_coordinates
@@ -101,11 +103,40 @@ class EventUpdate(LoginRequiredMixin, UpdateView):
     # Establish the target template for use
     template_name = "event_update.html"
 
+    def get(self, request, pk):
+        """ Handle get request to delete event """
+        
+        event = get_object_or_404(Event, pk=pk)
+
+        #Only the Event's organizer can get the form
+        if not request.user.id == event.organizer.id:
+            raise PermissionDenied()
+        
+        form = self.form_class(instance=event)
+        return render(request, self.template_name, {"form": form, "event": event})
+
+
+    def post(self, request, pk):
+        """ Handle post request """
+
+        event = get_object_or_404(Event, pk=pk)
+        form = self.form_class(request.POST, instance=event)
+
+        if not request.user.id == event.organizer.id:
+            raise PermissionDenied()
+
+        if form.is_valid():
+            form.save()
+            return redirect(reverse("event-detail", kwargs={"pk": pk}))
+        else:
+            form = self.form_class(instance=event)
+        return render(request, self.template_name, {"form": form, "event": event})
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['initial'] = {
-            'start_time': self.object.start_time,
-            'end_time': self.object.end_time
+            'start_time': self.get_object().start_time,
+            'end_time': self.get_object().end_time
         }
         return kwargs
 
@@ -149,6 +180,28 @@ class EventDelete(LoginRequiredMixin, DeleteView):
 
     # Establish the success url to redirect back to the events homepage
     success_url = reverse_lazy('events')
+
+    def get(self, request, pk):
+        """ Handle get request to delete event """
+        
+        event = get_object_or_404(Event, pk=pk)
+
+        if not request.user.id == event.organizer.id:
+            raise PermissionDenied()
+
+        return render(request, self.template_name, {"event": event})
+
+
+    def post(self, request, pk):
+        """ Handle post request """
+
+        event = get_object_or_404(Event, pk=pk)
+
+        if not request.user.id == event.organizer.id:
+            raise PermissionDenied()
+        
+        event.delete()
+        return redirect(reverse("events"))
 
     def get_context_data(self, **kwargs):
         """ Update context data """
