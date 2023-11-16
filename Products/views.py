@@ -14,10 +14,13 @@ from django.core.exceptions import PermissionDenied
 
 from .models import Product
 from .forms import ProductForm, ProductReserveForm
-from Common.forms import ProductImageForm
 from Events.models import Event
+
+
 from Common.models import ProductImage
-from Common.mixins import ImageHandlingMixin
+from Common.forms import ProductImageForm
+from Common.services import ImageService
+from Common.mixins import ImageHandlingMixin  # TODO remove this import
 
 
 class ProductList(ListView):
@@ -32,7 +35,7 @@ class ProductList(ListView):
 # TODO create new create view, inherit from `View` class
 
 
-class ProductCreate(LoginRequiredMixin, ImageHandlingMixin, CreateView):
+class ProductCreate(LoginRequiredMixin, CreateView):
     """Create View for an Event Object. URL `/products/new/`"""
 
     # Establish model type and form class for use
@@ -45,14 +48,15 @@ class ProductCreate(LoginRequiredMixin, ImageHandlingMixin, CreateView):
 
     def form_valid(self, form):
         """Update the `owner` field after submission"""
-        self.object = form.save(commit=False)
-        self.object.owner = self.request.user
-        self.object.save()
-
-        if self.image_form and self.image_form.is_valid():
-            image = self.image_form.save(commit=False)
-            image.product = self.object
-            image.save()
+        product = form.save(commit=False)
+        product.owner = self.request.user
+        product.save()
+        # if image was uploaded, create image object
+        image_file = self.request.FILES.get("file", None)
+        if image_file:
+            ImageService().create_image(
+                image_file, product, ProductImage, resize_to=(300, 300)
+            )
 
         return super().form_valid(form)
 
@@ -77,19 +81,6 @@ class ProductCreate(LoginRequiredMixin, ImageHandlingMixin, CreateView):
 
         return context
 
-    def post(self, request, *args, **kwargs):
-        form = self.get_form()
-
-        if "file" in request.FILES:
-            self.image_form = self.image_form_class(request.POST, request.FILES)
-        else:
-            self.image_form = None
-
-        if form.is_valid() and (self.image_form is None or self.image_form.is_valid()):
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form, self.image_form)
-
 
 class ProductDetail(DetailView):
     """Product Details about a specific product. URL `/products/details/<int:pk>/`"""
@@ -99,7 +90,7 @@ class ProductDetail(DetailView):
     template_name = "product_detail.html"
 
 
-class ProductUpdate(LoginRequiredMixin, ImageHandlingMixin, UpdateView):
+class ProductUpdate(LoginRequiredMixin, UpdateView):
     """Edit product details of a specific product. URL `/products/edit/<int:pk>/`"""
 
     # Establish model type and form class for use
@@ -114,13 +105,15 @@ class ProductUpdate(LoginRequiredMixin, ImageHandlingMixin, UpdateView):
         """Handle get request to update/edit product"""
 
         product = get_object_or_404(Product, pk=pk)
-        image = self.get_image_instance()
+        image = product.image.first() or None
+
         # Only the Product's owner can get the form
         if not request.user.id == product.owner.id:
             raise PermissionDenied()
 
         form = self.form_class(instance=product)
-        image_form = self.image_form_class(instance=image)
+        if image:
+            image_form = self.image_form_class(instance=image)
 
         context = {
             "form": form,
@@ -140,8 +133,6 @@ class ProductUpdate(LoginRequiredMixin, ImageHandlingMixin, UpdateView):
         if not request.user.id == product.owner.id:
             raise PermissionDenied()
 
-        self.handle_image_update(request, product)
-
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(self.get_success_url())
@@ -150,23 +141,22 @@ class ProductUpdate(LoginRequiredMixin, ImageHandlingMixin, UpdateView):
 
         return render(request, self.template_name, {"form": form, "product": product})
 
+    def form_valid(self, form):
+        product = form.save(commit=False)
+
+        image_form = self.image_form_class(
+            self.request.POST, self.request.FILES, instance=product.image.first()
+        )
+        if image_form.is_valid():
+            cleaned_data = image_form.cleaned_data
+            ImageService().handle_image_update(cleaned_data, product, ProductImage)
+
+        return super().form_valid(form)
+
     def get_success_url(self):
         """Get success URL after post completion."""
 
         return reverse("product-details", kwargs={"pk": self.get_object().pk})
-
-    def handle_image_update(self, request, product):
-        image = self.get_image_instance()
-        image_form = self.image_form_class(request.POST, request.FILES, instance=image)
-        if image_form and image_form.is_valid():
-            file = image_form.cleaned_data.get("file")
-            alt_text = image_form.cleaned_data.get("alt_text")
-            if file:
-                ProductImage.objects.update_or_create(
-                    product=product, defaults={"file": file, "alt_text": alt_text}
-                )
-            elif not file:
-                ProductImage.objects.filter(product=product).delete()
 
 
 class ProductDelete(LoginRequiredMixin, DeleteView):

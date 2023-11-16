@@ -5,12 +5,7 @@
 from django import forms
 from django.forms import modelform_factory
 from Common.models import ProductImage
-from Common.models import (
-    MAX_IMAGE_SIZE,
-    ACCEPTED_FILE_TYPES,
-    MAX_FILE_SIZE,
-    MIN_FILE_SIZE,
-)
+from Common.services import ImageService
 
 from PIL import Image as PIL
 
@@ -39,7 +34,7 @@ class ImageUploadForm(forms.ModelForm):
             "file": "Upload File",
             "alt_text": "Image description",
         }
-        
+
         required = {
             "file": False,
             "alt_text": False,
@@ -108,7 +103,7 @@ class ImageUploadForm(forms.ModelForm):
                 # check image is valid and readable
                 image.verify()
                 # check image format is supported
-                if image.format not in ACCEPTED_FILE_TYPES:
+                if image.format not in ImageService.ACCEPTED_FILE_TYPES:
                     raise forms.ValidationError("Invalid file format provided.")
         except Exception as e:
             raise forms.ValidationError("Invalid file.")
@@ -122,12 +117,12 @@ class ImageUploadForm(forms.ModelForm):
 
         try:
             with PIL.open(image) as img:
-                max_width, max_height = MAX_IMAGE_SIZE
+                max_width, max_height = ImageService.MAX_IMAGE_SIZE
                 if img.width > max_width or img.height > max_height:
                     exceeded_dimension = "width" if img.width > max_width else "height"
 
                     raise forms.ValidationError(
-                        f"Image {exceeded_dimension} exceeds maximum allowed.  Max allowed is {MAX_IMAGE_SIZE[0]}x{MAX_IMAGE_SIZE[1]}"
+                        f"Image {exceeded_dimension} exceeds maximum allowed.  Max allowed is {ImageService.MAX_IMAGE_SIZE[0]}x{ImageService.MAX_IMAGE_SIZE[1]}"
                     )
         except Exception as e:
             raise forms.ValidationError("Invalid image file.")
@@ -137,16 +132,13 @@ class ImageUploadForm(forms.ModelForm):
         if not file:
             return
 
-        max_in_mb = MAX_FILE_SIZE / 1000000
-        min_in_kb = MIN_FILE_SIZE / 1000
-
-        if file.size > MAX_FILE_SIZE:
+        if file.size > ImageService.MAX_FILE_SIZE:
             raise forms.ValidationError(
-                f"Image file too large. max size is {max_in_mb} MB"
+                f"Image file too large. max size is {ImageService.MAX_FILE_SIZE_MB} MB"
             )
-        elif file.size < MIN_FILE_SIZE:
+        elif file.size < ImageService.MIN_FILE_SIZE:
             raise forms.ValidationError(
-                f"Image file too small. min size is {min_in_kb} KB"
+                f"Image file too small. min size is {ImageService.MIN_FILE_SIZE_KB} KB"
             )
 
 
