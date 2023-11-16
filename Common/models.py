@@ -1,11 +1,14 @@
 from django.db import models
 
 
-# TODO - [x] handle alt text for images
 # TODO - [] make upload_to dynamic
 # TODO - [] implement generic FKs?
 # TODO - [] clean out code now covered in services.py
 # TODO - [] Should I add delete method from services to models?
+# TODO - [x] handle alt text for images
+# TODO - [x] clean out code now covered in services.py
+# TODO - [N] Should I add delete method from services to models?
+# TODO - [] Implement signals to further detach logic from views?
 
 
 class ImageUpload(models.Model):

@@ -132,9 +132,6 @@ class ImageService:
             image_instance.thumbnail.delete(save=False)
 
     def delete_image_instance(self, image_instance):
-        """
-        Deletes an image model instance and its associated files.
-        """
         self.delete_image_files(image_instance)
         if image_instance:
             image_instance.delete()
