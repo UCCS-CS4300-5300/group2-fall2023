@@ -54,7 +54,7 @@ class ImageService:
             file=saved_path,
             alt_text=alt_text,
             thumbnail=thumbnail,
-            related_object=related_object,
+            related_model=related_object,
         )
         image_instance.save()
 
@@ -98,26 +98,37 @@ class ImageService:
 
         return image_instance
 
-    def delete_image(self, image_instance):
+    def delete_image_files(self, image_instance):
         """Deletes an image model instance and its associated files."""
         if image_instance.file:
             image_instance.file.delete(save=False)
         if image_instance.thumbnail:
             image_instance.thumbnail.delete(save=False)
-        image_instance.delete()
+
+    def delete_image_instance(self, image_instance):
+        print(f"deleting image_instance: {image_instance}")
+        self.delete_image_files(image_instance)
+        print(f"files deleted check: {image_instance.file}, {image_instance.thumbnail}")
+        if image_instance:
+            image_instance.delete()
 
     def handle_image_update(
         self, cleaned_data, related_object, image_model, resize_to=None
     ):
         new_file = cleaned_data.get("file")
         new_alt_text = cleaned_data.get("alt_text")
-        clear_image = cleaned_data.get("clear")
+
+        print("new file: ", new_file)
 
         existing_image_instance = related_object.image.first()
+        print(
+            f"existing_image_instance: {existing_image_instance}, \n existing image instance file: {existing_image_instance.file} \n existing image instance thumbnail: {existing_image_instance.thumbnail}"
+        )
 
-        if new_file is None and clear_image:
+        if not new_file:
+            print("new file is none")
             if existing_image_instance:
-                self.delete_image(existing_image_instance)
+                self.delete_image_instance(existing_image_instance)
         elif new_file:
             if existing_image_instance:
                 self.update_image(

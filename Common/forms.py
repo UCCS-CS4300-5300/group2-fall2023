@@ -40,29 +40,6 @@ class ImageUploadForm(forms.ModelForm):
             "alt_text": False,
         }
 
-    def save(self, commit=True):
-        """Override save method to perform additional actions"""
-        instance = super().save(commit=False)
-
-        file = self.cleaned_data.get("file", None)
-
-        # clear image if checkbox is checked, delete instance.
-        if file is None and instance.id:
-            self.delete_images(instance)
-            instance.delete()
-            return None
-
-        if file is None:
-            return None
-
-        # if a new file was uploaded to existing instance, delete old files
-        if file and instance.id:
-            self.delete_images(instance)
-
-        if commit:
-            instance.save()
-        return instance
-
     def clean_file(self):
         """Performs various validations on image file, returning it if valid"""
         file = self.cleaned_data.get("file")
@@ -80,15 +57,6 @@ class ImageUploadForm(forms.ModelForm):
         self.validate_image_dimensions(file)
 
         return file
-
-    # TODO - Possibly relocate to a utils.py
-    @staticmethod
-    def delete_images(instance):
-        """deletes an instance's image and thumbnail files"""
-        if instance.file:
-            instance.file.delete(save=False)
-        if instance.thumbnail:
-            instance.thumbnail.delete(save=False)
 
     @staticmethod
     def validate_file(file):

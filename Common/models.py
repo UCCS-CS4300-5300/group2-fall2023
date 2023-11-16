@@ -38,9 +38,9 @@ class ImageUpload(models.Model):
 
 
 class ProductImage(ImageUpload):
-    product = models.ForeignKey(
+    related_model = models.ForeignKey(
         "Products.Product", related_name="image", on_delete=models.CASCADE
     )
 
     def __str__(self):
-        return self.product.name
+        return self.related_model.name
