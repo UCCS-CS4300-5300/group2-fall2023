@@ -4,9 +4,11 @@
 
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from Products.models import Product
 from Events.models import Event
+
+
 
 
 class ProductListTests(TestCase):
@@ -156,7 +158,7 @@ class ProductCreateTests(TestCase):
         
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Product.objects.filter(name="Product 1").exists())
-
+    
 
     def test_product_creates_object_with_event(self):
         """ Test that the product create view creates an object with an event """
@@ -755,3 +757,46 @@ class ProductReserveTests(TestCase):
         # validate that the object is not updated
         updated = Product.objects.get(id=self.product_1.id)
         self.assertEqual(updated.quantity, original_quantity)
+
+
+class PermissionProductModifyTests(TestCase):
+    """ Test the product create view with permission checks """
+
+    def setUp(self):
+        """ Login as user to handle LoginRequired and Create an object to be reserved """
+
+        self.user = User.objects.create_user(
+            username="test_user",
+            password="test_password",
+        )
+
+        self.product = Product.objects.create(
+            name="Existing Product",
+            description="Product Description",
+            price=10.0,
+            quantity=5,
+            owner=self.user
+        )
+
+        self.add_product_permission = Permission.objects.get(codename='add_product')
+        self.client.login(username="test_user", password="test_password")
+
+    def test_product_edit_forbidden_by_non_owner(self):
+        """ Verify that a non-owner cannot edit the product """
+
+        another_user = User.objects.create_user(username="another_user", password="another_password")
+        self.client.login(username="another_user", password="another_password")
+
+        data = {
+            "name": "Modified Product",
+            "description": "Modified Product Description",
+            "price": 30.0,
+            "quantity": 20,
+            "owner": another_user
+        }
+
+        response = self.client.post(reverse("product-update", args=[self.product.id]), data)
+        self.assertEqual(response.status_code, 403)
+
+        not_updated_product = Product.objects.get(id=self.product.id)
+        self.assertEqual(not_updated_product.name, "Existing Product")
