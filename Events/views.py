@@ -113,7 +113,11 @@ class EventUpdate(LoginRequiredMixin, UpdateView):
             raise PermissionDenied()
         
         form = self.form_class(instance=event)
-        return render(request, self.template_name, {"form": form, "event": event})
+        return render(request, self.template_name, {
+            "form": form,
+            "event": event,
+            "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY
+        })
 
 
     def post(self, request, pk):
@@ -132,26 +136,6 @@ class EventUpdate(LoginRequiredMixin, UpdateView):
             form = self.form_class(instance=event)
         return render(request, self.template_name, {"form": form, "event": event})
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['initial'] = {
-            'start_time': self.get_object().start_time,
-            'end_time': self.get_object().end_time
-        }
-        return kwargs
-
-    def get_context_data(self, **kwargs):
-        """ Update context data """
-
-        # Note that we are updating the context data with the Google Maps API Key
-        #   This means that the key is being passed to the client side data. This is 
-        #   crucial in order to implement autocomplete functionality. IT IS IMPERITAVE
-        #   that you protect your API_KEY through Google's resources (see README for more).
-
-        context = super().get_context_data(**kwargs)
-        context["google_maps_api_key"] = settings.GOOGLE_MAPS_API_KEY
-
-        return context
 
     def form_valid(self, form):
         """ Update the latitude and longitude fields using the address """
@@ -189,8 +173,10 @@ class EventDelete(LoginRequiredMixin, DeleteView):
         if not request.user.id == event.organizer.id:
             raise PermissionDenied()
 
-        return render(request, self.template_name, {"event": event})
-
+        return render(request, self.template_name, {
+            "event": event,
+            "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY
+        })
 
     def post(self, request, pk):
         """ Handle post request """
@@ -202,16 +188,3 @@ class EventDelete(LoginRequiredMixin, DeleteView):
         
         event.delete()
         return redirect(reverse("events"))
-
-    def get_context_data(self, **kwargs):
-        """ Update context data """
-
-        # Note that we are updating the context data with the Google Maps API Key
-        #   This means that the key is being passed to the client side data. This is 
-        #   crucial in order to implement autocomplete functionality. IT IS IMPERITAVE
-        #   that you protect your API_KEY through Google's resources (see README for more).
-
-        context = super().get_context_data(**kwargs)
-        context["google_maps_api_key"] = settings.GOOGLE_MAPS_API_KEY
-
-        return context
