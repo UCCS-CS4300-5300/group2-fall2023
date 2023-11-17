@@ -7,6 +7,13 @@ from django.core.files.storage import default_storage
 # !! LEAVE THIS IMPORT HERE FOR NOW
 from .models import ProductImage
 
+# TODO - [] async image resizing
+# TODO - [] async image uploading
+# TODO - [] async image deletion
+# TODO - [] implement image processing method?
+# TODO - [] standardize names, design naming scheme
+# TODO - [] Work on multiple images logic
+
 
 class ImageService:
     # macros
@@ -30,8 +37,17 @@ class ImageService:
         alt_text=None,
         resize_to=DEFAULT_IMAGE_SIZE,
     ):
-        """
-        Saves an image, resizing if necessary, and associates with a model instance.
+        """Create a new image object
+
+        Args:
+            image_file (file): an image file
+            related_object (object): the object type being related to image.
+            image_model (ImageUpload object): The specific object model inheriting ImageUpload base model.
+            alt_text (string, optional): an image's descriptive alternative text. Defaults to None.
+            resize_to (int tuple, optional): (width, height). Defaults to DEFAULT_IMAGE_SIZE.
+
+        Returns:
+            image_instance: returns the newly created image instance.
         """
 
         if resize_to:
@@ -42,9 +58,10 @@ class ImageService:
 
         # generate a unique filename
         filename = self._generate_unique_filename(image_file.name)
+        # join the image path to file name
         path = os.path.join("images", filename)
 
-        # save image file
+        # save image to content file
         saved_path = default_storage.save(path, ContentFile(image_file.read()))
 
         thumbnail = self.create_thumbnail(image_file)
@@ -67,8 +84,16 @@ class ImageService:
         alt_text=None,
         resize_to=DEFAULT_IMAGE_SIZE,
     ):
-        """
-        Updates an image, resizing if necessary.
+        """Updates an image instance's data.
+
+        Args:
+            image_instance (image object): instance of an image model
+            new_image_file (file): new file to update image instance to.
+            alt_text (string, optional): an image's descriptive alt text. Defaults to None.
+            resize_to (int tuple, optional): (width, height). Defaults to DEFAULT_IMAGE_SIZE.
+
+        Returns:
+            image_instance: returns the updated image instance.
         """
 
         if resize_to:
@@ -94,59 +119,65 @@ class ImageService:
         image_instance.file = saved_path
         image_instance.alt_text = alt_text
         image_instance.thumbnail = thumbnail
-        image_instance.save()
+        image_instance.save()  # ? is this necessary?
 
         return image_instance
 
     def delete_image_files(self, image_instance):
-        """Deletes an image model instance and its associated files."""
+        """Deletes an image instance's associated files from system storage."""
         if image_instance.file:
             image_instance.file.delete(save=False)
         if image_instance.thumbnail:
             image_instance.thumbnail.delete(save=False)
 
     def delete_image_instance(self, image_instance):
-        print(f"deleting image_instance: {image_instance}")
+        """
+        Deletes an image model instance and its associated files.
+        """
         self.delete_image_files(image_instance)
-        print(f"files deleted check: {image_instance.file}, {image_instance.thumbnail}")
         if image_instance:
             image_instance.delete()
 
     def handle_image_update(
         self, cleaned_data, related_object, image_model, resize_to=None
     ):
+        """helper method for image update process, re-routes to update or create image.
+
+        Args:
+            cleaned_data (object): cleaned data returned from image form
+            related_object (model instance): object related to image
+            image_model (the intermediary model to relate image with related_object): Image data structure
+            resize_to (integer tuple, optional): (height, width). Defaults to None.
+        """
         new_file = cleaned_data.get("file")
         new_alt_text = cleaned_data.get("alt_text")
 
-        print("new file: ", new_file)
-
         existing_image_instance = related_object.image.first()
-        print(
-            f"existing_image_instance: {existing_image_instance}, \n existing image instance file: {existing_image_instance.file} \n existing image instance thumbnail: {existing_image_instance.thumbnail}"
-        )
 
-        if not new_file:
-            print("new file is none")
-            if existing_image_instance:
-                self.delete_image_instance(existing_image_instance)
-        elif new_file:
-            if existing_image_instance:
-                self.update_image(
-                    existing_image_instance,
-                    new_file,
-                    alt_text=new_alt_text,
-                )
-            else:
-                self.create_image(
-                    new_file,
-                    related_object,
-                    image_model,
-                    alt_text=new_alt_text,
-                )
+        # TODO - clean this structure up a bit
+
+        if not new_file or new_file is None:
+            return
+
+        if existing_image_instance:
+            self.update_image(
+                existing_image_instance,
+                new_file,
+                alt_text=new_alt_text,
+            )
+        else:
+            self.create_image(
+                new_file,
+                related_object,
+                image_model,
+                alt_text=new_alt_text,
+            )
 
     def create_thumbnail(self, image_file, size=DEFAULT_THUMBNAIL_SIZE):
         """
         Resizes an image to the specified size.
+        :param image_file: an image file (img.png, img.jpg)
+        :param size: integer tuple (height, width)
         """
         img = PILImage.open(image_file)
         img.thumbnail(size)
@@ -158,11 +189,17 @@ class ImageService:
         return ContentFile(thumb_io.read(), name=image_file.name)
 
     def generate_alt_text(self, related_object):
+        """
+        generates alt text based upon the image's related object
+        :param related_object: object with relation to image object
+        """
         return f"{related_object.name} image"
 
     def _resize_image(self, image_file, size=DEFAULT_IMAGE_SIZE):
         """
         Resizes an image to the specified size.
+        :param image_file: a file
+        :param size: tuple (width, height) for resizing img
         """
         img = PILImage.open(image_file)
         img.thumbnail(size)
@@ -176,7 +213,19 @@ class ImageService:
     def _generate_unique_filename(self, filename):
         """
         Generates a unique filename.
+        :param filename: name of a file
+        e.g. file.png
         """
         name, extension = os.path.splitext(filename)
         unique_filename = f"{name}_{uuid.uuid4()}{extension}"
         return unique_filename
+
+    def get_image_instance_from_related_obj(
+        self, related_object_instance, related_name
+    ):
+        """
+        Returns related instance held by another object instance if it exists.
+        :param related_object: instance of an object we are searching for FK
+        :param related_name: the related_name field in the related_object_instance
+        """
+        return related_object_instance.related_name.first() or None

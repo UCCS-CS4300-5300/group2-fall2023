@@ -7,14 +7,6 @@ from django.db import models
 # TODO - [] clean out code now covered in services.py
 # TODO - [] Should I add delete method from services to models?
 
-# MAX_IMAGE_SIZE = (1920, 1920)
-# DEFAULT_IMAGE_SIZE = (480, 480)
-# DEFAULT_THUMBNAIL_SIZE = (128, 128)
-# IMAGE_QUALITY = 85
-# ACCEPTED_FILE_TYPES = ["JPEG", "JPG", "PNG"]
-# MIN_FILE_SIZE = 10240  # file size: 10 KB
-# MAX_FILE_SIZE = 5242880  # file size: 5 MB
-
 
 class ImageUpload(models.Model):
     file = models.ImageField(upload_to="images/", blank=True, null=True)
@@ -43,4 +35,4 @@ class ProductImage(ImageUpload):
     )
 
     def __str__(self):
-        return self.related_model.name
+        return f"self.related_model.name image"
