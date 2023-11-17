@@ -554,6 +554,33 @@ class ProductUpdateTests(TestCase):
         # validate updated object
         updated = Product.objects.get(id=self.product_1.id)
         self.assertEqual(updated.quantity, new_quantity)
+    
+    def test_product_edit_forbidden_by_non_owner(self):
+        """ Verify that a non-owner cannot edit another user's product """
+
+        another_user = User.objects.create_user(username="another_user", password="another_password")
+
+        another_product = Product.objects.create(
+            name="Another Product",
+            description="Another Product Description",
+            price=40.0,
+            quantity=15,
+            owner=another_user
+        )
+
+        self.client.login(username="original_user", password="original_password")
+
+        data = {
+            "name": "Modified Product",
+            "description": "Modified Product Description",
+            "price": 30.0,
+            "quantity": 20,
+        }
+
+        response = self.client.post(reverse("product-update", args=[another_product.id]), data)
+        self.assertEqual(response.status_code, 403)
+        not_updated_product = Product.objects.get(id=another_product.id)
+        self.assertEqual(not_updated_product.name, "Another Product")
 
 
 class ProductDeleteTests(TestCase):
@@ -759,44 +786,5 @@ class ProductReserveTests(TestCase):
         self.assertEqual(updated.quantity, original_quantity)
 
 
-class PermissionProductModifyTests(TestCase):
-    """ Test the product create view with permission checks """
 
-    def setUp(self):
-        """ Login as user to handle LoginRequired and Create an object to be reserved """
 
-        self.user = User.objects.create_user(
-            username="test_user",
-            password="test_password",
-        )
-
-        self.product = Product.objects.create(
-            name="Existing Product",
-            description="Product Description",
-            price=10.0,
-            quantity=5,
-            owner=self.user
-        )
-
-        self.add_product_permission = Permission.objects.get(codename='add_product')
-        self.client.login(username="test_user", password="test_password")
-
-    def test_product_edit_forbidden_by_non_owner(self):
-        """ Verify that a non-owner cannot edit the product """
-
-        another_user = User.objects.create_user(username="another_user", password="another_password")
-        self.client.login(username="another_user", password="another_password")
-
-        data = {
-            "name": "Modified Product",
-            "description": "Modified Product Description",
-            "price": 30.0,
-            "quantity": 20,
-            "owner": another_user
-        }
-
-        response = self.client.post(reverse("product-update", args=[self.product.id]), data)
-        self.assertEqual(response.status_code, 403)
-
-        not_updated_product = Product.objects.get(id=self.product.id)
-        self.assertEqual(not_updated_product.name, "Existing Product")

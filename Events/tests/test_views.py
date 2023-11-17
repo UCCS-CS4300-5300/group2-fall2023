@@ -103,6 +103,33 @@ class EventDetailTests(TestCase):
             organizer=self.user
         )
 
+    def test_event_edit_forbidden_by_non_organizer(self):
+        """ Verify that a non-organizer cannot edit another user's event """
+
+        another_user = User.objects.create_user(username="another_user", password="another_password")
+
+        another_event = Event.objects.create(
+            name="Another Event",
+            location="Some Location",
+            start_time="2024-12-02T09:00+03:00",
+            end_time="2024-12-02T10:00+03:00",
+            organizer=another_user
+        )
+
+        self.client.login(username="testinguser", password="testingpassword")
+
+        data = {
+            "name": "Modified Event",
+            "location": "Modified Location",
+            "start_time": "2024-12-01T09:30+03:00",
+            "end_time": "2024-12-01T10:30+03:00",
+        }
+
+        response = self.client.post(reverse("event-update", args=[another_event.id]), data)
+        self.assertEqual(response.status_code, 403)
+        not_updated_event = Event.objects.get(id=another_event.id)
+        self.assertEqual(not_updated_event.name, "Another Event")
+
     def test_event_detail_at_url(self):
         """Verify that the event detail exists at `/markets/details/<int:pk>`"""
 
