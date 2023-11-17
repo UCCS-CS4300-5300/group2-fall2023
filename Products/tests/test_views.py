@@ -4,9 +4,11 @@
 
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from Products.models import Product
 from Events.models import Event
+
+
 
 
 class ProductListTests(TestCase):
@@ -156,7 +158,7 @@ class ProductCreateTests(TestCase):
         
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Product.objects.filter(name="Product 1").exists())
-
+    
 
     def test_product_creates_object_with_event(self):
         """ Test that the product create view creates an object with an event """
@@ -552,6 +554,23 @@ class ProductUpdateTests(TestCase):
         # validate updated object
         updated = Product.objects.get(id=self.product_1.id)
         self.assertEqual(updated.quantity, new_quantity)
+    
+    def test_product_edit_forbidden_by_non_owner(self):
+        """ Verify that a non-owner cannot edit another user's product """
+
+        another_product = Product.objects.create(
+            name="Another Product",
+            description="Another Product Description",
+            price=40.0,
+            quantity=15,
+            owner=User.objects.create_user(
+                username="some_other_user",
+                password="some_other_password_12345"
+            )
+        )
+
+        bad_res = self.client.get(reverse("product-update", args=[another_product.id]))
+        self.assertEqual(bad_res.status_code, 403)
 
 
 class ProductDeleteTests(TestCase):
@@ -630,6 +649,23 @@ class ProductDeleteTests(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Product.objects.filter(id=self.product_1.id).exists())
+    
+    def test_product_delete_forbidden_by_non_owner(self):
+        """ Verify that a non-owner cannot delete another user's product """
+
+        another_product = Product.objects.create(
+            name="Another Product",
+            description="Another Product Description",
+            price=40.0,
+            quantity=15,
+            owner=User.objects.create_user(
+                username="some_other_user",
+                password="some_other_password_12345"
+            )
+        )
+
+        bad_res = self.client.get(reverse("product-delete", args=[another_product.id]))
+        self.assertEqual(bad_res.status_code, 403)
 
 
 class ProductReserveTests(TestCase):
@@ -657,7 +693,6 @@ class ProductReserveTests(TestCase):
             quantity=10,
             owner=user
         )
-
 
     def test_product_reserve_at_url(self):
         """ Verify that the product reserve exists at `/products/reserve/<int:pk>` """
@@ -755,3 +790,7 @@ class ProductReserveTests(TestCase):
         # validate that the object is not updated
         updated = Product.objects.get(id=self.product_1.id)
         self.assertEqual(updated.quantity, original_quantity)
+
+
+
+

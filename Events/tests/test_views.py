@@ -103,6 +103,8 @@ class EventDetailTests(TestCase):
             organizer=self.user
         )
 
+
+
     def test_event_detail_at_url(self):
         """Verify that the event detail exists at `/markets/details/<int:pk>`"""
 
@@ -481,6 +483,22 @@ class EventUpdateTests(TestCase):
         updated_event = Event.objects.get(pk=self.event_1.pk)
         self.assertEqual(updated_event.end_time, new_end_time)
 
+    def test_event_edit_forbidden_by_non_organizer(self):
+        """ Verify that a non-organizer cannot edit another user's event """
+
+        another_event = Event.objects.create(
+            name="Another Event",
+            location="Some Location",
+            start_time="2024-12-02T09:00+03:00",
+            end_time="2024-12-02T10:00+03:00",
+            organizer=User.objects.create_user(
+                username="some_other_user",
+                password="some_other_password_12345"
+            )
+        )
+
+        bad_res = self.client.get(reverse("event-update", args=[another_event.id]))
+        self.assertEqual(bad_res.status_code, 403)
 
 
 class EventDeleteTests(TestCase):
@@ -553,3 +571,20 @@ class EventDeleteTests(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Event.objects.filter(id=self.event_1.id).exists())
+
+    def test_event_delete_forbidden_by_non_organizer(self):
+        """ Verify that a non-organizer cannot delete another user's event """
+
+        another_event = Event.objects.create(
+            name="Another Event",
+            location="Some Location",
+            start_time="2024-12-02T09:00+03:00",
+            end_time="2024-12-02T10:00+03:00",
+            organizer=User.objects.create_user(
+                username="some_other_user",
+                password="some_other_password_12345"
+            )
+        )
+
+        bad_res = self.client.get(reverse("event-delete", args=[another_event.id]))
+        self.assertEqual(bad_res.status_code, 403)
