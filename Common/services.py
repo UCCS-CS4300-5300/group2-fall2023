@@ -138,6 +138,7 @@ class ImageService:
         if image_instance:
             image_instance.delete()
 
+    # fix maybe update params so image_form is passed instead of image_form.cleaned_data ?
     def handle_image_update(
         self, cleaned_data, related_object, image_model, resize_to=None
     ):

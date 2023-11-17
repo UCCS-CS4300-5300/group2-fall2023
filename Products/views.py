@@ -109,17 +109,21 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
 
         product = get_object_or_404(Product, pk=pk)
         image = product.image.first() if product.image.exists() else None
+        # ? image = product.image.get() ?
 
         # Only the Product's owner can get the form
         if not request.user.id == product.owner.id:
             raise PermissionDenied()
 
+        # fix start - could this be cleaner?
         form = self.form_class(instance=product)
         if image:
             image_form = self.image_form_class(instance=image)
         else:
             image_form = self.image_form_class()
+        # fix end
 
+        # include image_form in context
         context = {
             "form": form,
             "product": product,
@@ -138,11 +142,14 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
         if not request.user.id == product.owner.id:
             raise PermissionDenied()
 
+        # fix - should be a better way to do this
+        # Do not want to get_or_404 since image is optional
         image = product.image.first() if product.image.exists() else None
         image_form = self.image_form_class(request.POST, request.FILES, instance=image)
 
         if form.is_valid() and image_form.is_valid():
             form.save()
+            # perform image processing, updating, creating
             if image_form:
                 ImageService().handle_image_update(
                     image_form.cleaned_data, product, ProductImage
@@ -160,6 +167,7 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
         return reverse("product-details", kwargs={"pk": self.get_object().pk})
 
     def get_context_data(self, **kwargs):
+        # fix can I figure out how to remove this entirely? Let Django handle context?
         context = super().get_context_data(**kwargs)
 
         # find image_Form and add to context
