@@ -9,6 +9,8 @@ from Common.services import ImageService
 
 from PIL import Image as PIL
 
+# TODO -[] Check validator methods and update as necessary
+# TODO - 
 
 class ImageUploadForm(forms.ModelForm):
     """Image upload form information"""
@@ -112,7 +114,7 @@ class ImageUploadForm(forms.ModelForm):
 
 # Dynamic forms for adding images to models
 
-# for products
+# form factory for products
 ProductImageForm = modelform_factory(
     ProductImage, form=ImageUploadForm, fields=["file", "alt_text"]
 )

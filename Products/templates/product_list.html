@@ -15,14 +15,11 @@
         <div class="row">
             {% for product in product_list %}
             <div class="col-md-4 my-3">
-                <a 
-                    class="harvestly-card-link" 
-                    href="{% url 'product-details' product.id %}"
-                >
+                <a class="harvestly-card-link" href="{% url 'product-details' product.id %}">
                     <div class="card h-100">
                         <div class="product-card-img-container">
                             <!-- Render image thumbnail -->
-                            {% include "_product_thumbnail.html" %}
+                            {% include "_product_thumbnail.html" with product=product %}
                         </div>
                         <div class="card-body product-card-body">
                             <h3 class="card-title">{{ product.name|title }}</h3>
@@ -34,7 +31,7 @@
                     </div>
                 </a>
             </div>
-        {% endfor %}
+            {% endfor %}
         </div>
     </div>
 

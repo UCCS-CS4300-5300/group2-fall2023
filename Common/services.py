@@ -7,6 +7,7 @@ from django.core.files.storage import default_storage
 # !! LEAVE THIS IMPORT HERE FOR NOW
 from .models import ProductImage
 
+# TODO - [] Add more error checking, especially for PIL and file handling.
 # TODO - [] async image resizing
 # TODO - [] async image uploading
 # TODO - [] async image deletion

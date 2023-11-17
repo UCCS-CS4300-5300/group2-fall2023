@@ -1,3 +1,8 @@
+"""
+!!!! NO LONGER IN USE, CURRENTLY KEEPING AS REFERENCE, WILL SOON BE REMOVED COMPLETELY. 
+"""
+
+
 class ImageHandlingMixin:
     image_form_class = None
 
