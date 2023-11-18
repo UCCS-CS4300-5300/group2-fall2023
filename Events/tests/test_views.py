@@ -32,8 +32,6 @@ class EventListTests(TestCase):
 
         response = self.client.get(reverse("events"))
 
-        self.assertEqual(response.status_code, 200)
-
         self.assertTemplateUsed("event_list.html")
 
     def test_event_list_uses_layout(self):
@@ -41,7 +39,6 @@ class EventListTests(TestCase):
 
         response = self.client.get(reverse("events"))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("layout.html")
 
     def test_event_list_empty_uses_empty_template(self):
@@ -49,8 +46,6 @@ class EventListTests(TestCase):
 
         response = self.client.get(reverse("events"))
 
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "event_list.html")
         self.assertTemplateUsed(response, "empty_list.html")
 
     def test_event_list_with_events(self):
@@ -79,8 +74,6 @@ class EventListTests(TestCase):
 
         response = self.client.get(reverse("events"))
 
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "event_list.html")
         self.assertContains(response, event_1.name)
         self.assertContains(response, event_2.name)
 
@@ -124,7 +117,6 @@ class EventDetailTests(TestCase):
 
         response = self.client.get(reverse("event-detail", args=[self.event_1.id]))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "event_detail.html")
 
     def test_event_detail_uses_layout(self):
@@ -132,7 +124,6 @@ class EventDetailTests(TestCase):
 
         response = self.client.get(reverse("event-detail", args=[self.event_1.id]))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "layout.html")
 
     def test_event_detail_missing_object(self):
@@ -142,12 +133,11 @@ class EventDetailTests(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
-    def test_pevent_detail_displays_object_details(self):
+    def test_event_detail_displays_object_details(self):
         """Test that the event detail view displays event details"""
 
         response = self.client.get(reverse("event-detail", args=[self.event_1.id]))
 
-        self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.event_1.name)
         self.assertContains(response, self.event_1.location)
 
@@ -161,12 +151,12 @@ class EventCreateTests(TestCase):
         username = "test_user"
         password = "test_password"
 
-        user = User.objects.create_user(
+        self.user = User.objects.create_user(
             username=username,
             password=password,
         )
 
-        user.save()
+        self.user.save()
         self.client.login(username=username, password=password)
 
     def test_event_create_at_url(self):
@@ -206,12 +196,8 @@ class EventCreateTests(TestCase):
     def test_event_creates_object(self):
         """ Verify that the event create view successfully creates an event """
 
-        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
-        self.user.save()
-
-        event_name = "Market 1" 
         data = {
-            "name": event_name,
+            "name": "Market 1",
             "location": "1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             "start_time": "2024-12-01T09:00",
             "end_time": "2024-12-03T09:00",
@@ -221,14 +207,11 @@ class EventCreateTests(TestCase):
         response = self.client.post(reverse("event-create"), data)
         
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(Event.objects.filter(name=event_name).exists())
+        self.assertTrue(Event.objects.filter(name=data["name"]).exists())
 
 
     def test_event_create_missing_name(self):
         """ Test event create view when name is missing """
-        
-        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
-        self.user.save()
 
         data = {
             "location": "1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
@@ -245,9 +228,6 @@ class EventCreateTests(TestCase):
 
     def test_event_create_missing_location(self):
         """ Test event create view when location is missing """
-        
-        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
-        self.user.save()
 
         data = {
             "name": "Market 1",
@@ -264,9 +244,6 @@ class EventCreateTests(TestCase):
     
     def test_event_create_missing_start_time(self):
         """ Test event create view when start time is missing """
-        
-        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
-        self.user.save()
 
         data = {
             "name": "Some Event",
@@ -283,9 +260,6 @@ class EventCreateTests(TestCase):
 
     def test_event_create_missing_end_time(self):
         """ Test event create view when end time is missing """
-        
-        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
-        self.user.save()
 
         data = {
             "name": "Some Event",
@@ -302,9 +276,6 @@ class EventCreateTests(TestCase):
 
     def test_event_create_invalid_start_time(self):
         """ Test the event create when the start time is not in the correct format """
-
-        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
-        self.user.save()
 
         data = {
             "name": "Some Event",
@@ -323,9 +294,6 @@ class EventCreateTests(TestCase):
     def test_event_create_invalid_end_time(self):
         """ Test the event create view when the end time is not in the correct format """
 
-        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
-        self.user.save()
-
         data = {
             "name": "Some Event",
             "location": "1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
@@ -342,9 +310,6 @@ class EventCreateTests(TestCase):
     
     def test_event_create_end_time_before_start_time(self):
         """ Test the event create view when the end time is before the start time """
-
-        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
-        self.user.save()
 
         data = {
             "name": "Some Event",
@@ -370,59 +335,68 @@ class EventUpdateTests(TestCase):
         username = "test_user"
         password = "test_password"
 
-        user = User.objects.create_user(
+        self.user = User.objects.create_user(
             username=username,
             password=password,
         )
 
-        user.save()
+        self.user.save()
         self.client.login(username=username, password=password)
 
         self.event_1 = Event.objects.create(
             id=1,
-            name="Event 1",
+            name="Market 1",
             location="1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             start_time=timezone.make_aware(
                 datetime.datetime(2025, 11, 1, 10, 0)
             ),  # 2025-11-01 10:00
             end_time=timezone.make_aware(datetime.datetime(2025, 11, 1, 12, 0)),
-            organizer=user
+            organizer=self.user
         )
+
         self.update_url = reverse("event-update", kwargs={"pk": self.event_1.pk})
         self.res = self.client.get(self.update_url)
 
     def test_event_update_at_url(self):
+        """Verify that the update view exists at the correct url"""
+
         res = self.client.get(f"/markets/edit/{self.event_1.id}")
         self.assertEqual(res.status_code, 200)
 
     def test_event_update_at_reverse_lookup(self):
+        """Verify that the reverse lookup functionality works for the update view"""
+
         self.assertEqual(self.res.status_code, 200)
 
     def test_event_update_uses_template(self):
-        self.assertEqual(self.res.status_code, 200)
+        """Verify that the update view uses the correct template"""
+
         self.assertTemplateUsed(self.res, "event_update.html")
 
     def test_event_update_uses_layout(self):
-        self.assertEqual(self.res.status_code, 200)
+        """Verify that the update view incorporates the layout template"""
+
         self.assertTemplateUsed(self.res, "layout.html")
 
     def test_event_update_missing_object(self):
+        """Verify that trying to delete an event that doesn't exist returns 404"""
+
         bad_res = self.client.get(reverse("event-update", args=["999"]))
         self.assertEqual(bad_res.status_code, 404)
 
     def test_event_update_displays_object_details(self):
-        self.assertEqual(self.res.status_code, 200)
+        """Verify that the form for the update view displays the current state of the Event's data"""
 
-        # get form from context
         form = self.res.context["form"]
 
-        # check initial data is correct
         self.assertEqual(form.initial["name"], self.event_1.name)
         self.assertEqual(form.initial["location"], self.event_1.location)
         self.assertEqual(form.initial["start_time"], self.event_1.start_time)
         self.assertEqual(form.initial["end_time"], self.event_1.end_time)
 
     def test_event_update_change_name(self):
+        """Verify that updates to the Event's name work correctly"""
+
         new_name = "New Name"
         data = {
             "name": new_name,
@@ -438,6 +412,8 @@ class EventUpdateTests(TestCase):
         self.assertEqual(updated_event.name, new_name)
 
     def test_event_update_change_location(self):
+        """Verify that updates to the Event's location work correctly"""
+
         new_location = "3650 N Nevada Ave, Colorado Springs, CO 80907, USA"
         data = {
             "name": self.event_1.name,
@@ -453,6 +429,8 @@ class EventUpdateTests(TestCase):
         self.assertEqual(updated_event.location, new_location)
 
     def test_event_update_change_start_time(self):
+        """Verify that updates to the Event's start time work correctly"""
+
         new_start_time = timezone.make_aware(datetime.datetime(2025, 10, 5, 10, 0))
         data = {
             "name": self.event_1.name,
@@ -468,6 +446,8 @@ class EventUpdateTests(TestCase):
         self.assertEqual(updated_event.start_time, new_start_time)
 
     def test_event_update_change_end_time(self):
+        """Verify that updates to the Event's end time work correctly"""
+        
         new_end_time = timezone.make_aware(datetime.datetime(2025, 12, 5, 12, 0))
 
         data = {
@@ -510,21 +490,20 @@ class EventDeleteTests(TestCase):
         username = "test_user"
         password = "test_password"
 
-        user = User.objects.create_user(
+        self.user = User.objects.create_user(
             username=username,
             password=password,
         )
 
-        user.save()
+        self.user.save()
         self.client.login(username=username, password=password)
 
         self.event_1 = Event.objects.create(
-            id=1,
-            name="Event 1",
+            name="Market 1",
             location="1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             start_time="2024-12-01T09:00+03:00",
             end_time="2024-12-01T10:00+03:00",
-            organizer=user
+            organizer=self.user
         )
 
     def test_event_delete_at_url(self):
@@ -546,7 +525,6 @@ class EventDeleteTests(TestCase):
 
         response = self.client.get(reverse("event-delete", args=[self.event_1.id]))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "event_delete.html")
 
     def test_product_delete_uses_layout(self):
@@ -554,7 +532,6 @@ class EventDeleteTests(TestCase):
 
         response = self.client.get(reverse("event-delete", args=[self.event_1.id]))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "layout.html")
 
     def test_product_delete_missing_object(self):

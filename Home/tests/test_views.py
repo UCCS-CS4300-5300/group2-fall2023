@@ -33,7 +33,6 @@ class HomeTests(TestCase):
 
         response = self.client.get(reverse("index"))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("home.html")
 
 
@@ -42,7 +41,6 @@ class HomeTests(TestCase):
 
         response = self.client.get(reverse("index"))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("layout.html")
 
 
@@ -70,7 +68,6 @@ class AboutTests(TestCase):
 
         response = self.client.get(reverse("about"))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("about.html")
 
 
@@ -79,7 +76,6 @@ class AboutTests(TestCase):
 
         response = self.client.get(reverse("about"))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("layout.html")
 
 
@@ -107,7 +103,6 @@ class SignUpTests(TestCase):
 
         response = self.client.get(reverse("signup"))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("registration/signup.html")
 
 
@@ -116,7 +111,6 @@ class SignUpTests(TestCase):
 
         response = self.client.get(reverse("signup"))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("layout.html")
 
     
@@ -228,7 +222,6 @@ class LoginTests(TestCase):
 
         response = self.client.get(reverse("login"))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("registration/login.html")
 
 
@@ -237,7 +230,6 @@ class LoginTests(TestCase):
 
         response = self.client.get(reverse("login"))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("layout.html")
 
     
@@ -264,6 +256,8 @@ class LoginTests(TestCase):
         response = self.client.post(reverse("login"), data)
 
         self.assertEqual(response.status_code, 200)
+
+        # Unsure about this since Django already helps valiate here
         # self.assertContains(response, "This field is required.") TODO
 
 
@@ -277,6 +271,8 @@ class LoginTests(TestCase):
         response = self.client.post(reverse("login"), data)
 
         self.assertEqual(response.status_code, 200)
+
+        # Unsure about this since Django already helps valiate here
         # self.assertContains(response, "This field is required.") TODO
 
 

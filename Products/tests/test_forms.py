@@ -33,7 +33,7 @@ class ProductFormTest(TestCase):
         self.user.save()
 
         event = Event.objects.create(
-            name="Event 1",
+            name="Market 1",
             location="Some Location",
             start_time="2025-04-12T00:00-00:00",
             end_time="2025-04-15T00:00-00:00",

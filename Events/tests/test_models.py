@@ -14,9 +14,11 @@ import datetime
 
 
 class EventTests(TestCase):
+    """Test the Event model"""
+    
     @classmethod
     def setUpTestData(cls):
-        # set up data for the whole TestCase
+        """Sets up the data for the test cases"""
 
         cls.user = User.objects.create_user(username="testinguser", password="testingpassword")
         cls.user.save()

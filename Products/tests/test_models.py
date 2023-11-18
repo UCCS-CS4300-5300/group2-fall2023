@@ -12,12 +12,13 @@ from django.contrib.auth.models import User
 
 class ProductTests(TestCase):
     """ Test the Product model """
+    def setUp(self):
+        """Set up the necessary testing data"""
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
 
     def test_product_creation(self):
         """ Test valid product creation """
-
-        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
-        self.user.save()
 
         name = "Product 1"
         description = "Product 1 Description"
@@ -42,10 +43,7 @@ class ProductTests(TestCase):
 
 
     def test_product_creation_with_market(self):
-        """ Test valid product creation """
-
-        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
-        self.user.save()
+        """ Test valid product creation with the addition of an Event object """
 
         name = "Product 1"
         description = "Product 1 Description"
@@ -80,9 +78,6 @@ class ProductTests(TestCase):
 
     def test_product_str(self):
         """ Test the product `__str__` method """
-
-        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
-        self.user.save()
 
         name = "Product 1"
 
