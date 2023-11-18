@@ -402,6 +402,7 @@ class ProductUpdateTests(TestCase):
         self.client.login(username=username, password=password)
 
         self.product_1 = Product.objects.create(
+            id=1,
             name="Product 1",
             description="Product 1 Description",
             price=3.45,
@@ -571,6 +572,7 @@ class ProductDeleteTests(TestCase):
         self.client.login(username=username, password=password)
 
         self.product_1 = Product.objects.create(
+            id=1,
             name="Product 1",
             description="Product 1 Description",
             price=3.45,

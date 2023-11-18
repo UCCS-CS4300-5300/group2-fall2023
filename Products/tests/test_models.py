@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 class ProductTests(TestCase):
     """ Test the Product model """
     def setUp(self):
+        """Set up the necessary testing data"""
         self.user = User.objects.create_user(username="testinguser", password="testingpassword")
         self.user.save()
 

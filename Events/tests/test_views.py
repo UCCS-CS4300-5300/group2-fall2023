@@ -55,6 +55,7 @@ class EventListTests(TestCase):
         self.user.save()
 
         event_1 = Event.objects.create(
+            id=1,
             name="Event 1",
             location="1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             start_time="2024-12-01T09:00+03:00",
@@ -63,6 +64,7 @@ class EventListTests(TestCase):
         )
 
         event_2 = Event.objects.create(
+            id=2,
             name="Event 2",
             location="1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             start_time="2024-12-01T11:00+03:00",
@@ -86,6 +88,7 @@ class EventDetailTests(TestCase):
         self.user.save()
 
         self.event_1 = Event.objects.create(
+            id=1,
             name="Event 1",
             location="1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             start_time="2024-12-01T09:00+03:00",
@@ -341,6 +344,7 @@ class EventUpdateTests(TestCase):
         self.client.login(username=username, password=password)
 
         self.event_1 = Event.objects.create(
+            id=1,
             name="Market 1",
             location="1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             start_time=timezone.make_aware(
