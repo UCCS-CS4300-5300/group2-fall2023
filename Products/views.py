@@ -57,7 +57,7 @@ class ProductCreate(LoginRequiredMixin, CreateView):
         #   supported in this version of Django.
 
         context = super().get_context_data(**kwargs)
-        context["event_list"] = Event.objects.all()     # TODO update to be only the objects the user has access to
+        context["event_list"] = Event.objects.filter(organizer=self.request.user)
 
         return context
 
@@ -91,7 +91,11 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
             raise PermissionDenied()
         
         form = self.form_class(instance=product)
-        return render(request, self.template_name, {"form": form, "product": product})
+        return render(request, self.template_name, {
+            "form": form,
+            "product": product,
+            "event_list": Event.objects.filter(organizer=request.user)
+        })
 
 
     def post(self, request, pk):
