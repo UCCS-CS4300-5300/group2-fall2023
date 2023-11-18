@@ -155,7 +155,7 @@ class ProductCreateTests(TestCase):
         """ Test that the product create view creates an object with an event """
 
         event = Event.objects.create(
-            name="Event 1",
+            name="Market 1",
             location="1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             start_time="2025-04-12T00:00-00:00",
             end_time="2025-04-15T00:00-00:00",
@@ -319,7 +319,7 @@ class ProductDetailTests(TestCase):
 
 
     def setUp(self):
-        """ Create an object to view details """
+        """ Set up the data for the test cases """
         
         self.user = User.objects.create_user(username="testinguser", password="testingpassword")
         self.user.save()
@@ -402,7 +402,6 @@ class ProductUpdateTests(TestCase):
         self.client.login(username=username, password=password)
 
         self.product_1 = Product.objects.create(
-            id=1,
             name="Product 1",
             description="Product 1 Description",
             price=3.45,
@@ -572,7 +571,6 @@ class ProductDeleteTests(TestCase):
         self.client.login(username=username, password=password)
 
         self.product_1 = Product.objects.create(
-            id=1,
             name="Product 1",
             description="Product 1 Description",
             price=3.45,

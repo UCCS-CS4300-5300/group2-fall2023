@@ -495,7 +495,7 @@ class EventDeleteTests(TestCase):
         self.client.login(username=username, password=password)
 
         self.event_1 = Event.objects.create(
-            name="Event 1",
+            name="Market 1",
             location="1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             start_time="2024-12-01T09:00+03:00",
             end_time="2024-12-01T10:00+03:00",

@@ -42,7 +42,7 @@ class ProductTests(TestCase):
 
 
     def test_product_creation_with_market(self):
-        """ Test valid product creation """
+        """ Test valid product creation with the addition of an Event object """
 
         name = "Product 1"
         description = "Product 1 Description"
