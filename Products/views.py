@@ -48,7 +48,6 @@ class ProductCreate(LoginRequiredMixin, CreateView):
 
         return reverse("product-details", kwargs={"pk": self.object.pk})
     
-
     def get_context_data(self, **kwargs):
         """ Include list of events in context data """
         
@@ -57,7 +56,23 @@ class ProductCreate(LoginRequiredMixin, CreateView):
         #   supported in this version of Django.
 
         context = super().get_context_data(**kwargs)
-        context["event_list"] = Event.objects.all()     # TODO update to be only the objects the user has access to
+        context["event_list"] = Event.objects.filter(organizer=self.request.user)
+
+        # Set initial event ID value (when redirected from event details page, or reload)
+        event_id = self.kwargs.get("event_id")
+        if event_id:
+            context["event_id"] = event_id
+            return context
+
+        # Set event id attribute on form resubmission
+        f_kwargs = super().get_form_kwargs()
+        form_data = f_kwargs.get("data")
+
+        if form_data:
+            event_id = form_data.get("product_event")
+            
+            if event_id:
+                context["event_id"] = event_id
 
         return context
 
@@ -91,7 +106,11 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
             raise PermissionDenied()
         
         form = self.form_class(instance=product)
-        return render(request, self.template_name, {"form": form, "product": product})
+        return render(request, self.template_name, {
+            "form": form,
+            "product": product,
+            "event_list": Event.objects.filter(organizer=request.user)
+        })
 
 
     def post(self, request, pk):
