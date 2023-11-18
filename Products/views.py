@@ -66,10 +66,13 @@ class ProductCreate(LoginRequiredMixin, CreateView):
 
         # Set event id attribute on form resubmission
         f_kwargs = super().get_form_kwargs()
-        event_id = f_kwargs["data"].get("product_event")
+        form_data = f_kwargs.get("data")
 
-        if event_id:
-            context["event_id"] = event_id
+        if form_data:
+            event_id = form_data.get("product_event")
+            
+            if event_id:
+                context["event_id"] = event_id
 
         return context
 
