@@ -170,6 +170,23 @@ The halstead metrics are provided as follows:
 
 This is an evaluation of number of lines of code and their purpose (i.e. blank, comments, code, etc).
 
+## Code Qualification - PyLint
+
+To evaluate the overall consistency and readability of the code, as well as its adherence to coding best practices, use the `Pylint` library. To evaluate a module use the following command:
+```
+pylint < APP_NAME >
+```
+This will examine the module's code for formatting errors and non-adherence to coding practices, and it will provide a score X/10 based on what it finds.
+
+
+## Code Security - Bandit
+
+To evaluate the presence of security pitfalls in the code, use the `Bandit` library. To evaluate a module use the following command:
+```
+bandit -r < APP_NAME >
+```
+This will examine the module for potential security issues and generate a report detailing the number of issues found, the severity of those issues, and the confidence rating of those issues.
+
 
 ## Google Maps API Key Configuration
 This app uses the [Google Maps API](https://developers.google.com/maps) to store set location information for events. You must first create a Google Maps API key.
