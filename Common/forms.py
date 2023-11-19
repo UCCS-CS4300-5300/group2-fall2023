@@ -10,7 +10,8 @@ from Common.services import ImageService
 from PIL import Image as PIL
 
 # TODO -[] Check validator methods and update as necessary
-# TODO - 
+# TODO -
+
 
 class ImageUploadForm(forms.ModelForm):
     """Image upload form information"""
@@ -44,7 +45,7 @@ class ImageUploadForm(forms.ModelForm):
 
     def clean_file(self):
         """Performs various validations on image file, returning it if valid"""
-        file = self.cleaned_data.get("file")
+        file = self.cleaned_data.get("file") or None
 
         if file is None:
             return None

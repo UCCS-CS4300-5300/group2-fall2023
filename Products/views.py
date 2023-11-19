@@ -76,6 +76,7 @@ class ProductCreate(LoginRequiredMixin, CreateView):
 
         context = super().get_context_data(**kwargs)
         context["event_list"] = Event.objects.filter(organizer=self.request.user)
+        context["image_form"] = self.image_form_class()
 
         # Set initial event ID value (when redirected from event details page, or reload)
         event_id = self.kwargs.get("event_id")
@@ -92,8 +93,6 @@ class ProductCreate(LoginRequiredMixin, CreateView):
 
             if event_id:
                 context["event_id"] = event_id
-
-        context["image_form"] = self.image_form_class()
 
         return context
 
@@ -121,20 +120,16 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
         """Handle get request to update/edit product"""
 
         product = get_object_or_404(Product, pk=pk)
-        image = product.image.first() if product.image.exists() else None
-        # ? image = product.image.get() ?
 
         # Only the Product's owner can get the form
         if not request.user.id == product.owner.id:
             raise PermissionDenied()
 
-        # fix start - could this be cleaner?
         form = self.form_class(instance=product)
-        if image:
-            image_form = self.image_form_class(instance=image)
-        else:
-            image_form = self.image_form_class()
-        # fix end
+
+        # if image, use that instance for image for, else blank form.
+        image = product.image.first()
+        image_form = self.image_form_class(instance=image)
 
         # include image_form in context
         context = {
@@ -155,19 +150,21 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
         if not request.user.id == product.owner.id:
             raise PermissionDenied()
 
-        # fix - should be a better way to do this
-        # Do not want to get_or_404 since image is optional
-        image = product.image.first() if product.image.exists() else None
+        image = product.image.first()
         image_form = self.image_form_class(request.POST, request.FILES, instance=image)
 
         if form.is_valid() and image_form.is_valid():
             form.save()
             # perform image processing, updating, creating
-            if image_form:
-                ImageService().handle_image_update(
+            if image_form.cleaned_data.get("file") is None and image:
+                print("deleting in view")
+                ImageService().delete_image_instance(image)
+            else:
+                image = ImageService().handle_image_update(
                     image_form.cleaned_data, product, ProductImage
                 )
-                image_form.save()
+                if image:
+                    image_form.save()
             return HttpResponseRedirect(self.get_success_url())
         else:
             form = self.form_class(instance=product)

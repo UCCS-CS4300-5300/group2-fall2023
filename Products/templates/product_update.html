@@ -6,6 +6,15 @@
     <h3 class="subtitle">Edit Product Details</h3>
     <form method="post" enctype="multipart/form-data"> <!-- allow file upload-->
         {% csrf_token %}
+        <div class="row mt-4 mb-5">
+            <div class="col-md-6 mb-1">
+                <!-- render image -->
+                {% load static %}
+                {% include "_product_image.html" %}
+                <!-- image control group -->
+                {% include "_image_form.html" with form=image_form %}
+            </div>
+        </div>
         <div class="row pt-4 mb-2">
             <div class="col-md-6 harvestly-form-item">
                 {{ form.name.label }}
@@ -14,13 +23,6 @@
             <div class="col-md-6 harvestly-form-item">
                 {{ form.price.label }}
                 {{ form.price }}
-        <div class="row mt-4 mb-5">
-            <div class="col-md-6 mb-1">
-                <!-- render image -->
-                {% load static %}
-                {% include "_product_image.html" %}
-                <!-- image control group -->
-                {% include "_image_form.html" with form=image_form %}
             </div>
         </div>
         <div class="row pt-2 mb-2">

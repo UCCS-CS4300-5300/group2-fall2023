@@ -38,4 +38,4 @@ class ProductImage(ImageUpload):
     )
 
     def __str__(self):
-        return f"self.related_model.name image"
+        return f"{self.related_model.name} image"
