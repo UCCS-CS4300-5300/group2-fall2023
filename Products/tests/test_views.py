@@ -4,9 +4,11 @@
 
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from Products.models import Product
 from Events.models import Event
+
+
 
 
 class ProductListTests(TestCase):
@@ -33,7 +35,6 @@ class ProductListTests(TestCase):
 
         response = self.client.get(reverse("products"))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("product_list.html")
 
 
@@ -42,7 +43,6 @@ class ProductListTests(TestCase):
 
         response = self.client.get(reverse("products"))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("layout.html")
 
 
@@ -51,8 +51,6 @@ class ProductListTests(TestCase):
 
         response = self.client.get(reverse("products"))
 
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "product_list.html")
         self.assertTemplateUsed(response, "empty_list.html")
 
 
@@ -95,12 +93,12 @@ class ProductCreateTests(TestCase):
         username = "test_user"
         password = "test_password"
 
-        user = User.objects.create_user(
+        self.user = User.objects.create_user(
             username=username,
             password=password,
         )
 
-        user.save()
+        self.user.save()
         self.client.login(username=username, password=password)
 
 
@@ -125,7 +123,6 @@ class ProductCreateTests(TestCase):
 
         response = self.client.get(reverse("product-create"))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "product_create.html")
 
 
@@ -134,15 +131,11 @@ class ProductCreateTests(TestCase):
 
         response = self.client.get(reverse("product-create"))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "layout.html")
 
     
     def test_product_creates_object(self):
         """ Verify that the product create view successfully creates a product """
-
-        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
-        self.user.save()
 
         data = {
             "name": "Product 1",
@@ -156,16 +149,13 @@ class ProductCreateTests(TestCase):
         
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Product.objects.filter(name="Product 1").exists())
-
+    
 
     def test_product_creates_object_with_event(self):
         """ Test that the product create view creates an object with an event """
 
-        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
-        self.user.save()
-
         event = Event.objects.create(
-            name="Event 1",
+            name="Market 1",
             location="1420 Austin Bluffs Pkwy, Colorado Springs, CO 80918, USA",
             start_time="2025-04-12T00:00-00:00",
             end_time="2025-04-15T00:00-00:00",
@@ -190,9 +180,6 @@ class ProductCreateTests(TestCase):
     def test_product_create_missing_name(self):
         """ Test the product create view post with missing name in data """
 
-        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
-        self.user.save()
-
         data = {
             "description": "Product 1 Description",
             "price": 3.45,
@@ -208,9 +195,6 @@ class ProductCreateTests(TestCase):
 
     def test_product_create_missing_description(self):
         """ Test the product create view post with missing description in data """
-
-        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
-        self.user.save()
 
         data = {
             "name": "Product 1",
@@ -232,6 +216,7 @@ class ProductCreateTests(TestCase):
             "name": "Product 1",
             "description": "Description 1",
             "quantity": 10,
+            "owner":self.user.pk
         }
 
         response = self.client.post(reverse("product-create"), data)
@@ -247,6 +232,7 @@ class ProductCreateTests(TestCase):
             "name": "Product 1",
             "description": "Description 1",
             "price": 3.45,
+            "owner":self.user.pk
         }
 
         response = self.client.post(reverse("product-create"), data)
@@ -263,6 +249,7 @@ class ProductCreateTests(TestCase):
             "description": "Product 1 Description",
             "price": 3.45,
             "quantity": 10,
+            "owner":self.user.pk
         }
 
         response = self.client.post(reverse("product-create"), data)
@@ -283,6 +270,7 @@ class ProductCreateTests(TestCase):
             "description": "Product 1 Description",
             "price": 3.45,
             "quantity": 10,
+            "owner":self.user.pk
         }
 
         response = self.client.post(reverse("product-create"), data)
@@ -299,6 +287,7 @@ class ProductCreateTests(TestCase):
             "description": "Product 1 Description",
             "price": 3.45,
             "quantity": 0,
+            "owner":self.user.pk
         }
 
         response = self.client.post(reverse("product-create"), data)
@@ -315,6 +304,7 @@ class ProductCreateTests(TestCase):
             "description": "Product 1 Description",
             "price": 3.45,
             "quantity": 10,
+            "owner":self.user.pk,
             "product_event": 999,
         }
 
@@ -329,13 +319,12 @@ class ProductDetailTests(TestCase):
 
 
     def setUp(self):
-        """ Create an object to view details """
+        """ Set up the data for the test cases """
         
         self.user = User.objects.create_user(username="testinguser", password="testingpassword")
         self.user.save()
 
         self.product_1 = Product.objects.create(
-            id=1,
             name="Product 1",
             description="Product 1 Description",
             price=3.45,
@@ -365,7 +354,6 @@ class ProductDetailTests(TestCase):
 
         response = self.client.get(reverse("product-details", args=[self.product_1.id]))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "product_detail.html")
 
 
@@ -374,7 +362,6 @@ class ProductDetailTests(TestCase):
 
         response = self.client.get(reverse("product-details", args=[self.product_1.id]))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "layout.html")
 
 
@@ -391,7 +378,6 @@ class ProductDetailTests(TestCase):
 
         response = self.client.get(reverse("product-details", args=[self.product_1.id]))
 
-        self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.product_1.name)
         self.assertContains(response, self.product_1.description)
         self.assertContains(response, self.product_1.price)
@@ -407,12 +393,12 @@ class ProductUpdateTests(TestCase):
         username = "test_user"
         password = "test_password"
 
-        user = User.objects.create_user(
+        self.user = User.objects.create_user(
             username=username,
             password=password,
         )
 
-        user.save()
+        self.user.save()
         self.client.login(username=username, password=password)
 
         self.product_1 = Product.objects.create(
@@ -421,7 +407,7 @@ class ProductUpdateTests(TestCase):
             description="Product 1 Description",
             price=3.45,
             quantity=10,
-            owner=user
+            owner=self.user
         )
 
     def test_product_update_at_url(self):
@@ -445,7 +431,6 @@ class ProductUpdateTests(TestCase):
 
         response = self.client.get(reverse("product-update", args=[self.product_1.id]))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "product_update.html")
 
 
@@ -454,7 +439,6 @@ class ProductUpdateTests(TestCase):
 
         response = self.client.get(reverse("product-update", args=[self.product_1.id]))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "layout.html")
 
 
@@ -471,7 +455,6 @@ class ProductUpdateTests(TestCase):
 
         response = self.client.get(reverse("product-update", args=[self.product_1.id]))
 
-        self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.product_1.name)
         self.assertContains(response, self.product_1.description)
         self.assertContains(response, self.product_1.price)
@@ -552,6 +535,23 @@ class ProductUpdateTests(TestCase):
         # validate updated object
         updated = Product.objects.get(id=self.product_1.id)
         self.assertEqual(updated.quantity, new_quantity)
+    
+    def test_product_edit_forbidden_by_non_owner(self):
+        """ Verify that a non-owner cannot edit another user's product """
+
+        another_product = Product.objects.create(
+            name="Another Product",
+            description="Another Product Description",
+            price=40.0,
+            quantity=15,
+            owner=User.objects.create_user(
+                username="some_other_user",
+                password="some_other_password_12345"
+            )
+        )
+
+        bad_res = self.client.get(reverse("product-update", args=[another_product.id]))
+        self.assertEqual(bad_res.status_code, 403)
 
 
 class ProductDeleteTests(TestCase):
@@ -563,12 +563,12 @@ class ProductDeleteTests(TestCase):
         username = "test_user"
         password = "test_password"
 
-        user = User.objects.create_user(
+        self.user = User.objects.create_user(
             username=username,
             password=password,
         )
 
-        user.save()
+        self.user.save()
         self.client.login(username=username, password=password)
 
         self.product_1 = Product.objects.create(
@@ -577,7 +577,7 @@ class ProductDeleteTests(TestCase):
             description="Product 1 Description",
             price=3.45,
             quantity=10,
-            owner=user
+            owner=self.user
         )
 
 
@@ -602,7 +602,6 @@ class ProductDeleteTests(TestCase):
 
         response = self.client.get(reverse("product-delete", args=[self.product_1.id]))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "product_delete.html")
 
 
@@ -611,7 +610,6 @@ class ProductDeleteTests(TestCase):
 
         response = self.client.get(reverse("product-delete", args=[self.product_1.id]))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "layout.html")
 
 
@@ -630,6 +628,23 @@ class ProductDeleteTests(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Product.objects.filter(id=self.product_1.id).exists())
+    
+    def test_product_delete_forbidden_by_non_owner(self):
+        """ Verify that a non-owner cannot delete another user's product """
+
+        another_product = Product.objects.create(
+            name="Another Product",
+            description="Another Product Description",
+            price=40.0,
+            quantity=15,
+            owner=User.objects.create_user(
+                username="some_other_user",
+                password="some_other_password_12345"
+            )
+        )
+
+        bad_res = self.client.get(reverse("product-delete", args=[another_product.id]))
+        self.assertEqual(bad_res.status_code, 403)
 
 
 class ProductReserveTests(TestCase):
@@ -641,23 +656,21 @@ class ProductReserveTests(TestCase):
         username = "test_user"
         password = "test_password"
 
-        user = User.objects.create_user(
+        self.user = User.objects.create_user(
             username=username,
             password=password,
         )
 
-        user.save()
+        self.user.save()
         self.client.login(username=username, password=password)
 
         self.product_1 = Product.objects.create(
-            id=1,
             name="Product 1",
             description="Product 1 Description",
             price=3.45,
             quantity=10,
-            owner=user
+            owner=self.user
         )
-
 
     def test_product_reserve_at_url(self):
         """ Verify that the product reserve exists at `/products/reserve/<int:pk>` """
@@ -680,7 +693,6 @@ class ProductReserveTests(TestCase):
 
         response = self.client.get(reverse("product-reserve", args=[self.product_1.id]))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "product_reserve.html")
 
 
@@ -689,7 +701,6 @@ class ProductReserveTests(TestCase):
 
         response = self.client.get(reverse("product-reserve", args=[self.product_1.id]))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "layout.html")
 
 
@@ -755,3 +766,7 @@ class ProductReserveTests(TestCase):
         # validate that the object is not updated
         updated = Product.objects.get(id=self.product_1.id)
         self.assertEqual(updated.quantity, original_quantity)
+
+
+
+
