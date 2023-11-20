@@ -223,7 +223,7 @@ class EventCreateTests(TestCase):
         response = self.client.post(reverse("event-create"), data)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Please correct the errors.")
+        self.assertContains(response, "All fields are required! Include a market name!")
 
 
     def test_event_create_missing_location(self):
@@ -239,7 +239,7 @@ class EventCreateTests(TestCase):
         response = self.client.post(reverse("event-create"), data)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Please correct the errors.")
+        self.assertContains(response, "All fields are required! Include a market location!")
 
     
     def test_event_create_missing_start_time(self):
@@ -255,7 +255,7 @@ class EventCreateTests(TestCase):
         response = self.client.post(reverse("event-create"), data)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Please correct the errors.")
+        self.assertContains(response, "All fields are required! Include a market start time!")
 
 
     def test_event_create_missing_end_time(self):
@@ -271,7 +271,7 @@ class EventCreateTests(TestCase):
         response = self.client.post(reverse("event-create"), data)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Please correct the errors.")
+        self.assertContains(response, "All fields are required! Include a market end time!")
 
 
     def test_event_create_invalid_start_time(self):
@@ -288,7 +288,7 @@ class EventCreateTests(TestCase):
         response = self.client.post(reverse("event-create"), data)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Please correct the errors.")
+        self.assertContains(response, "Invalid start time format!")
 
 
     def test_event_create_invalid_end_time(self):
@@ -305,7 +305,7 @@ class EventCreateTests(TestCase):
         response = self.client.post(reverse("event-create"), data)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Please correct the errors.")
+        self.assertContains(response, "Invalid end time format!")
 
     
     def test_event_create_end_time_before_start_time(self):
@@ -322,7 +322,6 @@ class EventCreateTests(TestCase):
         response = self.client.post(reverse("event-create"), data)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Please correct the errors.")
         self.assertContains(response, "End time must come after start time!")
 
 

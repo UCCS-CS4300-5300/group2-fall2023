@@ -139,5 +139,6 @@ class EventFormTests(TestCase):
 
         form = forms.EventForm(data=data)
         self.assertFalse(form.is_valid())
-        self.assertIn("end_time", form.errors)
+        self.assertIn("__all__", form.errors)
+        self.assertIn("End time must come after start time!", form.errors["__all__"])
 
