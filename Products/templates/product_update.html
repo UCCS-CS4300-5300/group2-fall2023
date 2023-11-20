@@ -12,8 +12,9 @@
         <div class="row mt-4 mb-5">
             <div class="col-md-6 mb-1">
                 <!-- render image -->
-                {% load static %}
                 {% include "_product_image.html" %}
+            </div>
+            <div class="col-md-6 mb-1">
                 <!-- image control group -->
                 {% include "_image_form.html" with form=image_form %}
             </div>

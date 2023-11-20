@@ -33,6 +33,7 @@ class ImageUploadForm(forms.ModelForm):
         }
 
         labels = {
+            "file": "Image upload",
             "alt_text": "Image description",
         }
 

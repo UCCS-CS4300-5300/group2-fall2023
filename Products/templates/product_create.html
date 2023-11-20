@@ -64,8 +64,10 @@
             </div>
         </div>
         <div class="row pt-2 mb-2">
-            <!-- Image upload section -->
-            {% include "_image_form.html" with image_form=image_form %}
+            <div class="col-md-6">
+                <!-- Image upload section -->
+                {% include "_image_form.html" with image_form=image_form %}
+            </div>
         </div>
         <!-- Submit and Cancel buttons -->
         <div class="d-flex justify-content-end pt-2">

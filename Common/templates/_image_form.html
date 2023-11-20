@@ -1,5 +1,8 @@
 {% load static %}
 <div class="pt-3 mt-3">
+    {% if form.errors %}
+        {% include "form_errors.html" with error_items=form.errors.items %}
+    {% endif %}
     <p class="my-3">
         <button 
             class="btn harvestly-nav-btn-primary" 
