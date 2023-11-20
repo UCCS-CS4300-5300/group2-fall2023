@@ -3,7 +3,7 @@
 ### Products Models
 
 from django.db import models
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.urls import reverse
 from django.conf import settings
 from Events.models import Event
@@ -18,10 +18,17 @@ class Product(models.Model):
 
     name = models.CharField(max_length=255)
     description = models.TextField()
-    price = models.DecimalField(max_digits=5, decimal_places=2)
+    price = models.FloatField(
+        validators=[
+            MinValueValidator(0.01),
+            MaxValueValidator(100_000.00),
+        ]
+    )
     quantity = models.IntegerField(
-        default=1,
-        validators=[MinValueValidator(0)],
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(100_000),
+        ],
     )
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE)

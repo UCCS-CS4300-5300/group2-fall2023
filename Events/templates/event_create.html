@@ -4,6 +4,9 @@
 {% block content %}
 <div>
     <h3 class="subtitle"> Add New Market </h3>
+    {% if form.errors %}
+        {% include "form_errors.html" with error_items=form.errors.items %}
+    {% endif %}
     <form method="post">
         {% csrf_token %}
         <div class="row pt-4 mb-2">
@@ -28,18 +31,8 @@
             <a class="harvestly-nav-btn-secondary d-flex justify-content-center align-items-center mr-2" href="{% url 'events' %}">Cancel</a>
             <input class="harvestly-nav-btn-primary" type="submit" value="Add Market" />
         </div>
-        {% if form.errors %}
-            <div class="error-message mt-2">
-                Please correct the errors.
-                <ul>
-                    {% for field, errors in form.errors.items %}
-                        {% for error in errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
+
+        
     </form>
 
     {% load static %}

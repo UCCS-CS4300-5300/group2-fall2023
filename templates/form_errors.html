@@ -1,0 +1,9 @@
+<div class="harvestly-form-errors">
+    {% for field, errors in error_items %}
+        {% for error in errors %}
+            <div class="harvestly-form-error">
+                <h5 class="m-0">{{ error }}</h5>
+            </div>
+        {% endfor %}
+    {% endfor %}
+</div>
