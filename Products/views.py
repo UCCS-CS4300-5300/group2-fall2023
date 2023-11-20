@@ -23,7 +23,7 @@ from Common.services import ImageService
 
 
 class ProductList(ListView):
-    """Get a list of Harvestly products. URL `/get-products-list/`"""
+    """ Get a list of Harvestly products. URL `/get-products-list/` """
 
     # Specify model and template
     model = Product
@@ -35,7 +35,7 @@ class ProductList(ListView):
 
 
 class ProductCreate(LoginRequiredMixin, CreateView):
-    """Create View for an Event Object. URL `/products/new/`"""
+    """ Create View for an Event Object. URL `/products/new/` """
 
     # Establish model type and form class for use
     model = Product
@@ -63,12 +63,12 @@ class ProductCreate(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        """Get success URL after post completion."""
+        """ Get success URL after post completion. """
 
         return reverse("product-details", kwargs={"pk": self.object.pk})
 
     def get_context_data(self, **kwargs):
-        """Include list of events in context data"""
+        """ Include list of events in context data """
 
         # In order to iterate over the model options, we need to provide the list in
         #   the context. Unfortunately, iterating through Choice Select options is not
@@ -98,7 +98,7 @@ class ProductCreate(LoginRequiredMixin, CreateView):
 
 
 class ProductDetail(DetailView):
-    """Product Details about a specific product. URL `/products/details/<int:pk>/`"""
+    """ Product Details about a specific product. URL `/products/details/<int:pk>/` """
 
     # Set model type
     model = Product
@@ -106,7 +106,7 @@ class ProductDetail(DetailView):
 
 
 class ProductUpdate(LoginRequiredMixin, UpdateView):
-    """Edit product details of a specific product. URL `/products/edit/<int:pk>/`"""
+    """ Edit product details of a specific product. URL `/products/edit/<int:pk>/` """
 
     # Establish model type and form class for use
     model = Product
@@ -117,7 +117,7 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
     template_name = "product_update.html"
 
     def get(self, request, pk):
-        """Handle get request to update/edit product"""
+        """ Handle get request to update/edit product """
 
         product = get_object_or_404(Product, pk=pk)
 
@@ -141,7 +141,7 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
         return render(request, self.template_name, context)
 
     def post(self, request, pk):
-        """Handle post request"""
+        """ Handle post request """
 
         product = get_object_or_404(Product, pk=pk)
         form = self.form_class(request.POST, instance=product)
@@ -178,7 +178,7 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
         )
 
     def get_success_url(self):
-        """Get success URL after post completion."""
+        """ Get success URL after post completion. """
 
         return reverse("product-details", kwargs={"pk": self.get_object().pk})
 
@@ -200,14 +200,14 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
 
 
 class ProductDelete(LoginRequiredMixin, DeleteView):
-    """Delete a specific product. URL `/products/delete/<int:pk>/`"""
+    """ Delete a specific product. URL `/products/delete/<int:pk>/` """
 
     # Establish the model type and template name for the generic view
     model = Product
     template_name = "product_delete.html"
 
     def get(self, request, pk):
-        """Handle get request to delete product"""
+        """ Handle get request to delete product """
 
         product = get_object_or_404(Product, pk=pk)
 
@@ -218,7 +218,7 @@ class ProductDelete(LoginRequiredMixin, DeleteView):
         return render(request, self.template_name, {"product": product})
 
     def post(self, request, pk):
-        """Handle post request"""
+        """ Handle post request """
 
         product = get_object_or_404(Product, pk=pk)
 
@@ -230,18 +230,18 @@ class ProductDelete(LoginRequiredMixin, DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        """Get success URL after post completion"""
+        """ Get success URL after post completion """
 
         return reverse("products")
 
 
 class ProductReserve(LoginRequiredMixin, View):
-    """Reserve a quantity of a specific product. URL `/products/reserve/<int:pk>/`"""
+    """ Reserve a quantity of a specific product. URL `/products/reserve/<int:pk>/` """
 
     template_name = "product_reserve.html"
 
     def get(self, request, pk):
-        """Handle get request to view (render form)"""
+        """ Handle get request to view (render form) """
 
         product = get_object_or_404(Product, pk=pk)
         form = ProductReserveForm
@@ -249,7 +249,7 @@ class ProductReserve(LoginRequiredMixin, View):
         return render(request, self.template_name, {"form": form, "product": product})
 
     def post(self, request, pk):
-        """Handle post request"""
+        """ Handle post request """
 
         product = get_object_or_404(Product, pk=pk)
         form = ProductReserveForm(request.POST)
@@ -262,14 +262,11 @@ class ProductReserve(LoginRequiredMixin, View):
                 product.save()
                 return HttpResponseRedirect(self.get_success_url(pk))
 
-            form.add_error(
-                "reserve_quantity",
-                "Reserve quantity must not exceed available quantity!",
-            )
+            form.add_error("reserve_quantity", "Reserve quantity must not exceed available quantity!")
 
         return render(request, self.template_name, {"form": form, "product": product})
 
     def get_success_url(self, pk):
-        """Get success URL after post completion"""
+        """ Get success URL after post completion """
 
         return reverse("product-details", kwargs={"pk": pk})

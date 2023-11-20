@@ -30,9 +30,7 @@ class Product(models.Model):
     )
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    product_event = models.ForeignKey(
-        Event, on_delete=models.SET_NULL, blank=True, null=True
-    )
+    product_event = models.ForeignKey(Event, on_delete=models.SET_NULL, blank=True, null=True)
 
 
     def __str__(self):
