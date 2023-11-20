@@ -340,6 +340,21 @@ footer .harvestly-nav-link {
 }
 
 
+.harvestly-form-errors {
+    margin: 1rem 0;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.harvestly-form-error {
+    margin: 0 0 1rem;
+    padding: 0.5rem 1rem;
+    border: solid 2px var(--danger-color);
+    border-radius: 10px;
+    color: var(--danger-color);
+}
+
+
 .harvestly-map-display {
     width: 100% !important;
     height: max(500px, 20vh) !important;

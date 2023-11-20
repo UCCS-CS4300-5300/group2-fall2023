@@ -61,7 +61,29 @@ class EventForm(forms.ModelForm):
     
 
     def clean_end_time(self):
-        """ Ensure that the start_time comes before end_time """
+        """ Ensure that the end_time is not in the past """
+
+        end_time = self.cleaned_data.get("end_time")
+        now = datetime.now(timezone.get_current_timezone())
+
+        if end_time:
+            end_time_aware = datetime(
+                end_time.year,
+                end_time.month,
+                end_time.day,
+                end_time.hour,
+                end_time.minute,
+                tzinfo=timezone.get_current_timezone()
+            )
+
+        if end_time_aware < now:
+            raise forms.ValidationError("End time must not be in the past!")
+        
+        return end_time
+
+
+    def clean(self):
+        """ Ensure that start_time comes before end_time """
 
         start_time = self.cleaned_data.get("start_time")
         end_time = self.cleaned_data.get("end_time")
@@ -69,10 +91,4 @@ class EventForm(forms.ModelForm):
         if start_time and end_time and start_time > end_time:
             raise forms.ValidationError("End time must come after start time!")
         
-        return end_time
-
-
-
-
-
-
+        return self.cleaned_data

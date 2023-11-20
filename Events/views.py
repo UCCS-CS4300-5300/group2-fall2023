@@ -132,8 +132,7 @@ class EventUpdate(LoginRequiredMixin, UpdateView):
         if form.is_valid():
             form.save()
             return redirect(reverse("event-detail", kwargs={"pk": pk}))
-        else:
-            form = self.form_class(instance=event)
+
         return render(request, self.template_name, {"form": form, "event": event})
 
 

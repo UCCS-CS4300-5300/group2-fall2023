@@ -27,11 +27,6 @@ class Event(models.Model):
     def get_absolute_url(self):
         return reverse("event-detail", args=[str(self.id)])
 
-    def clean(self):
-        # don't allow end_time to be before start_time
-        if self.start_time and self.end_time and self.end_time < self.start_time:
-            raise ValidationError("End time cannot be before start time")
-
     def save(self, *args, **kwargs):
         # Ensure that latitude and longitude are set before calling super().save()
         if self.latitude is None:
