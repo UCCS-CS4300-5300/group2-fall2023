@@ -19,8 +19,8 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from django.conf import settings  # new
-from django.conf.urls.static import static  # new
+from django.conf import settings
+from django.conf.urls.static import static
 
 from Home import views as home_views
 from Events import views as events_views
@@ -30,9 +30,12 @@ urlpatterns = [
     path("", home_views.Home.as_view(), name="index"),
     path("about-us/", home_views.About.as_view(), name="about"),
     path("profile/", home_views.Profile.as_view(), name="profile"),
+
     path("markets/", include("Events.urls")),
     path("products/", include("Products.urls")),
+
     path("admin/", admin.site.urls),
+    
     path("signup/", home_views.SignUp.as_view(), name="signup"),
     path("accounts/profile/", home_views.login_redirect),
     path("accounts/logout/", home_views.logout_request, name="logout"),

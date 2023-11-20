@@ -46,10 +46,12 @@ class ProductCreate(LoginRequiredMixin, CreateView):
     template_name = "product_create.html"
 
     def form_valid(self, form):
-        """Update the `owner` field after submission"""
+        """ Update the `owner` field after submission """
+
         product = form.save(commit=False)
         product.owner = self.request.user
         product.save()
+
         # if image was uploaded, create image object
         image_file = self.request.FILES.get("file", None)
         if image_file:
@@ -167,15 +169,11 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
                     image_form.save()
             return HttpResponseRedirect(self.get_success_url())
 
-        return render(
-            request,
-            self.template_name,
-            {
-                "form": form,
-                "product": product,
-                "event_list": Event.objects.filter(organizer=request.user),
-            },
-        )
+        return render(request, self.template_name, {
+            "form": form,
+            "product": product,
+            "event_list": Event.objects.filter(organizer=request.user),
+        })
 
     def get_success_url(self):
         """ Get success URL after post completion. """
