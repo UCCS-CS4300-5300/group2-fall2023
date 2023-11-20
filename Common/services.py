@@ -100,6 +100,7 @@ class ImageService:
         if resize_to:
             new_image_file = self._resize_image(new_image_file, resize_to)
 
+        # generate default alt_text if none provided.
         if alt_text is None:
             alt_text = self.generate_alt_text(image_instance.related_object)
 
@@ -120,7 +121,7 @@ class ImageService:
         image_instance.file = saved_path
         image_instance.alt_text = alt_text
         image_instance.thumbnail = thumbnail
-        image_instance.save()  # ? is this necessary?
+        image_instance.save()
 
         return image_instance
 
@@ -136,7 +137,6 @@ class ImageService:
         if image_instance:
             image_instance.delete()
 
-    # fix maybe update params so image_form is passed instead of image_form.cleaned_data ?
     def handle_image_update(
         self, cleaned_data, related_object, image_model, resize_to=None
     ):
@@ -178,14 +178,14 @@ class ImageService:
         :param image_file: an image file (img.png, img.jpg)
         :param size: integer tuple (height, width)
         """
-        img = PILImage.open(image_file)
-        img.thumbnail(size)
+        with PILImage.open(image_file) as img:
+            img.thumbnail(size)
 
-        thumb_io = BytesIO()
-        img.save(thumb_io, img.format)
-        thumb_io.seek(0)
+            thumb_io = BytesIO()
+            img.save(thumb_io, img.format)
+            thumb_io.seek(0)
 
-        return ContentFile(thumb_io.read(), name=image_file.name)
+            return ContentFile(thumb_io.read(), name=image_file.name)
 
     def generate_alt_text(self, related_object):
         """
@@ -200,14 +200,14 @@ class ImageService:
         :param image_file: a file
         :param size: tuple (width, height) for resizing img
         """
-        img = PILImage.open(image_file)
-        img.thumbnail(size)
+        with PILImage.open(image_file) as img:
+            img.thumbnail(size)
 
-        thumb_io = BytesIO()
-        img.save(thumb_io, img.format)
-        thumb_io.seek(0)
+            thumb_io = BytesIO()
+            img.save(thumb_io, img.format)
+            thumb_io.seek(0)
 
-        return ContentFile(thumb_io.read(), name=image_file.name)
+            return ContentFile(thumb_io.read(), name=image_file.name)
 
     def _generate_unique_filename(self, filename):
         """

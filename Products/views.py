@@ -127,9 +127,8 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
 
         form = self.form_class(instance=product)
 
-        # if image, use that instance for image for, else blank form.
-        image = product.image.first()
-        image_form = self.image_form_class(instance=image)
+        # if product has image, use in image form, else blank form.
+        image_form = self.image_form_class(instance=product.image.first())
 
         # include image_form in context
         context = {
@@ -157,7 +156,7 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
             form.save()
             # perform image processing, updating, creating
             if image_form.cleaned_data.get("file") is None and image:
-                print("deleting in view")
+                # product has image instance but no image, delete
                 ImageService().delete_image_instance(image)
             else:
                 image = ImageService().handle_image_update(
@@ -177,7 +176,6 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
         return reverse("product-details", kwargs={"pk": self.get_object().pk})
 
     def get_context_data(self, **kwargs):
-        # fix can I figure out how to remove this entirely? Let Django handle context?
         context = super().get_context_data(**kwargs)
 
         # find image_Form and add to context
