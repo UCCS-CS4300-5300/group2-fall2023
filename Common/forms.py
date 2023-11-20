@@ -44,7 +44,7 @@ class ImageUploadForm(forms.ModelForm):
         if file is None:
             return None
 
-        # validate image file size
+        # check for valid, non-corrupted image file.
         self.validate_file(file)
 
         # validate image file size
