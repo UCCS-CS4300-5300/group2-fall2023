@@ -4,6 +4,9 @@
 {% block content %}
 <div>
     <h3 class="subtitle">{{ product.name|title }}</h3>
+    {% if form.errors %}
+        {% include "form_errors.html" with error_items=form.errors.items %}
+    {% endif %}
     <div class="row mt-4 mb-5">
         <div class="col-md-6">
             <!-- render image -->
@@ -32,12 +35,6 @@
                         <h4 class="m-0">Confirm</h4>
                     </button>
                 </div>
-
-                {% if form.is_bound and form.errors %}
-                    <div class="error-message mt-3">
-                        {{ form.errors }}
-                    </div>
-                {% endif %}
             </form>
         </div>
     </div>

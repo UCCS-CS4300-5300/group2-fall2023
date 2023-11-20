@@ -4,6 +4,9 @@
 {% block content %}
 <div>
     <h3 class="subtitle"> Add New Product </h3>
+    {% if form.errors %}
+        {% include "form_errors.html" with error_items=form.errors.items %}
+    {% endif %}
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <!-- Base Product form input -->
@@ -70,32 +73,6 @@
             <input class="harvestly-nav-btn-primary" type="submit" value="Add Product" />
         </div>
     </form>
-
-    {% if form.errors %}
-        <div class="error-message">
-            Please correct the errors.
-            <ul>
-                {% for field, errors in form.errors.items %}
-                    {% for error in errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
-
-    {%if image_form.errors %}
-        <div class="error-message">
-            Image upload errors. Please Correct. 
-            <ul>
-                {% for field, errors in image_form.errors.items %}
-                    {% for error in errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
 </div>
 
 <script>

@@ -7,4 +7,4 @@ APPS=("Events" "Products" "Common")
 python3 ../manage.py makemigrations ${APPS[@]}
 
 # Run migrate
-python3 manage.py migrate
+python3 ../manage.py migrate

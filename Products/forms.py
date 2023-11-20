@@ -10,7 +10,6 @@ from Events.models import Event
 class ProductForm(forms.ModelForm):
     """Product upload form information"""
 
-    # TODO need to add validators
     # TODO need to add image upload
 
     class Meta:
@@ -35,6 +34,7 @@ class ProductForm(forms.ModelForm):
                 attrs={
                     "required": "required",
                     "min": "0.01",
+                    "max": "100000.00",
                     "step": "0.01",
                     "placeholder": "X.XX",
                 }
@@ -47,7 +47,7 @@ class ProductForm(forms.ModelForm):
                     "placeholder": "Product quantity",
                 }
             ),
-            "product_event": forms.Select(),  # TODO this should be limited to only markets where the user is the organizer or has joined
+            "product_event": forms.Select(),
             "description": forms.Textarea(
                 attrs={
                     "required": "required",
@@ -59,7 +59,7 @@ class ProductForm(forms.ModelForm):
 
         labels = {
             "name": "Product name",
-            "price": "Product price",
+            "price": "Product price (USD)",
             "quantity": "Product quantity",
             "product_event": "Market for Product (optional)",
             "description": "Product description",
@@ -95,6 +95,12 @@ class ProductReserveForm(forms.Form):
                     "placeholder": "Reserve quantity",
                 }
             ),
+        }
+
+        error_messages = {
+            "reserve_quantity": {
+                "required": "All fields are required! Include a reserve quantity!"
+            },
         }
 
     def clean_reserve_quantity(self):
