@@ -9,7 +9,6 @@ from Events.models import Event
 class ProductForm(forms.ModelForm):
     """ Product upload form information """
 
-    # TODO need to add validators
     # TODO need to add image upload
 
     class Meta:
@@ -40,7 +39,7 @@ class ProductForm(forms.ModelForm):
                 "min": "1",
                 "placeholder": "Product quantity"
             }),
-            "product_event": forms.Select(), # TODO this should be limited to only markets where the user is the organizer or has joined
+            "product_event": forms.Select(),
             "description": forms.Textarea(attrs={
                 "required": "required",
                 "rows": 5,
@@ -56,17 +55,51 @@ class ProductForm(forms.ModelForm):
             "description": "Product description",
         }
 
+        error_messages = {
+            "name": {
+                "required": "All fields are required! Include a name!"
+            },
+            "price": {
+                "required": "All fields are required! Include a price!",
+            },
+            "quantity": {
+                "required": "All fields are required! Include a quantity!",
+                "max_value": "Maximum quantity exceeded! Maximum quantity for any one item is 100,000!",
+            },
+            "description": {
+                "required": "All fields are required! Include a description!"
+            },
+        }
 
     def clean_quantity(self):
         """ Clean quantity field, ensure it is at least 1 """
         
         quantity = self.cleaned_data.get("quantity")
         
-        if quantity is None or quantity < 1:
-            raise forms.ValidationError("Value must be greater than or equal to 1")
+        if quantity < 1:
+            raise forms.ValidationError("Minimum quantity requirement not met! Minimum quantity for an item is 1!")
         
         return quantity
 
+
+    def clean_price(self):
+        """ Ensure that price field is within the minimum and maximum.
+         
+        Note that we use this function, because the max_digits constraint 
+        is checked before the validators, and the error message for this field 
+        is not customizable. This leaves the user with a somewhat vague error message.  
+        """
+
+        price = self.cleaned_data.get("price")
+
+        if price < 0.01:
+            self.add_error("price", "Price must be at least $0.01!")
+
+        elif price > 100_000.00:
+            self.add_error("price", "Price must not exceed $100,000.00!")
+
+        return price
+    
 
 class ProductReserveForm(forms.Form):
     """ Product reserve form, for user to reserve a quantity of a product """
@@ -80,13 +113,17 @@ class ProductReserveForm(forms.Form):
 
         widgets = {
             "reserve_quantity": forms.NumberInput(attrs={
-                "required": "required",
                 "step": "1",
                 "min": "1",
                 "placeholder": "Reserve quantity"
             }),
         }
 
+        error_messages = {
+            "reserve_quantity": {
+                "required": "All fields are required! Include a reserve quantity!"
+            },
+        }
 
     def clean_reserve_quantity(self):
         """ Clean quantity field, ensure it is at least 1 """

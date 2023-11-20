@@ -4,6 +4,9 @@
 {% block content %}
 <div>
     <h3 class="subtitle">Edit Product Details</h3>
+    {% if form.errors %}
+        {% include "form_errors.html" with error_items=form.errors.items %}
+    {% endif %}
     <form method="post">
         {% csrf_token %}
         <div class="row pt-4 mb-2">

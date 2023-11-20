@@ -109,7 +109,7 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
         return render(request, self.template_name, {
             "form": form,
             "product": product,
-            "event_list": Event.objects.filter(organizer=request.user)
+            "event_list": Event.objects.filter(organizer=request.user),
         })
 
 
@@ -126,10 +126,12 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(self.get_success_url())
-        else:
-            form = self.form_class(instance=product)
 
-        return render(request, self.template_name, {"form": form, "product": product})
+        return render(request, self.template_name, {
+            "form": form,
+            "product": product,
+            "event_list": Event.objects.filter(organizer=request.user),
+        })
 
     def get_success_url(self):
         """ Get success URL after post completion. """
