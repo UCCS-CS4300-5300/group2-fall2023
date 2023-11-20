@@ -185,6 +185,14 @@ class ImageService:
             img.save(thumb_io, img.format)
             thumb_io.seek(0)
 
+            # generate a unique filename
+            filename = f"thumb_{self._generate_unique_filename(image_file.name)}"
+            # join the image path to file name
+            path = os.path.join("thumbnails", filename)
+
+            # save image to content file
+            saved_path = default_storage.save(path, ContentFile(image_file.read()))
+
             return ContentFile(thumb_io.read(), name=image_file.name)
 
     def generate_alt_text(self, related_object):
