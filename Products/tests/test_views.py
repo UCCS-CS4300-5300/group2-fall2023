@@ -190,7 +190,7 @@ class ProductCreateTests(TestCase):
         response = self.client.post(reverse("product-create"), data)
         
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Please correct the errors.")
+        self.assertContains(response, "All fields are required! Include a name!")
 
 
     def test_product_create_missing_description(self):
@@ -206,7 +206,7 @@ class ProductCreateTests(TestCase):
         response = self.client.post(reverse("product-create"), data)
         
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Please correct the errors.")
+        self.assertContains(response, "All fields are required! Include a description!")
 
 
     def test_product_create_missing_price(self):
@@ -222,7 +222,7 @@ class ProductCreateTests(TestCase):
         response = self.client.post(reverse("product-create"), data)
         
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Please correct the errors.")
+        self.assertContains(response, "All fields are required! Include a price!")
 
 
     def test_product_create_missing_quantity(self):
@@ -238,24 +238,7 @@ class ProductCreateTests(TestCase):
         response = self.client.post(reverse("product-create"), data)
         
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Please correct the errors.")
-
-
-    def test_product_create_invalid_name_too_short(self):
-        """ Test the product create view post with invalid name - too short """
-
-        data = {
-            "name": "",
-            "description": "Product 1 Description",
-            "price": 3.45,
-            "quantity": 10,
-            "owner":self.user.pk
-        }
-
-        response = self.client.post(reverse("product-create"), data)
-        
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Please correct the errors.")
+        self.assertContains(response, "All fields are required! Include a quantity!")
 
 
     def test_product_create_invalid_name_too_long(self):
@@ -276,7 +259,7 @@ class ProductCreateTests(TestCase):
         response = self.client.post(reverse("product-create"), data)
         
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Please correct the errors.")
+        self.assertContains(response, "Maximum name length exceeded!")
 
 
     def test_product_create_invalid_quantity_minimum(self):
@@ -293,7 +276,7 @@ class ProductCreateTests(TestCase):
         response = self.client.post(reverse("product-create"), data)
         
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Please correct the errors.")
+        self.assertContains(response, "Minimum quantity requirement not met!")
 
 
     def test_product_create_invalid_event(self):

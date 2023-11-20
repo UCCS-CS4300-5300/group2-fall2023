@@ -58,10 +58,13 @@ class ProductForm(forms.ModelForm):
 
         error_messages = {
             "name": {
-                "required": "All fields are required! Include a name!"
+                "required": "All fields are required! Include a name!",
+                "max_length": "Maximum name length exceeded! Name length must not exceed 255 characters!"
             },
             "price": {
                 "required": "All fields are required! Include a price!",
+                "min_value": "Price must be at least $0.01!",
+                "max_value": "Price must not exceed $100,000.00!",
             },
             "quantity": {
                 "required": "All fields are required! Include a quantity!",
@@ -72,8 +75,13 @@ class ProductForm(forms.ModelForm):
             },
         }
 
+
     def clean_quantity(self):
-        """ Clean quantity field, ensure it is at least 1 """
+        """ Clean quantity field, ensure it is at least 1 
+        
+        Note that the minimum value on the model is 0, however, in the form entry
+        the user must enter a value of at least 1.
+        """
         
         quantity = self.cleaned_data.get("quantity")
         
@@ -81,25 +89,6 @@ class ProductForm(forms.ModelForm):
             raise forms.ValidationError("Minimum quantity requirement not met! Minimum quantity for an item is 1!")
         
         return quantity
-
-
-    def clean_price(self):
-        """ Ensure that price field is within the minimum and maximum.
-         
-        Note that we use this function, because the max_digits constraint 
-        is checked before the validators, and the error message for this field 
-        is not customizable. This leaves the user with a somewhat vague error message.  
-        """
-
-        price = self.cleaned_data.get("price")
-
-        if price < 0.01:
-            self.add_error("price", "Price must be at least $0.01!")
-
-        elif price > 100_000.00:
-            self.add_error("price", "Price must not exceed $100,000.00!")
-
-        return price
     
 
 class ProductReserveForm(forms.Form):

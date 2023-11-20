@@ -3,7 +3,6 @@
 ### Test Products Models
 
 from django.test import TestCase
-from decimal import Decimal
 from Products.models import Product
 from Events.models import Event
 from django.contrib.auth.models import User
@@ -38,7 +37,7 @@ class ProductTests(TestCase):
         product_1 = Product.objects.get(name=name)
         self.assertEqual(product_1.name, name)
         self.assertEqual(product_1.description, description)
-        self.assertEqual(product_1.price, Decimal(str(price)))
+        self.assertEqual(product_1.price, price)
         self.assertEqual(product_1.quantity, quantity)
 
 
@@ -71,7 +70,7 @@ class ProductTests(TestCase):
         product_1 = Product.objects.get(name=name)
         self.assertEqual(product_1.name, name)
         self.assertEqual(product_1.description, description)
-        self.assertEqual(product_1.price, Decimal(str(price)))
+        self.assertEqual(product_1.price, price)
         self.assertEqual(product_1.quantity, quantity)
         self.assertEqual(product_1.product_event.name, event.name)
         
