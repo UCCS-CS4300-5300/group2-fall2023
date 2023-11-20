@@ -133,6 +133,7 @@ class ImageService:
             image_instance.thumbnail.delete(save=False)
 
     def delete_image_instance(self, image_instance):
+        """deletes an instance of an image, and its associated files if any"""
         self.delete_image_files(image_instance)
         if image_instance:
             image_instance.delete()

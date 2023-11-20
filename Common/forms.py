@@ -94,6 +94,7 @@ class ImageUploadForm(forms.ModelForm):
 
     @staticmethod
     def validate_file_size(file):
+        """checks file is not too large or small in size"""
         if not file:
             return
 
