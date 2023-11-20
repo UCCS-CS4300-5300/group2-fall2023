@@ -1,5 +1,5 @@
 {%load static %}
-{% with image=product.image.first css_class="card-img-top product-card-img img-thumbnail" %}
+{% with image=product.image.first css_class="card-img-top harvestly-product-card-img" %}
 
   {% if image and image.thumbnail %}
     {% with url=image.thumbnail.url alt_text=image.alt_text %}

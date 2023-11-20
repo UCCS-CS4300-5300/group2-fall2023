@@ -11,30 +11,27 @@
         </a>
     </div>
     {% if product_list %}
-    <div class="container">
         <div class="row">
             {% for product in product_list %}
-            <div class="col-md-4 my-3">
-                <a class="harvestly-card-link" href="{% url 'product-details' product.id %}">
-                    <div class="card h-100">
-                        <div class="product-card-img-container">
-                            <!-- Render image thumbnail -->
-                            {% include "_product_thumbnail.html" with product=product %}
-                        </div>
-                        <div class="card-body product-card-body">
-                            <h3 class="card-title">{{ product.name|title }}</h3>
-                            <div class="d-flex justify-content-between">
-                                <h5>${{ product.price|floatformat:"2" }}</h5>
-                                <h5>&times;{{ product.quantity }}</h5>
+                <div class="col-md-4 my-3">
+                    <a class="harvestly-card-link" href="{% url 'product-details' product.id %}">
+                        <div class="card">
+                            <div class="harvestly-product-card-img-container">
+                                <!-- Render image thumbnail -->
+                                {% include "_product_thumbnail.html" with product=product %}
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title">{{ product.name|title }}</h3>
+                                <div class="d-flex justify-content-between">
+                                    <h5>${{ product.price|floatformat:"2" }}</h5>
+                                    <h5>&times;{{ product.quantity }}</h5>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
             {% endfor %}
         </div>
-    </div>
-
     {% else %}
         {% include "empty_list.html" with items="products" %}
     {% endif %}

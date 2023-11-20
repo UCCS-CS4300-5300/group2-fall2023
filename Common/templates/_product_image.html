@@ -1,5 +1,5 @@
 {% load static %}
-{% with image=product.image.first css_class="rounded img-fluid product-image" %}
+{% with image=product.image.first css_class="rounded img-fluid harvestly-product-img" %}
 
   {% if image and image.file %}
     {% with url=image.file.url alt_text=image.alt_text %}

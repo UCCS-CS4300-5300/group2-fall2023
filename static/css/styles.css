@@ -339,26 +339,16 @@ footer .harvestly-nav-link {
     background-color: var(--primary-color-transparent);
 }
 
-.product-card-img-container {
-    height: 200px; /* fix height for img container */
-    overflow: hidden;
+.harvestly-product-card-img-container {
+    display: flex;
+    justify-content: center;
 }
-
-.product-card-img {
-    width: 100%; /*responsive width */
-    height: 200px;  /* fixed height */
-    object-fit: contain;
+.harvestly-product-card-img {
+    object-fit: cover;
+    max-height: 480px;
 }
-
-.product-card-body {
-    min-height: 150px;
-}
-
-.product-image { 
-    max-height: 400px; 
-    width: auto; 
-    max-width: 100%; 
-    height: auto; 
+.harvestly-product-img { 
+    width: 100%;
 }
 
 .harvestly-form-errors {
