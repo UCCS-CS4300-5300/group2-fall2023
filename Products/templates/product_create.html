@@ -7,8 +7,9 @@
     {% if form.errors %}
         {% include "form_errors.html" with error_items=form.errors.items %}
     {% endif %}
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
+        <!-- Base Product form input -->
         <div class="row pt-4 mb-2">
             <div class="col-md-6 harvestly-form-item">
                 {{ form.name.label }}
@@ -34,6 +35,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Event Section -->
             <div class="col-md-6 harvestly-form-item">
                 {{ form.product_event.label }}
                 <input type="hidden" name="{{ form.product_event.name }}" id="product-event" value=""/>
@@ -61,6 +63,13 @@
                 </div>
             </div>
         </div>
+        <div class="row pt-2 mb-2">
+            <div class="col-md-6">
+                <!-- Image upload section -->
+                {% include "_image_form.html" with image_form=image_form %}
+            </div>
+        </div>
+        <!-- Submit and Cancel buttons -->
         <div class="d-flex justify-content-end pt-2">
             <a class="harvestly-nav-btn-secondary d-flex justify-content-center align-items-center mr-2" href="{% url 'products' %}">Cancel</a>
             <input class="harvestly-nav-btn-primary" type="submit" value="Add Product" />

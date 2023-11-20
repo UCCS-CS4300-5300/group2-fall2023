@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block title %}Products{% endblock %}
 
+{% load static %}
 {% block content %}
 <div>
     <div class="d-flex align-items-center justify-content-between mb-5">
@@ -12,12 +13,13 @@
     {% if product_list %}
         <div class="row">
             {% for product in product_list %}
-                <div class="col-md-4 my-3">
+                <div class="col-lg-4 my-3">
                     <a class="harvestly-card-link" href="{% url 'product-details' product.id %}">
                         <div class="card">
-                            <!-- TODO image upload -->
-                            {% load static %}
-                            <img src="{% static 'img/product_placeholder.png' %}" alt="Product Image" class="card-img-top ">
+                            <div class="harvestly-product-card-img-container">
+                                <!-- Render image thumbnail -->
+                                {% include "_product_thumbnail.html" with product=product %}
+                            </div>
                             <div class="card-body">
                                 <h3 class="card-title">{{ product.name|title }}</h3>
                                 <div class="d-flex justify-content-between">

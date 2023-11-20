@@ -9,9 +9,8 @@
     {% endif %}
     <div class="row mt-4 mb-5">
         <div class="col-md-6">
-            <!-- TODO load image -->
-            {% load static %}
-            <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Product Image" width="100%">
+            <!-- render image -->
+            {% include "_product_image.html" %}
         </div>
         <div class="col-md-6 align-self-center">
             <form method="post">

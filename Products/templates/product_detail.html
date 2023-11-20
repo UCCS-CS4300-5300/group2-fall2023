@@ -1,14 +1,14 @@
 {% extends "layout.html" %}
 {% block title %}{{ product.name|title }} Details{% endblock %}
 
+{% load static %}
 {% block content %}
 <div>
     <h3 class="subtitle">{{ product.name|title }}</h3>
     <div class="row mt-4 mb-5">
         <div class="col-md-6">
-            <!-- TODO load image -->
-            {% load static %}
-            <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Product Image" width="100%">
+            <!-- render product image or placeholder -->
+            {% include "_product_image.html" %}
         </div>
         <div class="col-md-6 align-self-center">
             <h3>{{ product.name|title }} Details</h3>

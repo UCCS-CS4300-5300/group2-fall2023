@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
 {% block title %}Delete {{ product.name|title }}{% endblock %}
 
+{% load static %}
 {% block content %}
 <div>
     <h3 class="subtitle">{{ product.name|title }}</h3>
     <form method="post">
         {% csrf_token %}
         <div class="row mt-4 mb-5">
+            <!-- ImageSection -->
             <div class="col-md-6 mb-2">
-                <!-- TODO load image -->
-                {% load static %}
-                <img class="rounded" src="{% static 'img/product_placeholder.png' %}" alt="Product Image" width="100%">
+                {% include "_product_image.html" %}
             </div>
             <div class="col-md-6 align-self-center">
                 <h3>Delete {{ product.name|title }}</h3>
@@ -21,6 +21,7 @@
                     <h5 class="text-muted">${{ product.price|floatformat:"2" }}</h5>
                     <h5 class="text-muted">&times;{{ product.quantity }}</h5>
                 </div>
+                <!-- Form Submission Section -->
                 <div class="d-flex mt-3 justify-content-end">
                     <a
                         href="{% url 'product-details' product.id %}"

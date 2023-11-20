@@ -7,8 +7,18 @@
     {% if form.errors %}
         {% include "form_errors.html" with error_items=form.errors.items %}
     {% endif %}
-    <form method="post">
+    <form method="post" enctype="multipart/form-data"> <!-- allow file upload-->
         {% csrf_token %}
+        <div class="row mt-4 mb-5">
+            <div class="col-md-6 mb-1">
+                <!-- render image -->
+                {% include "_product_image.html" %}
+            </div>
+            <div class="col-md-6 mb-1">
+                <!-- image control group -->
+                {% include "_image_form.html" with form=image_form %}
+            </div>
+        </div>
         <div class="row pt-4 mb-2">
             <div class="col-md-6 harvestly-form-item">
                 {{ form.name.label }}
@@ -75,4 +85,4 @@
 {% load static %}
 <script src="{% static 'js/harvestlySelect.js' %}"></script>
 
-{%endblock %}
+{% endblock %}

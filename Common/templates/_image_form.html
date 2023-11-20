@@ -1,0 +1,28 @@
+{% load static %}
+<div class="pt-3 mt-3">
+    {% if form.errors %}
+        {% include "form_errors.html" with error_items=form.errors.items %}
+    {% endif %}
+    <p class="my-3">
+        <button 
+            class="btn harvestly-nav-btn-primary" 
+            type="button" 
+            data-toggle="collapse" 
+            data-target="#imageFormCollapse" 
+            aria-expanded="false" 
+            aria-controls="imageFormCollapse"
+        >
+            Upload New Image
+        </button>
+    </p>
+    <div class="collapse form-group" id="imageFormCollapse">
+        <div class="mt-3 harvestly-form-item">
+            {{ image_form.file.label }}
+            {{ image_form.file }}
+        </div>
+        <div class="mt-3 harvestly-form-item">
+            {{ image_form.alt_text.label }}
+            {{ image_form.alt_text }}
+        </div>
+    </div>
+</div>

@@ -6,6 +6,7 @@ from django import forms
 from Products.models import Product
 from Events.models import Event
 
+
 class ProductForm(forms.ModelForm):
     """ Product upload form information """
 
@@ -82,14 +83,14 @@ class ProductForm(forms.ModelForm):
         Note that the minimum value on the model is 0, however, in the form entry
         the user must enter a value of at least 1.
         """
-        
+
         quantity = self.cleaned_data.get("quantity")
-        
+
         if quantity < 1:
             raise forms.ValidationError("Minimum quantity requirement not met! Minimum quantity for an item is 1!")
-        
+
         return quantity
-    
+
 
 class ProductReserveForm(forms.Form):
     """ Product reserve form, for user to reserve a quantity of a product """
@@ -117,11 +118,10 @@ class ProductReserveForm(forms.Form):
 
     def clean_reserve_quantity(self):
         """ Clean quantity field, ensure it is at least 1 """
-        
+
         reserve_quantity = self.cleaned_data.get("reserve_quantity")
-        
+
         if reserve_quantity is None or reserve_quantity < 1:
             raise forms.ValidationError("Reserve quantity must be at least 1!")
-        
+
         return reserve_quantity
-    

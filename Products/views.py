@@ -16,6 +16,12 @@ from .models import Product
 from .forms import ProductForm, ProductReserveForm
 from Events.models import Event
 
+
+from Common.models import ProductImage
+from Common.forms import ProductImageForm
+from Common.services import ImageService
+
+
 class ProductList(ListView):
     """ Get a list of Harvestly products. URL `/get-products-list/` """
 
@@ -23,9 +29,10 @@ class ProductList(ListView):
     model = Product
     template_name = "product_list.html"
     context_object_name = "product_list"
-    
+
 
 # TODO create new create view, inherit from `View` class
+
 
 class ProductCreate(LoginRequiredMixin, CreateView):
     """ Create View for an Event Object. URL `/products/new/` """
@@ -33,6 +40,7 @@ class ProductCreate(LoginRequiredMixin, CreateView):
     # Establish model type and form class for use
     model = Product
     form_class = ProductForm
+    image_form_class = ProductImageForm
 
     # Establish the target template for use
     template_name = "product_create.html"
@@ -40,23 +48,37 @@ class ProductCreate(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         """ Update the `owner` field after submission """
 
-        form.instance.owner = self.request.user
+        product = form.save(commit=False)
+        product.owner = self.request.user
+        product.save()
+
+        # if image was uploaded, create image object
+        image_file = self.request.FILES.get("file", None)
+        if image_file:
+            ImageService().create_image(
+                image_file,
+                product,
+                ProductImage,
+                resize_to=ImageService.DEFAULT_IMAGE_SIZE,
+            )
+
         return super().form_valid(form)
-    
+
     def get_success_url(self):
         """ Get success URL after post completion. """
 
         return reverse("product-details", kwargs={"pk": self.object.pk})
-    
+
     def get_context_data(self, **kwargs):
         """ Include list of events in context data """
-        
-        # In order to iterate over the model options, we need to provide the list in 
+
+        # In order to iterate over the model options, we need to provide the list in
         #   the context. Unfortunately, iterating through Choice Select options is not
         #   supported in this version of Django.
 
         context = super().get_context_data(**kwargs)
         context["event_list"] = Event.objects.filter(organizer=self.request.user)
+        context["image_form"] = self.image_form_class()
 
         # Set initial event ID value (when redirected from event details page, or reload)
         event_id = self.kwargs.get("event_id")
@@ -70,12 +92,11 @@ class ProductCreate(LoginRequiredMixin, CreateView):
 
         if form_data:
             event_id = form_data.get("product_event")
-            
+
             if event_id:
                 context["event_id"] = event_id
 
         return context
-
 
 
 class ProductDetail(DetailView):
@@ -92,26 +113,34 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
     # Establish model type and form class for use
     model = Product
     form_class = ProductForm
+    image_form_class = ProductImageForm
 
     # Establish the target template for use
     template_name = "product_update.html"
 
     def get(self, request, pk):
-        """ Handle get request to delete product """
-        
+        """ Handle get request to update/edit product """
+
         product = get_object_or_404(Product, pk=pk)
 
-        #Only the Product's owner can get the form
+        # Only the Product's owner can get the form
         if not request.user.id == product.owner.id:
             raise PermissionDenied()
-        
+
         form = self.form_class(instance=product)
-        return render(request, self.template_name, {
+
+        # if product has image, use in image form, else blank form.
+        image_form = self.image_form_class(instance=product.image.first())
+
+        # include image_form in context
+        context = {
             "form": form,
             "product": product,
+            "image_form": image_form,
             "event_list": Event.objects.filter(organizer=request.user),
-        })
+        }
 
+        return render(request, self.template_name, context)
 
     def post(self, request, pk):
         """ Handle post request """
@@ -119,16 +148,34 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
         product = get_object_or_404(Product, pk=pk)
         form = self.form_class(request.POST, instance=product)
 
-        #Only the Product's owner can get the form
+        # Only the Product's owner can get the form
         if not request.user.id == product.owner.id:
             raise PermissionDenied()
 
-        if form.is_valid():
+        image = product.image.first()
+        image_form = self.image_form_class(request.POST, request.FILES, instance=image)
+
+        if form.is_valid() and image_form.is_valid():
             form.save()
+
+            # perform image processing, updating, creating
+            if image_form.cleaned_data.get("file") is None and image:
+                # product has image instance but no image, delete
+                ImageService().delete_image_instance(image)
+
+            else:
+                image = ImageService().handle_image_update(
+                    image_form.cleaned_data, product, ProductImage
+                )
+
+                if image:
+                    image_form.save()
+
             return HttpResponseRedirect(self.get_success_url())
 
         return render(request, self.template_name, {
             "form": form,
+            "image_form": image_form,
             "product": product,
             "event_list": Event.objects.filter(organizer=request.user),
         })
@@ -137,6 +184,22 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
         """ Get success URL after post completion. """
 
         return reverse("product-details", kwargs={"pk": self.get_object().pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # find image_Form and add to context
+        if "image_form" not in context:
+            if self.object.image.exists():
+                # image exists, update form
+                context["image_form"] = self.image_form_class(
+                    instance=self.object.image.first()
+                )
+            else:
+                # no image exists, create new form
+                context["image_form"] = self.image_form_class()
+
+        return context
 
 
 class ProductDelete(LoginRequiredMixin, DeleteView):
@@ -148,25 +211,24 @@ class ProductDelete(LoginRequiredMixin, DeleteView):
 
     def get(self, request, pk):
         """ Handle get request to delete product """
-        
+
         product = get_object_or_404(Product, pk=pk)
 
-        #Only the Product's owner can access the page
+        # Only the Product's owner can access the page
         if not request.user.id == product.owner.id:
             raise PermissionDenied()
 
         return render(request, self.template_name, {"product": product})
-
 
     def post(self, request, pk):
         """ Handle post request """
 
         product = get_object_or_404(Product, pk=pk)
 
-        #Only the Product's owner can create the object
+        # Only the Product's owner can create the object
         if not request.user.id == product.owner.id:
             raise PermissionDenied()
-        
+
         product.delete()
         return HttpResponseRedirect(self.get_success_url())
 
@@ -174,7 +236,7 @@ class ProductDelete(LoginRequiredMixin, DeleteView):
         """ Get success URL after post completion """
 
         return reverse("products")
-    
+
 
 class ProductReserve(LoginRequiredMixin, View):
     """ Reserve a quantity of a specific product. URL `/products/reserve/<int:pk>/` """
@@ -183,12 +245,11 @@ class ProductReserve(LoginRequiredMixin, View):
 
     def get(self, request, pk):
         """ Handle get request to view (render form) """
-        
+
         product = get_object_or_404(Product, pk=pk)
         form = ProductReserveForm
 
         return render(request, self.template_name, {"form": form, "product": product})
-
 
     def post(self, request, pk):
         """ Handle post request """
@@ -208,8 +269,7 @@ class ProductReserve(LoginRequiredMixin, View):
 
         return render(request, self.template_name, {"form": form, "product": product})
 
-
     def get_success_url(self, pk):
         """ Get success URL after post completion """
-        
+
         return reverse("product-details", kwargs={"pk": pk})

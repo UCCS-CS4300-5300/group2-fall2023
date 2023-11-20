@@ -1,0 +1,11 @@
+{% load static %}
+{% with image=product.image.first css_class="rounded img-fluid harvestly-product-img" %}
+
+  {% if image and image.file %}
+    {% with url=image.file.url alt_text=image.alt_text %}
+      <img src="{{ url }}" class="{{ css_class }}" alt="{{ alt_text }}">
+    {% endwith %}
+  {% else %}
+    <img src="{% static 'img/product_placeholder.png' %}" class="{{ css_class }}" alt="Placeholder Image">
+  {% endif %}
+{% endwith %}

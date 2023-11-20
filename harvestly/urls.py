@@ -19,6 +19,8 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 from Home import views as home_views
 from Events import views as events_views
@@ -31,7 +33,7 @@ urlpatterns = [
 
     path("markets/", include("Events.urls")),
     path("products/", include("Products.urls")),
-    
+
     path("admin/", admin.site.urls),
     
     path("signup/", home_views.SignUp.as_view(), name="signup"),
@@ -39,6 +41,8 @@ urlpatterns = [
     path("accounts/logout/", home_views.logout_request, name="logout"),
 ]
 
-urlpatterns+= [
-    path("accounts/", include("django.contrib.auth.urls"))
+urlpatterns += [
+    path("accounts/", include("django.contrib.auth.urls")),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

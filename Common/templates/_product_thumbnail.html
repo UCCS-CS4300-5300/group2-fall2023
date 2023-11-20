@@ -1,0 +1,12 @@
+{%load static %}
+{% with image=product.image.first css_class="card-img-top harvestly-product-card-img" %}
+
+  {% if image and image.thumbnail %}
+    {% with url=image.thumbnail.url alt_text=image.alt_text %}
+      <img src="{{ url }}" class="{{ css_class }}" alt="{{ alt_text }}">
+    {% endwith %}
+  {% else %}
+    <img src="{% static 'img/product_placeholder.png' %}" class="{{ css_class }}" alt="Placeholder Image">
+  {% endif %}
+
+{% endwith %}
