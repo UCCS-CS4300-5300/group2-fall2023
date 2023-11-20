@@ -10,7 +10,6 @@ from Common.services import ImageService
 from PIL import Image as PIL
 
 # TODO -[] Check validator methods and update as necessary
-# TODO -
 
 
 class ImageUploadForm(forms.ModelForm):
@@ -31,11 +30,6 @@ class ImageUploadForm(forms.ModelForm):
                     "aria-label": "Image description",
                 }
             ),
-        }
-
-        labels = {
-            "file": "Upload File",
-            "alt_text": "Image description",
         }
 
         required = {

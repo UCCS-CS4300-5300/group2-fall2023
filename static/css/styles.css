@@ -354,6 +354,13 @@ footer .harvestly-nav-link {
     min-height: 150px;
 }
 
+.product-image { 
+    max-height: 400px; 
+    width: auto; 
+    max-width: 100%; 
+    height: auto; 
+}
+
 .harvestly-map-display {
     width: 100% !important;
     height: max(500px, 20vh) !important;
