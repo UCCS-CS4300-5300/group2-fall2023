@@ -342,13 +342,15 @@ footer .harvestly-nav-link {
 .harvestly-product-card-img-container {
     display: flex;
     justify-content: center;
+    height: 30vh;
+    overflow: hidden;
 }
 .harvestly-product-card-img {
     object-fit: cover;
-    max-height: 480px;
 }
 .harvestly-product-img { 
-    width: 100%;
+    max-width: 40vw;
+    max-height: 70vh;
 }
 
 .harvestly-form-errors {
