@@ -30,6 +30,7 @@ class ProductForm(forms.ModelForm):
             "price": forms.NumberInput(attrs={
                 "required": "required",
                 "min": "0.01",
+                "max": "100000.00",
                 "step": "0.01",
                 "placeholder": "X.XX"
             }),
@@ -49,7 +50,7 @@ class ProductForm(forms.ModelForm):
 
         labels = {
             "name": "Product name",
-            "price": "Product price",
+            "price": "Product price (USD)",
             "quantity": "Product quantity",
             "product_event": "Market for Product (optional)",
             "description": "Product description",
