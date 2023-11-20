@@ -32,6 +32,10 @@ class ImageUploadForm(forms.ModelForm):
             ),
         }
 
+        labels = {
+            "alt_text": "Image description",
+        }
+
         required = {
             "file": False,
             "alt_text": False,

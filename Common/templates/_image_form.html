@@ -13,15 +13,12 @@
         </button>
     </p>
     <div class="collapse form-group" id="imageFormCollapse">
-        <div class="mt-3">
+        <div class="mt-3 harvestly-form-item">
             {{ image_form.file.label }}
             {{ image_form.file }}
-
         </div>
-        <div class="mt-3">
-            <label for="{{ image_form.alt_text.id_for_label }}">
-                {{ image_form.alt_text.label_tag }}
-            </label>
+        <div class="mt-3 harvestly-form-item">
+            {{ image_form.alt_text.label }}
             {{ image_form.alt_text }}
         </div>
     </div>
