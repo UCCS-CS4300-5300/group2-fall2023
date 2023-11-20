@@ -78,12 +78,16 @@ class ProductForm(forms.ModelForm):
 
 
     def clean_quantity(self):
-        """ Clean quantity field, ensure it is at least 1 """
+        """ Clean quantity field, ensure it is at least 1 
+        
+        Note that the minimum value on the model is 0, however, in the form entry
+        the user must enter a value of at least 1.
+        """
 
         quantity = self.cleaned_data.get("quantity")
 
-        if quantity is None or quantity < 1:
-            raise forms.ValidationError("Value must be greater than or equal to 1")
+        if quantity < 1:
+            raise forms.ValidationError("Minimum quantity requirement not met! Minimum quantity for an item is 1!")
 
         return quantity
 
@@ -99,14 +103,11 @@ class ProductReserveForm(forms.Form):
         }
 
         widgets = {
-            "reserve_quantity": forms.NumberInput(
-                attrs={
-                    "required": "required",
-                    "step": "1",
-                    "min": "1",
-                    "placeholder": "Reserve quantity",
-                }
-            ),
+            "reserve_quantity": forms.NumberInput(attrs={
+                "step": "1",
+                "min": "1",
+                "placeholder": "Reserve quantity"
+            }),
         }
 
         error_messages = {
@@ -116,7 +117,7 @@ class ProductReserveForm(forms.Form):
         }
 
     def clean_reserve_quantity(self):
-        """Clean quantity field, ensure it is at least 1"""
+        """ Clean quantity field, ensure it is at least 1 """
 
         reserve_quantity = self.cleaned_data.get("reserve_quantity")
 

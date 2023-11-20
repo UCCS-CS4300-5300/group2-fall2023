@@ -12,9 +12,7 @@ User = settings.AUTH_USER_MODEL
 
 
 class Product(models.Model):
-    """Product model"""
-
-    # TODO - Set up vendors app/model to link vendors to users,products,events
+    """ Product model """
 
     name = models.CharField(max_length=255)
     description = models.TextField()
@@ -36,9 +34,6 @@ class Product(models.Model):
         Event, on_delete=models.SET_NULL, blank=True, null=True
     )
 
-    # TODO - see above
-    # product_vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
-    # product_event = models.ForeignKey(Event, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
         return self.name
