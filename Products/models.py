@@ -47,3 +47,16 @@ class Product(models.Model):
                 image.thumbnail.delete(save=False)
             image.delete()
         super().delete(*args, **kwargs)
+
+
+class Reservation(models.Model):
+    """ Reservation model - Linking table between User and Product """
+
+    customer = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    quantity = models.IntegerField(
+        validators=[
+            MinValueValidator(0),
+        ]
+    )

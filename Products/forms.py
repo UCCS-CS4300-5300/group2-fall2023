@@ -10,8 +10,6 @@ from Events.models import Event
 class ProductForm(forms.ModelForm):
     """ Product upload form information """
 
-    # TODO need to add image upload
-
     class Meta:
         model = Product
         fields = [
