@@ -59,13 +59,13 @@
                         </li>
                     {% else %}
                         <li>
-                            <a href="{% url 'cart' %}" class="harvestly-nav-link">Reservations</a>
-                        </li>
-                        <li>
                             <a href="{% url 'logout' %}" class="harvestly-nav-link">Logout</a>
                         </li>
                         <li>
                             <a href="{% url 'profile' %}" class="harvestly-nav-link">Profile</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'cart' %}" class="harvestly-nav-link">Cart</a>
                         </li>
                     {% endif %}
                 </ul>

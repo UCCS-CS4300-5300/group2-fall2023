@@ -110,7 +110,7 @@ footer .harvestly-nav-link {
     min-height: 40px;
     min-width: 120px;
 
-    border: 1px solid var(--primary-color);
+    border: 2px solid var(--primary-color);
     border-radius: 5px;
     background-color: var(--primary-color);
 
@@ -175,7 +175,7 @@ footer .harvestly-nav-link {
     min-height: 40px;
     min-width: 120px;
 
-    border: 1px solid var(--danger-color);
+    border: 2px solid var(--danger-color);
     border-radius: 5px;
     background-color: var(--danger-color);
 

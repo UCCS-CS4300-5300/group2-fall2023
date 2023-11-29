@@ -102,6 +102,7 @@ class ProductDetail(DetailView):
     template_name = "product_detail.html"
 
     def get_context_data(self, **kwargs):
+        """ Get context data for product details """
 
         # Get the product for reservation filtering
         product_id = self.kwargs.get("pk")
@@ -109,14 +110,14 @@ class ProductDetail(DetailView):
 
         context = super().get_context_data(**kwargs)
 
+
         # Filter the reservations by customer and product to identify whether the user has a reservation for the product
-        reservations = Reservation.objects.filter(customer=self.request.user, product=product)
-        if reservations:
-            context["reservation"] = reservations[0]
-        else:
-            context["reservation"] = None
+        context["reservation"] = Reservation.objects \
+            .filter(customer=self.request.user, product=product) \
+            .first()
         
         return context
+
 
 class ProductUpdate(LoginRequiredMixin, UpdateView):
     """ Edit product details of a specific product. URL `/products/edit/<int:pk>/` """
