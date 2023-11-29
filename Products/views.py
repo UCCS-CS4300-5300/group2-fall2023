@@ -106,7 +106,13 @@ class ProductDetail(DetailView):
         product = Product.objects.get(pk=product_id)
 
         context = super().get_context_data(**kwargs)
-        context["reservation"] = Reservation.objects.get(customer=self.request.user, product=product)
+
+        reservations = Reservation.objects.filter(customer=self.request.user, product=product)
+        if reservations:
+            context["reservation"] = reservations[0]
+        else:
+            context["reservation"] = None
+        
         return context
 
 class ProductUpdate(LoginRequiredMixin, UpdateView):
