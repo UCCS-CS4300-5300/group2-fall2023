@@ -2,18 +2,16 @@
 ### Harvestly
 ### Products Views
 
-from typing import Any
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 
-from .models import Product, Reservation
-from .forms import ProductForm, ReservationForm
+from Products.models import Product
+from Products.forms import ProductForm
 from Events.models import Event
 
 
@@ -29,9 +27,6 @@ class ProductList(ListView):
     model = Product
     template_name = "product_list.html"
     context_object_name = "product_list"
-
-
-# TODO create new create view, inherit from `View` class
 
 
 class ProductCreate(LoginRequiredMixin, CreateView):
@@ -236,65 +231,3 @@ class ProductDelete(LoginRequiredMixin, DeleteView):
         """ Get success URL after post completion """
 
         return reverse("products")
-
-
-class ProductReserve(LoginRequiredMixin, CreateView):
-    """ Reserve a quantity of a specific product. URL `/products/reserve/<int:pk>/` """
-
-    template_name = "reservation_create.html"
-
-    def get(self, request, pk):
-        """ Handle get request to view (render form) """
-
-        product = get_object_or_404(Product, pk=pk)
-        form = ReservationForm
-
-        return render(request, self.template_name, {"form": form, "product": product})
-
-    def post(self, request, pk):
-        """ Handle post request """
-
-        product = get_object_or_404(Product, pk=pk)
-        form = ReservationForm(request.POST)
-
-        if form.is_valid():
-            quantity = form.cleaned_data["quantity"]
-
-            if quantity <= product.quantity:
-                product.quantity -= quantity
-                product.save()              
-                reservation = form.save(commit=False)
-                reservation.customer = self.request.user
-                reservation.product = product
-                reservation.price = (product.price * quantity)
-                reservation.save()
-
-                return HttpResponseRedirect(self.get_success_url(pk))
-
-            form.add_error("quantity", "Reserve quantity must not exceed available quantity!")
-
-        return render(request, self.template_name, {"form": form, "product": product})
-    
-    def get_success_url(self, pk):
-        """ Get success URL after post completion """
-
-        return reverse("product-details", kwargs={"pk": pk})
-
-
-class ReservationUpdate(LoginRequiredMixin, UpdateView):
-    """ TODO """
-
-    template_name = "reservation_update.html"
-
-    def get(self, request, pk):
-        """ Handle get request to view (render form) """
-
-        product = get_object_or_404(Product, pk=pk)
-        form = ReservationForm
-
-        return render(request, self.template_name, {"form": form, "product": product})
-
-
-
-class ReservationDelete(LoginRequiredMixin, DeleteView):
-    """ TODO """

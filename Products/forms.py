@@ -3,7 +3,7 @@
 ### Product Form
 
 from django import forms
-from Products.models import Product, Reservation
+from Products.models import Product
 
 
 class ProductForm(forms.ModelForm):
@@ -88,41 +88,3 @@ class ProductForm(forms.ModelForm):
 
         return quantity
 
-
-class ReservationForm(forms.ModelForm):
-    """ Product reserve form, for user to reserve a quantity of a product """
-
-    class Meta:
-        model = Reservation
-        fields = [
-            "quantity",
-        ]
-
-        labels = {
-            "quantity": "Reserve Quantity",
-        }
-
-        widgets = {
-            "quantity": forms.NumberInput(attrs={
-                "step": "1",
-                "min": "1",
-                "placeholder": "Reserve quantity"
-            }),
-        }
-
-        error_messages = {
-            "quantity": {
-                "required": "All fields are required! Include a reserve quantity!",
-                "min_value": "Reserve quantity must be at least 1!",
-            },
-        }
-
-    # def clean_reserve_quantity(self):
-    #     """ Clean quantity field, ensure it is at least 1 """
-
-    #     quantity = self.cleaned_data.get("quantity")
-
-    #     if quantity is None or quantity < 1:
-    #         raise forms.ValidationError("Reserve quantity must be at least 1!")
-
-    #     return quantity

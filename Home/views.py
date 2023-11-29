@@ -11,7 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from Events.models import Event
-from Products.models import Product, Reservation
+from Products.models import Product
+from Reservations.models import Reservation
 
 
 @login_required

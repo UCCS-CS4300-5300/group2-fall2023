@@ -34,6 +34,7 @@ urlpatterns = [
 
     path("markets/", include("Events.urls")),
     path("products/", include("Products.urls")),
+    path("reservations/", include("Reservations.urls")),
 
     path("admin/", admin.site.urls),
     

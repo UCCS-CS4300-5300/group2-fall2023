@@ -38,6 +38,17 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse("product-details", args=[str(self.id)])
+    
+    def get_reservation_count(self):
+        """ Get total count of reservations """
+
+        from Reservations.models import Reservation
+
+        reservations = Reservation.objects.filter(product=self).count()
+        count = sum([reservation.quantity for reservation in reservations])
+
+        return count
+
 
     def delete(self, *args, **kwargs):
         for image in self.image.all():
@@ -49,16 +60,3 @@ class Product(models.Model):
         super().delete(*args, **kwargs)
 
 
-class Reservation(models.Model):
-    """ Reservation model - Linking table between User and Product """
-
-    customer = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-
-    quantity = models.IntegerField(
-        validators=[
-            MinValueValidator(0),
-        ]
-    )
-
-    price = models.FloatField()
