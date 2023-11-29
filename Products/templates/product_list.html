@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Reserve{% endblock %}
+{% block title %}Products{% endblock %}
 
 {% load static %}
 {% block content %}
@@ -24,7 +24,16 @@
                                 <h3 class="card-title">{{ product.name|title }}</h3>
                                 <div class="d-flex justify-content-between">
                                     <h5>${{ product.price|floatformat:"2" }}</h5>
-                                    <h5>&times;{{ product.quantity }}</h5>
+                                    <h5>
+                                        <i class="bi-server"></i>
+                                        {{ product.quantity }}
+                                    </h5>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <h5>
+                                        <i class="bi-person-x"></i>
+                                        {{ product.quantity }}
+                                    </h5>
                                 </div>
                             </div>
                         </div>
