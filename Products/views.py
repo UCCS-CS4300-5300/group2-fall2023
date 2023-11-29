@@ -13,7 +13,7 @@ from django.core.exceptions import PermissionDenied
 from Products.models import Product
 from Products.forms import ProductForm
 from Events.models import Event
-
+from Reservations.models import Reservation
 
 from Common.models import ProductImage
 from Common.forms import ProductImageForm
@@ -101,6 +101,11 @@ class ProductDetail(DetailView):
     model = Product
     template_name = "product_detail.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["reservation_list"] = Reservation.objects.filter(customer=self.request.user)
+
+        return context
 
 class ProductUpdate(LoginRequiredMixin, UpdateView):
     """ Edit product details of a specific product. URL `/products/edit/<int:pk>/` """

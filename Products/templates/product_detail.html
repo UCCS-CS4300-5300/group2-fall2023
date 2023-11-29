@@ -50,12 +50,21 @@
         <!-- If user is not logged in OR if they are not the owner -->
         {% if not user.is_authenticated or user.id != product.owner.id %}
             <div class="col-md-6  my-1 d-flex flex-column">
-                <a 
-                    href="{% url 'reservation-create' product.id %}" 
-                    class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center mb-3 py-2"
-                >
-                    <h4 class="m-0">Reserve this Product</h4>
-                </a>
+                {% if not reservation_list %}
+                    <a 
+                        href="{% url 'reservation-create' product.id %}" 
+                        class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center mb-3 py-2"
+                    >
+                        <h4 class="m-0">Reserve this Product</h4>
+                    </a>
+                {% else %}
+                    <a 
+                        href="{% url 'reservation-create' product.id %}" 
+                        class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center mb-3 py-2"
+                    >
+                        <h4 class="m-0">Update Product Reservation</h4>
+                    </a>
+                {% endif %}
             </div>
         <!-- If the user is the owner of this product, display the edit, delete options -->
         {% else %}

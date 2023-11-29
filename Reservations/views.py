@@ -65,7 +65,9 @@ class ReservationCreate(LoginRequiredMixin, CreateView):
 
 class ReservationUpdate(LoginRequiredMixin, UpdateView):
     """ TODO """
-
+    
+    model = Reservation
+    form_class = ReservationForm
     template_name = "reservation_update.html"
 
     # def get(self, request, pk):
