@@ -6,7 +6,7 @@ from typing import Any
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 
@@ -71,6 +71,52 @@ class ReservationUpdate(LoginRequiredMixin, UpdateView):
     template_name = "reservation_update.html"
 
     # TODO
+
+    def get(self, request, pk):
+
+        reservation = get_object_or_404(Reservation, pk=pk)
+
+        if not request.user.id == reservation.customer.id:
+            raise PermissionDenied()
+        
+        form = self.form_class(instance=reservation)
+        return render(request, self.template_name, {
+                "form": form,
+                "reservation": reservation,
+                "product": reservation.product
+        })
+    
+    def post(self, request, pk):
+
+        reservation = get_object_or_404(Reservation, pk=pk)
+        form = self.form_class(request.POST, instance=reservation)
+
+        if not request.user.id == reservation.customer.id:
+            raise PermissionDenied()
+        
+        if form.is_valid():
+            form.save()
+            return redirect(reverse("product-details", kwargs={"pk": reservation.product.id}))
+        
+        return render(request, self.template_name, {"form": form, "reservation": reservation})
+
+    
+    def form_valid(self, form):
+        """ Update the `customer` and `product` fields after submission """
+
+        # TODO handle case where product id is null
+        # TODO handle case where product does not exist
+        product_id = self.kwargs.get("product_id")
+        product = Product.objects.get(pk=product_id)
+
+        product_price = product.price
+        quantity = form.instance.quantity
+
+        form.instance.customer = self.request.user
+        form.instance.product = Product.objects.get(pk=product_id)
+        form.instance.price = product_price * quantity
+
+        return super().form_valid(form)
 
 
 
