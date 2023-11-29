@@ -4,11 +4,11 @@
 
 from typing import Any
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-# from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
-# from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied
 
 from Products.models import Product
 from Reservations.models import Reservation
@@ -64,23 +64,49 @@ class ReservationCreate(LoginRequiredMixin, CreateView):
 
 
 class ReservationUpdate(LoginRequiredMixin, UpdateView):
-    """ TODO """
+    """ Reservation Update View """
     
     model = Reservation
     form_class = ReservationForm
     template_name = "reservation_update.html"
 
-    # def get(self, request, pk):
-    #     """ Handle get request to view (render form) """
-
-    #     product = get_object_or_404(Product, pk=pk)
-    #     form = ReservationForm
-
-    #     return render(request, self.template_name, {"form": form, "product": product})
+    # TODO
 
 
 
 class ReservationDelete(LoginRequiredMixin, DeleteView):
-    """ TODO """
+    """ Reservation Delete View """
 
+    model = Reservation
     template_name = "reservation_delete.html"
+
+    def get(self, request, pk):
+        """ Handle get request to delete product """
+
+        reservation = get_object_or_404(Reservation, pk=pk)
+
+        # Only the Product's owner can access the page
+        if not request.user.id == reservation.customer.id:
+            raise PermissionDenied()
+
+        return render(request, self.template_name, {"reservation": reservation})
+
+
+    def post(self, request, pk):
+        """ Handle post request """
+
+        reservation = get_object_or_404(Reservation, pk=pk)
+
+        # Only the Product's owner can create the object
+        if not request.user.id == reservation.customer.id:
+            raise PermissionDenied()
+
+        reservation.delete()
+
+        return HttpResponseRedirect(self.get_success_url())
+
+
+    def get_success_url(self):
+        """ Get success URL after post completion """
+
+        return reverse("cart")

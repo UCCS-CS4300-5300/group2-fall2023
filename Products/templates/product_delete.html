@@ -14,15 +14,24 @@
             </div>
             <div class="col-md-6 align-self-center">
                 <h3>Delete {{ product.name|title }}</h3>
-                <div>
-                    <h5>{{ product.description }}</h5>
+                <h5>{{ product.description }}</h5>
+                <h5 class="mt-5 mb-3">${{ reservation.product.price|floatformat:"2" }}</h5>
+                <div class="d-flex text-muted justify-content-between">
+                    <h5>Quantity</h5>
+                    <h5>
+                        <i class="bi-server"></i>
+                        {{ product.quantity }}
+                    </h5>
                 </div>
-                <div class="mt-5 w-100 d-flex justify-content-between">
-                    <h5 class="text-muted">${{ product.price|floatformat:"2" }}</h5>
-                    <h5 class="text-muted">&times;{{ product.quantity }}</h5>
+                <div class="d-flex text-muted justify-content-between">
+                    <h5>Reserved</h5>
+                    <h5 class="{% if product.get_reservation_count >= product.quantity %}text-danger{% endif %}">
+                        <i class="bi-person-x"></i>
+                        {{ product.get_reservation_count }}
+                    </h5>
                 </div>
                 <!-- Form Submission Section -->
-                <div class="d-flex mt-3 justify-content-end">
+                <div class="d-flex justify-content-end mt-5 pt-4">
                     <a
                         href="{% url 'product-details' product.id %}"
                         class="harvestly-nav-btn-secondary  d-flex justify-content-center align-items-center mr-2 py-2"
