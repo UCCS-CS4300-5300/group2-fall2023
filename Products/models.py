@@ -44,7 +44,7 @@ class Product(models.Model):
 
         from Reservations.models import Reservation
 
-        reservations = Reservation.objects.filter(product=self).count()
+        reservations = Reservation.objects.filter(product=self)
         count = sum([reservation.quantity for reservation in reservations])
 
         return count

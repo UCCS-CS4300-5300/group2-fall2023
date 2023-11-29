@@ -25,6 +25,8 @@ class ReservationCreate(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         """ Pass product to  template """
 
+        # TODO handle case where product id is null
+        # TODO handle case where product does not exist
         product_id = self.kwargs.get("product_id")
 
         context = super().get_context_data(**kwargs)
@@ -36,18 +38,17 @@ class ReservationCreate(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         """ Update the `customer` and `product` fields after submission """
 
+        # TODO handle case where product id is null
+        # TODO handle case where product does not exist
         product_id = self.kwargs.get("product_id")
         product = Product.objects.get(pk=product_id)
 
         product_price = product.price
         quantity = form.instance.quantity
 
-        reservation = form.save(commit=False)
-
-        reservation.customer = self.request.user
-        reservation.product = Product.objects.get(pk=product_id)
-        reservation.price = product_price * quantity
-        reservation.save()
+        form.instance.customer = self.request.user
+        form.instance.product = Product.objects.get(pk=product_id)
+        form.instance.price = product_price * quantity
 
         return super().form_valid(form)
 
@@ -55,6 +56,8 @@ class ReservationCreate(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         """ Get success URL after post completion. """
 
+        # TODO handle case where product id is null
+        # TODO handle case where product does not exist
         product_id = self.kwargs.get("product_id")
 
         return reverse("product-details", kwargs={"pk": product_id})

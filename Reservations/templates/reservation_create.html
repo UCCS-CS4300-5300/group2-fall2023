@@ -16,11 +16,31 @@
             <form method="post">
                 {% csrf_token %}
                 <h3>{{ product.name|title }} Details</h3>
-                <div class="mt-5 w-100 d-flex justify-content-between">
-                    <h5 class="text-muted">${{ product.price|floatformat:"2" }}</h5>
-                    <h5 class="text-muted">&times;{{ product.quantity }}</h5>
+                <h5>{{ product.description }}</h5>
+                {% if product.product_event %}
+                    <a
+                        class="harvestly-nav-link mt-4" 
+                        href="{% url 'event-detail' product.product_event.id %}"
+                    >
+                        <h6>Available at {{ product.product_event.name|title }}</h6>
+                    </a>
+                {% endif %}
+                <h5 class="mt-5">${{ product.price|floatformat:"2" }}</h5>
+                <div class="d-flex text-muted justify-content-between">
+                    <h5>Quantity</h5>
+                    <h5>
+                        <i class="bi-server"></i>
+                        {{ product.quantity }}
+                    </h5>
                 </div>
-                <div class="harvestly-form-item">
+                <div class="d-flex text-muted justify-content-between">
+                    <h5>Reserved</h5>
+                    <h5>
+                        <i class="bi-person-x"></i>
+                        {{ product.get_reservation_count }}
+                    </h5>
+                </div>
+                <div class="harvestly-form-item mt-5">
                     {{ form.quantity.label }}
                     {{ form.quantity }}
                 </div>
