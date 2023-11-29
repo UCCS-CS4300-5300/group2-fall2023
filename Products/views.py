@@ -13,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 
 from .models import Product
-from .forms import ProductForm, ProductReserveForm
+from .forms import ProductForm, ReservationForm
 from Events.models import Event
 
 
@@ -247,7 +247,7 @@ class ProductReserve(LoginRequiredMixin, View):
         """ Handle get request to view (render form) """
 
         product = get_object_or_404(Product, pk=pk)
-        form = ProductReserveForm
+        form = ReservationForm
 
         return render(request, self.template_name, {"form": form, "product": product})
 
@@ -255,17 +255,23 @@ class ProductReserve(LoginRequiredMixin, View):
         """ Handle post request """
 
         product = get_object_or_404(Product, pk=pk)
-        form = ProductReserveForm(request.POST)
+        form = ReservationForm(request.POST)
 
         if form.is_valid():
-            reserve_quantity = form.cleaned_data["reserve_quantity"]
+            quantity = form.cleaned_data["quantity"]
 
-            if reserve_quantity <= product.quantity:
-                product.quantity -= reserve_quantity
+            if quantity <= product.quantity:
+                product.quantity -= quantity
                 product.save()
+
+                reservation = form.save(commit=False)
+                reservation.customer = self.request.user
+                reservation.product = product
+                reservation.save()
+
                 return HttpResponseRedirect(self.get_success_url(pk))
 
-            form.add_error("reserve_quantity", "Reserve quantity must not exceed available quantity!")
+            form.add_error("quantity", "Reserve quantity must not exceed available quantity!")
 
         return render(request, self.template_name, {"form": form, "product": product})
 

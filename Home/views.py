@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from Events.models import Event
-from Products.models import Product
+from Products.models import Product, Reservation
 
 
 @login_required
@@ -56,7 +56,24 @@ class Profile(LoginRequiredMixin, View):
     def get(self, request):
         """ Handle get requests for profile """
 
-        event_list = Event.objects.all
-        product_list = Product.objects.all
-        return render(request, "profile.html", {"event_list": event_list, "product_list": product_list})
+        event_list = Event.objects.filter(organizer=request.user)
+        product_list = Product.objects.filter(owner=request.user)
+        
+        
+        return render(request, "profile.html", {
+            "event_list": event_list,
+            "product_list": product_list,
+        })
 
+
+class Cart(LoginRequiredMixin, View):
+    """ User's cart of reserved prdocuts """
+
+    def get(self, request):
+        """ Handle get requests for user's cart """
+
+        reservation_list = Reservation.objects.filter(customer=request.user)
+
+        return render(request, "cart.html", {
+            "reservation_list": reservation_list,
+        })

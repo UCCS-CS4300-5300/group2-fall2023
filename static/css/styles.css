@@ -275,24 +275,28 @@ footer .harvestly-nav-link {
 }
 .harvestly-card-link .card-body {
     background-color: rgba(0,0,0,0.1);
+    color: var(--dark-color);
+    transition: all 0.4s ease-in-out;
 }
+.harvestly-card-link:hover .card-body {
+    color: white;
+    background: var(--primary-color);
+} 
 .harvestly-card-link .card-body h5 {
     opacity: 0.7;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.4s ease-in-out;
 }
+
 .harvestly-card-link:hover .card-body h5 {
     opacity: 1;
 }
 .harvestly-card-link .card {
-    color: var(--dark-color);
-    border-color: var(--dark-color);
-    border-width: 0px;
-    transition: all 0.3s ease;
+    background-color: rgba(0,0,0,0.1);
+    border-width: 2px;
+    transition: all 0.4s ease-in-out;
 }
 .harvestly-card-link:hover .card {
-    color: var(--primary-color);
-    transform: scale(1.01);
-    box-shadow: 0 0 10px 3px rgba(0,0,0,0.5);
+    border-color: var(--primary-color);
 }
 
 

@@ -3,8 +3,7 @@
 ### Product Form
 
 from django import forms
-from Products.models import Product
-from Events.models import Event
+from Products.models import Product, Reservation
 
 
 class ProductForm(forms.ModelForm):
@@ -90,18 +89,21 @@ class ProductForm(forms.ModelForm):
         return quantity
 
 
-class ProductReserveForm(forms.Form):
+class ReservationForm(forms.ModelForm):
     """ Product reserve form, for user to reserve a quantity of a product """
 
-    reserve_quantity = forms.IntegerField()
-
     class Meta:
+        model = Reservation
+        fields = [
+            "quantity",
+        ]
+
         labels = {
-            "reserve_quantity": "Reserve Quantity",
+            "quantity": "Reserve Quantity",
         }
 
         widgets = {
-            "reserve_quantity": forms.NumberInput(attrs={
+            "quantity": forms.NumberInput(attrs={
                 "step": "1",
                 "min": "1",
                 "placeholder": "Reserve quantity"
@@ -109,17 +111,18 @@ class ProductReserveForm(forms.Form):
         }
 
         error_messages = {
-            "reserve_quantity": {
-                "required": "All fields are required! Include a reserve quantity!"
+            "quantity": {
+                "required": "All fields are required! Include a reserve quantity!",
+                "min_value": "Reserve quantity must be at least 1!",
             },
         }
 
-    def clean_reserve_quantity(self):
-        """ Clean quantity field, ensure it is at least 1 """
+    # def clean_reserve_quantity(self):
+    #     """ Clean quantity field, ensure it is at least 1 """
 
-        reserve_quantity = self.cleaned_data.get("reserve_quantity")
+    #     quantity = self.cleaned_data.get("quantity")
 
-        if reserve_quantity is None or reserve_quantity < 1:
-            raise forms.ValidationError("Reserve quantity must be at least 1!")
+    #     if quantity is None or quantity < 1:
+    #         raise forms.ValidationError("Reserve quantity must be at least 1!")
 
-        return reserve_quantity
+    #     return quantity
