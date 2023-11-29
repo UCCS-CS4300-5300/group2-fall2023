@@ -102,9 +102,11 @@ class ProductDetail(DetailView):
     template_name = "product_detail.html"
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["reservation_list"] = Reservation.objects.filter(customer=self.request.user)
+        product_id = self.kwargs.get("pk")
+        product = Product.objects.get(pk=product_id)
 
+        context = super().get_context_data(**kwargs)
+        context["reservation"] = Reservation.objects.get(customer=self.request.user, product=product)
         return context
 
 class ProductUpdate(LoginRequiredMixin, UpdateView):
