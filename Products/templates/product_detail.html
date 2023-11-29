@@ -55,23 +55,23 @@
                         href="{% url 'reservation-create' product.id %}" 
                         class="harvestly-nav-btn-primary p-2"
                     >
-                        <h4 class="m-0">Reserve this Product</h4>
+                        <h5 class="m-0">Reserve this Product</h5>
                     </a>
                 {% else %}
                     <a 
                         href="{% url 'reservation-delete' reservation.id %}" 
                         class="harvestly-nav-btn-danger p-2 mr-2"
                     >
-                        <h4 class="m-0">
+                        <h5 class="m-0">
                             <i class="bi-exclamation-diamond-fill"></i>
-                            Delete
-                        </h4>
+                            Delete Reservation
+                        </h5>
                     </a>
                     <a 
                         href="{% url 'reservation-update' reservation.id %}" 
                         class="harvestly-nav-btn-secondary p-2"
                     >
-                        <h4 class="m-0">Edit Reservation</h4>
+                        <h5 class="m-0">Edit Reservation</h5>
                     </a>
                 {% endif %}
             </div>
