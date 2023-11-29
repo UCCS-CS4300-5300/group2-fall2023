@@ -238,10 +238,10 @@ class ProductDelete(LoginRequiredMixin, DeleteView):
         return reverse("products")
 
 
-class ProductReserve(LoginRequiredMixin, View):
+class ProductReserve(LoginRequiredMixin, CreateView):
     """ Reserve a quantity of a specific product. URL `/products/reserve/<int:pk>/` """
 
-    template_name = "product_reserve.html"
+    template_name = "reservation_create.html"
 
     def get(self, request, pk):
         """ Handle get request to view (render form) """
@@ -274,8 +274,27 @@ class ProductReserve(LoginRequiredMixin, View):
             form.add_error("quantity", "Reserve quantity must not exceed available quantity!")
 
         return render(request, self.template_name, {"form": form, "product": product})
-
+    
     def get_success_url(self, pk):
         """ Get success URL after post completion """
 
         return reverse("product-details", kwargs={"pk": pk})
+
+
+class ReservationUpdate(LoginRequiredMixin, UpdateView):
+    """ TODO """
+
+    template_name = "reservation_update.html"
+
+    def get(self, request, pk):
+        """ Handle get request to view (render form) """
+
+        product = get_object_or_404(Product, pk=pk)
+        form = ReservationForm
+
+        return render(request, self.template_name, {"form": form, "product": product})
+
+
+
+class ReservationDelete(LoginRequiredMixin, DeleteView):
+    """ TODO """
