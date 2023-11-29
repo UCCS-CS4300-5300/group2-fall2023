@@ -16,11 +16,24 @@
                             {% include "_product_thumbnail.html" with product=reservation.product %}
                         </div>
                         <div class="card-body">
-                            <h3 class="card-title">{{ reservation.product.name|title }}</h3>
-                            <div class="d-flex justify-content-between">
-                                <h5>${{ reservation.product.price|floatformat:"2" }}</h5>
-                                <h5>&times;{{ reservation.quantity }}</h5>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h3 class="card-title">{{ reservation.product.name|title }}</h3>
+                                <h5>${{ reservation.price|floatformat:"2" }}</h5>
                             </div>
+                            <div class="d-flex justify-content-between">
+                                <h5>Reserved</h5>
+                                <h5>
+                                    <i class="bi-bag-check-fill"></i>
+                                    {{ reservation.quantity }}
+                                </h5>
+                            </div>
+                            <!--<div class="d-flex justify-content-end">
+                                <button class="harvestly-nav-btn-danger p-0">
+                                    <h5 class="m-0">
+                                        <i class="bi-trash"></i>
+                                    </h5>
+                                </button>
+                            </div>-->
                         </div>
                     </div>
                 </a>
