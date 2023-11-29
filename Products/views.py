@@ -102,11 +102,14 @@ class ProductDetail(DetailView):
     template_name = "product_detail.html"
 
     def get_context_data(self, **kwargs):
+
+        # Get the product for reservation filtering
         product_id = self.kwargs.get("pk")
         product = Product.objects.get(pk=product_id)
 
         context = super().get_context_data(**kwargs)
 
+        # Filter the reservations by customer and product to identify whether the user has a reservation for the product
         reservations = Reservation.objects.filter(customer=self.request.user, product=product)
         if reservations:
             context["reservation"] = reservations[0]
