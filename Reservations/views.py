@@ -73,9 +73,11 @@ class ReservationUpdate(LoginRequiredMixin, UpdateView):
     # TODO
 
     def get(self, request, pk):
+        """ Handle Get Request """
 
         reservation = get_object_or_404(Reservation, pk=pk)
 
+        # Only the product owner can access the form
         if not request.user.id == reservation.customer.id:
             raise PermissionDenied()
         
@@ -87,16 +89,21 @@ class ReservationUpdate(LoginRequiredMixin, UpdateView):
         })
     
     def post(self, request, pk):
+        """ Handle Post Request """
 
         reservation = get_object_or_404(Reservation, pk=pk)
         form = self.form_class(request.POST, instance=reservation)
 
+        # Only the reservation's owner can access the page
         if not request.user.id == reservation.customer.id:
             raise PermissionDenied()
         
         if form.is_valid():
             form.save()
-            return redirect(reverse("product-details", kwargs={"pk": reservation.product.id}))
+
+            # Go back to the details page for the reserved product
+            return redirect(reverse("product-details", kwargs={"pk": reservation.product.id})
+)
         
         return render(request, self.template_name, {"form": form, "reservation": reservation})
 
