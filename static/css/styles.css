@@ -378,6 +378,10 @@ footer .harvestly-nav-link {
     font-weight: 400;
 }
 
+.text-danger {
+    color: var(--danger-color) !important;
+}
+
 @media screen and (max-width: 768px) {
     :root {
         --footer-pad: 0;
