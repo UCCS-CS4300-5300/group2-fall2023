@@ -60,3 +60,5 @@ class Reservation(models.Model):
             MinValueValidator(0),
         ]
     )
+
+    price = models.FloatField()

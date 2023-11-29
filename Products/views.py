@@ -12,7 +12,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 
-from .models import Product
+from .models import Product, Reservation
 from .forms import ProductForm, ReservationForm
 from Events.models import Event
 
@@ -262,11 +262,11 @@ class ProductReserve(LoginRequiredMixin, CreateView):
 
             if quantity <= product.quantity:
                 product.quantity -= quantity
-                product.save()
-
+                product.save()              
                 reservation = form.save(commit=False)
                 reservation.customer = self.request.user
                 reservation.product = product
+                reservation.price = (product.price * quantity)
                 reservation.save()
 
                 return HttpResponseRedirect(self.get_success_url(pk))
