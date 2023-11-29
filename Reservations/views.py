@@ -99,11 +99,15 @@ class ReservationUpdate(LoginRequiredMixin, UpdateView):
             raise PermissionDenied()
         
         if form.is_valid():
-            form.save()
+            reserve_quantity = form.cleaned_data["quantity"]
 
-            # Go back to the details page for the reserved product
-            return redirect(reverse("product-details", kwargs={"pk": reservation.product.id})
-)
+            if reserve_quantity <= reservation.product.quantity:
+                form.save()
+
+                # Go back to the details page for the reserved product
+                return redirect(reverse("product-details", kwargs={"pk": reservation.product.id}))
+            
+            form.add_error("quantity", "Reserve quantity must not exceed product quantity!")
         
         return render(request, self.template_name, {"form": form, "reservation": reservation})
 

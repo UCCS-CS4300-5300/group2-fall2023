@@ -111,9 +111,12 @@ class ProductDetail(DetailView):
         context = super().get_context_data(**kwargs)
 
         # Filter the reservations by customer and product to identify whether the user has a reservation for the product
-        context["reservation"] = Reservation.objects \
-            .filter(customer=self.request.user, product=product) \
-            .first()
+        if self.request.user.is_authenticated:
+            context["reservation"] = Reservation.objects \
+                .filter(customer=self.request.user, product=product) \
+                .first()
+        else:
+            context["reservation"] = None
         
         return context
 
