@@ -27,7 +27,7 @@ class ReservationForm(forms.ModelForm):
             "quantity": forms.NumberInput(attrs={
                 "step": "1",
                 "min": "1",
-                "placeholder": "Reservation quantity"
+                "placeholder": "1"
             }),
         }
 
