@@ -1,122 +1,129 @@
+### CS 4300 Fall 2023 Group 2
+### Harvestly
+### Test Reservations Views
 
-""" TODO """
+from django.test import TestCase
+from django.urls import reverse
+from django.contrib.auth.models import User, Permission
+from Products.models import Product
+from Reservations.models import Reservation
 
-# class ProductReserveTests(TestCase):
-#     """ Test the Product Reserve view """
+class ReservationCreateTests(TestCase):
+    """ Test the Reservation Create view """
 
-#     def setUp(self):
-#         """ Login as user to handle LoginRequired and Create an object to be reserved """
+    def setUp(self):
+        """ Create a Product to reserve and login as a customer """
 
-#         username = "test_user"
-#         password = "test_password"
+        product_owner_username = "product_owner"
+        customer_username = "customer"
+        password = "testingpassword"
 
-#         self.user = User.objects.create_user(
-#             username=username,
-#             password=password,
-#         )
+        self.product_owner = User.objects.create_user(
+            username=product_owner_username,
+            password=password,
+        )
 
-#         self.user.save()
-#         self.client.login(username=username, password=password)
+        self.customer = User.objects.create_user(
+            username=customer_username,
+            password=password,
+        )
 
-#         self.product_1 = Product.objects.create(
-#             name="Product 1",
-#             description="Product 1 Description",
-#             price=3.45,
-#             quantity=10,
-#             owner=self.user
-#         )
+        self.product_1 = Product.objects.create(
+            id=1,
+            name="Product 1",
+            description="Product 1 Description",
+            price=3.45,
+            quantity=10,
+            owner=self.product_owner
+        )
 
-#     def test_product_reserve_at_url(self):
-#         """ Verify that the product reserve exists at `/products/reserve/<int:pk>` """
+        self.client.login(username=customer_username, password=password)
 
-#         response = self.client.get(f"/products/reserve/{self.product_1.id}")
+    def test_reservation_create_at_url(self):
+        """ Test that the reservation create view exists at `/reservations/new/<int:product_id>` """
 
-#         self.assertEqual(response.status_code, 200)
+        response = self.client.get(f"/reservations/new/{self.product_1.id}")
 
+        self.assertEqual(response.status_code, 200)
 
-#     def test_product_reserve_at_reverse_lookup(self):
-#         """ Verify that the product reserve exists with reverse lookup of `product-reserve` """
+    def test_reservation_create_at_reverse_lookup(self):
+        """ Test that the reservation create view exists at reverse lookup of `reservation-create` """
 
-#         response = self.client.get(reverse("product-reserve", args=[self.product_1.id]))
+        response = self.client.get(reverse("reservation-create", args=[self.product_1.id]))
 
-#         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
+    def test_reservation_create_uses_template(self):
+        """ Test that the reservation create view uses correct template """
 
-#     def test_product_reserve_uses_template(self):
-#         """ Verify that the product reserve view uses the correct template """
+        response = self.client.get(reverse("reservation-create", args=[self.product_1.id]))
 
-#         response = self.client.get(reverse("product-reserve", args=[self.product_1.id]))
+        self.assertTemplateUsed(response, "reservation_create.html")
 
-#         self.assertTemplateUsed(response, "product_reserve.html")
+    def test_reservation_create_uses_layout(self):
+        """ Test that the reservation create view uses layout """
 
+        response = self.client.get(reverse("reservation-create", args=[self.product_1.id]))
 
-#     def test_product_reserve_uses_layout(self):
-#         """ Verify that the product reserve view uses the layout template """
+        self.assertTemplateUsed(response, "layout.html")
 
-#         response = self.client.get(reverse("product-reserve", args=[self.product_1.id]))
+    def test_reservation_create_missing_object(self):
+        """ Test reservation create view when `Product` object is missing """
 
-#         self.assertTemplateUsed(response, "layout.html")
+        response = self.client.get(reverse("reservation-create", args=["999"]))
 
+        self.assertEqual(response.status_code, 404)
 
-#     def test_product_reserve_missing_object(self):
-#         """ Test the product reserve view when there is no object at the given argument """
+    def test_reservation_create_valid(self):
+        """ Test successful reservation creation"""
 
-#         response = self.client.get(reverse("product-reserve", args=["999"]))
+        quantity = 5
+        data = {
+            "quantity": quantity,
+        }
 
-#         self.assertEqual(response.status_code, 404)
+        response = self.client.post(reverse("reservation-create", args=[self.product_1.id]), data)
 
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Reservation.objects.filter(quantity=quantity).exists())
 
-#     def test_product_reserve_valid(self):
-#         """ Test the product reserve view with successful reservation """
+        # check correct user and product
+        reservation = Reservation.objects.get(quantity=quantity)
+        self.assertEqual(reservation.product.id, self.product_1.id)
+        self.assertEqual(reservation.customer.id, self.customer.id)
 
-#         original_quantity = self.product_1.quantity
-#         reserve_quantity = 5
-#         data = {
-#             "reserve_quantity": reserve_quantity,
-#         }
+    def test_reservation_create_missing_quantity(self):
+        """ Test the reservation create view with `quantity` missing """
 
-#         response = self.client.post(reverse("product-reserve", args=[self.product_1.id]), data)
+        data = {}
 
-#         self.assertEqual(response.status_code, 302)
+        response = self.client.post(reverse("reservation-create", args=[self.product_1.id]), data)
 
-#         # validate updated object
-#         updated = Product.objects.get(id=self.product_1.id)
-#         self.assertEqual(updated.quantity, original_quantity - reserve_quantity)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "All fields are required! Include a reservation quantity!")
 
+    def test_reservation_create_quantity_maximum(self):
+        """ Test the reservation create view with `quantity` greater than allowed """
 
-#     def test_product_reserve_quantity_maximum(self):
-#         """ Test the product reserve view with `reserve_quantity` greater than allowed """
+        quantity = self.product_1.quantity + 1  # 1 more than allowed
+        data = {
+            "quantity": quantity,
+        }
 
-#         original_quantity = self.product_1.quantity
-#         reserve_quantity = self.product_1.quantity + 1
-#         data = {
-#             "reserve_quantity": reserve_quantity,
-#         }
+        response = self.client.post(reverse("reservation-create", args=[self.product_1.id]), data)
 
-#         response = self.client.post(reverse("product-reserve", args=[self.product_1.id]), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Reserve quantity must not exceed product quantity!")
 
-#         self.assertEqual(response.status_code, 200)
-#         self.assertContains(response, "Reserve quantity must not exceed available quantity!")
+    def test_reservation_create_quantity_minimum(self):
+        """ Test the reservation create view with `quantity` less than allowed """
 
-#         # validate that the object is not updated
-#         updated = Product.objects.get(id=self.product_1.id)
-#         self.assertEqual(updated.quantity, original_quantity)
+        quantity = 0
+        data = {
+            "quantity": quantity,
+        }
 
+        response = self.client.post(reverse("reservation-create", args=[self.product_1.id]), data)
 
-#     def test_product_reserve_quantity_minimum(self):
-#         """ Test the product reserve view with `reserve_quantity` less than allowed """
-
-#         original_quantity = self.product_1.quantity
-#         reserve_quantity = 0
-#         data = {
-#             "reserve_quantity": reserve_quantity,
-#         }
-
-#         response = self.client.post(reverse("product-reserve", args=[self.product_1.id]), data)
-
-#         self.assertEqual(response.status_code, 200)
-#         self.assertContains(response, "Reserve quantity must be at least 1!")
-
-#         # validate that the object is not updated
-#         updated = Product.objects.get(id=self.product_1.id)
-#         self.assertEqual(updated.quantity, original_quantity)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Reserve quantity must be at least 1!")

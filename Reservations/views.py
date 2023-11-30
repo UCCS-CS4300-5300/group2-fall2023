@@ -30,8 +30,6 @@ class ReservationCreate(LoginRequiredMixin, CreateView):
         form = self.get_form()
         product = get_object_or_404(Product, pk=product_id)
 
-        print("HERE")
-
         return render(request, self.template_name, {
                 "form": form,
                 "product": product,
