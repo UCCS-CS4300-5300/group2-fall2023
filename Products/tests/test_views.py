@@ -2,9 +2,11 @@
 ### Harvestly
 ### Test Products Views
 
+""" Test Suite for the Products Views """
+
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import User
 from Products.models import Product
 from Events.models import Event
 
@@ -31,7 +33,7 @@ class ProductListTests(TestCase):
     def test_product_list_uses_template(self):
         """ Verify that the product list uses the correct template """
 
-        response = self.client.get(reverse("products"))
+        self.client.get(reverse("products"))
 
         self.assertTemplateUsed("product_list.html")
 
@@ -39,7 +41,7 @@ class ProductListTests(TestCase):
     def test_product_list_uses_layout(self):
         """ Verify that the product list uses the layout template """
 
-        response = self.client.get(reverse("products"))
+        self.client.get(reverse("products"))
 
         self.assertTemplateUsed("layout.html")
 
@@ -55,15 +57,15 @@ class ProductListTests(TestCase):
     def test_product_list_with_products(self):
         """ Test the product list view with product instances """
 
-        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
-        self.user.save()
+        user = User.objects.create_user(username="testinguser", password="testingpassword")
+        user.save()
 
         product_1 = Product.objects.create(
             name="Product 1",
             description="Product 1 Description",
             price=3.45,
             quantity=10,
-            owner=self.user
+            owner=user
         )
 
         product_2 = Product.objects.create(
@@ -71,7 +73,7 @@ class ProductListTests(TestCase):
             description="Product 2 Description",
             price=12.00,
             quantity=11,
-            owner=self.user
+            owner=user
         )
 
         response = self.client.get(reverse("products"))
@@ -131,7 +133,7 @@ class ProductCreateTests(TestCase):
 
         self.assertTemplateUsed(response, "layout.html")
 
-    
+
     def test_product_creates_object(self):
         """ Verify that the product create view successfully creates a product """
 
@@ -144,10 +146,10 @@ class ProductCreateTests(TestCase):
         }
 
         response = self.client.post(reverse("product-create"), data)
-        
+
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Product.objects.filter(name="Product 1").exists())
-    
+
 
     def test_product_creates_object_with_event(self):
         """ Test that the product create view creates an object with an event """
@@ -186,7 +188,7 @@ class ProductCreateTests(TestCase):
         }
 
         response = self.client.post(reverse("product-create"), data)
-        
+
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "All fields are required! Include a name!")
 
@@ -202,7 +204,7 @@ class ProductCreateTests(TestCase):
         }
 
         response = self.client.post(reverse("product-create"), data)
-        
+
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "All fields are required! Include a description!")
 
@@ -218,7 +220,7 @@ class ProductCreateTests(TestCase):
         }
 
         response = self.client.post(reverse("product-create"), data)
-        
+
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "All fields are required! Include a price!")
 
@@ -234,7 +236,7 @@ class ProductCreateTests(TestCase):
         }
 
         response = self.client.post(reverse("product-create"), data)
-        
+
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "All fields are required! Include a quantity!")
 
@@ -243,11 +245,13 @@ class ProductCreateTests(TestCase):
         """ Test the product create view post with invalid name - too long """
 
         data = {
-            "name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit congue neque nec tristique. \
-                Duis sed volutpat mi, et rutrum justo. Nunc condimentum feugiat erat in interdum. Proin eu mattis dolor. \
-                Curabitur quis risus consectetur neque tempus ullamcorper. Aliquam venenatis purus at hendrerit vehicula. \
-                Maecenas laoreet vitae elit in lacinia. Vestibulum tristique erat hendrerit dictum consequat. Sed at eleifend est. \
-                Aenean et erat in ligula facilisis vestibulum nec non lectus.",
+            "name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit \
+                congue neque nec tristique. Duis sed volutpat mi, et rutrum justo. Nunc \
+                condimentum feugiat erat in interdum. Proin eu mattis dolor. Curabitur quis \
+                risus consectetur neque tempus ullamcorper. Aliquam venenatis purus at \
+                hendrerit vehicula. Maecenas laoreet vitae elit in lacinia. Vestibulum tristique \
+                erat hendrerit dictum consequat. Sed at eleifend est. Aenean et erat in ligula \
+                facilisis vestibulum nec non lectus.",
             "description": "Product 1 Description",
             "price": 3.45,
             "quantity": 10,
@@ -255,7 +259,7 @@ class ProductCreateTests(TestCase):
         }
 
         response = self.client.post(reverse("product-create"), data)
-        
+
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Maximum name length exceeded!")
 
@@ -272,7 +276,7 @@ class ProductCreateTests(TestCase):
         }
 
         response = self.client.post(reverse("product-create"), data)
-        
+
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Minimum quantity requirement not met!")
 
@@ -292,7 +296,8 @@ class ProductCreateTests(TestCase):
         response = self.client.post(reverse("product-create"), data)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Select a valid choice. That choice is not one of the available choices.")
+        self.assertContains(response,
+            "Select a valid choice. That choice is not one of the available choices.")
 
 
 class ProductDetailTests(TestCase):
@@ -301,7 +306,7 @@ class ProductDetailTests(TestCase):
 
     def setUp(self):
         """ Set up the data for the test cases """
-        
+
         self.user = User.objects.create_user(username="testinguser", password="testingpassword")
         self.user.save()
 
@@ -313,7 +318,7 @@ class ProductDetailTests(TestCase):
             owner=self.user
         )
 
-    
+
     def test_product_detail_at_url(self):
         """ Verify that the product detail exists at `/products/details/<int:pk>` """
 
@@ -516,7 +521,7 @@ class ProductUpdateTests(TestCase):
         # validate updated object
         updated = Product.objects.get(id=self.product_1.id)
         self.assertEqual(updated.quantity, new_quantity)
-    
+
     def test_product_edit_forbidden_by_non_owner(self):
         """ Verify that a non-owner cannot edit another user's product """
 
@@ -601,7 +606,7 @@ class ProductDeleteTests(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
-    
+
     def test_product_delete_valid(self):
         """ Test the product delete post with a valid object ID """
 
@@ -609,7 +614,7 @@ class ProductDeleteTests(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Product.objects.filter(id=self.product_1.id).exists())
-    
+
     def test_product_delete_forbidden_by_non_owner(self):
         """ Verify that a non-owner cannot delete another user's product """
 

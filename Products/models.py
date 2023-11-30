@@ -2,6 +2,8 @@
 ### Harvestly
 ### Products Models
 
+""" Implementation of Product Model """
+
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.urls import reverse
@@ -32,31 +34,22 @@ class Product(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     product_event = models.ForeignKey(Event, on_delete=models.SET_NULL, blank=True, null=True)
 
-
     def __str__(self):
-        return self.name
+        """ String representation of model """
+
+        return str(self.name)
 
     def get_absolute_url(self):
+        """ Absolute URL for the model - Details page """
+
         return reverse("product-details", args=[str(self.id)])
-    
+
     def get_reservation_count(self):
         """ Get total count of reservations """
 
         from Reservations.models import Reservation
 
         reservations = Reservation.objects.filter(product=self)
-        count = sum([reservation.quantity for reservation in reservations])
+        count = sum(reservation.quantity for reservation in reservations)
 
         return count
-
-
-    def delete(self, *args, **kwargs):
-        for image in self.image.all():
-            if image.file:
-                image.file.delete(save=False)
-            if image.thumbnail:
-                image.thumbnail.delete(save=False)
-            image.delete()
-        super().delete(*args, **kwargs)
-
-

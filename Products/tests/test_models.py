@@ -2,20 +2,22 @@
 ### Harvestly
 ### Test Products Models
 
+""" Test Suite for the Product Model """
+
 from django.test import TestCase
+from django.contrib.auth.models import User
+
 from Products.models import Product
 from Events.models import Event
 from Reservations.models import Reservation
-from django.contrib.auth.models import User
 
-# TODO - update this when image imports are available
 
 class ProductTests(TestCase):
     """ Test the Product model """
 
     def setUp(self):
         """Set up the necessary testing data"""
-    
+
         self.user = User.objects.create_user(username="testinguser", password="testingpassword")
         self.user.save()
 
@@ -36,7 +38,7 @@ class ProductTests(TestCase):
         )
 
         self.assertTrue(Product.objects.filter(name=name).exists())
-        
+
         product_1 = Product.objects.get(name=name)
         self.assertEqual(product_1.name, name)
         self.assertEqual(product_1.description, description)
@@ -68,7 +70,7 @@ class ProductTests(TestCase):
         )
 
         self.assertTrue(Product.objects.filter(name=name).exists())
-        
+
         product_1 = Product.objects.get(name=name)
         self.assertEqual(product_1.name, name)
         self.assertEqual(product_1.description, description)
@@ -107,7 +109,7 @@ class ProductTests(TestCase):
 
         reserve_quantity = 5
 
-        reservation = Reservation.objects.create(
+        Reservation.objects.create(
             product=product,
             customer=customer,
             quantity=reserve_quantity,
