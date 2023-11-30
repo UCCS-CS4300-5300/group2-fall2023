@@ -127,3 +127,13 @@ class ReservationCreateTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Reserve quantity must be at least 1!")
+
+
+class ReservationUpdateTests(TestCase):
+    """ Test the Reservation Update view """
+    """ TODO """
+
+
+class ReservationDeleteTests(TestCase):
+    """ Test the Reservation Delete view """
+    """ TODO """
