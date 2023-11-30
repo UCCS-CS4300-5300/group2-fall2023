@@ -17,7 +17,7 @@ class Reservation(models.Model):
 
     quantity = models.IntegerField(
         validators=[
-            MinValueValidator(0),
+            MinValueValidator(1),
         ]
     )
 

@@ -7,7 +7,6 @@ from Products import forms
 from Events.models import Event
 from django.contrib.auth.models import User
 
-# TODO - Update when image upload is available
 
 class ProductFormTest(TestCase):
     """ Test the ProductForm form class """

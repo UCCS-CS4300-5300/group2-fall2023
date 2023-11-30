@@ -1,36 +1,39 @@
+### CS 4300 Fall 2023 Group 2
+### Harvestly
+### Test Reservations Forms
 
-""" TODO """
-# class ProductReserveFormTests(TestCase):
-#     """ Test the ProductReserveForm form class """
+from django.test import TestCase
+from Reservations import forms
 
-#     def test_valid_product_reserve_form(self):
-#         """ Test the product reserve form is recognized as valid """
+class ReservationFormTests(TestCase):
+    """ Test the ReservationForm form class """
 
-#         data = {
-#             "reserve_quantity": 1,
-#         }
+    def test_valid_reservation_form(self):
+        """ Test that the reservation form is recognized as valid """
 
-#         form = forms.ProductReserveForm(data=data)
-#         self.assertTrue(form.is_valid())
+        data = {
+            "quantity": 12,
+        }
 
+        form = forms.ReservationForm(data=data)
+        self.assertTrue(form.is_valid())
+
+    def test_reservation_form_missing_quantity(self):
+        """ Test the reservation form when the quantity is missing """
+
+        data = {}
+
+        form = forms.ReservationForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertIn("quantity", form.errors)
     
-#     def test_product_reserve_form_minimum_reserve_quantity(self):
-#         """ Test the product reserve form when the reserve quantity is less than the minimum """
+    def test_reservation_form_minimum_quantity(self):
+        """ Test the reservation form when the quantity is below the minimum """
 
-#         data = {
-#             "reserve_quantity": 0,
-#         }
+        data = {
+            "quantity": 0
+        }
 
-#         form = forms.ProductReserveForm(data=data)
-#         self.assertFalse(form.is_valid())
-#         self.assertIn("reserve_quantity", form.errors)
-
-
-#     def test_product_reserve_form_missing_reserve_quantity(self):
-#         """ Test form when reserve quantity is missing """
-
-#         data = {}
-
-#         form = forms.ProductReserveForm(data=data)
-#         self.assertFalse(form.is_valid())
-#         self.assertIn("reserve_quantity", form.errors)
+        form = forms.ReservationForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertIn("quantity", form.errors)
