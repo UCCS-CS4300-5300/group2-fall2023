@@ -2,6 +2,8 @@
 ### Harvestly
 ### Product Form
 
+""" Implementation of Product Form """
+
 from django import forms
 from Products.models import Product
 
@@ -10,6 +12,8 @@ class ProductForm(forms.ModelForm):
     """ Product upload form information """
 
     class Meta:
+        """ Meta class for Product Form """
+
         model = Product
         fields = [
             "name",
@@ -57,7 +61,8 @@ class ProductForm(forms.ModelForm):
         error_messages = {
             "name": {
                 "required": "All fields are required! Include a name!",
-                "max_length": "Maximum name length exceeded! Name length must not exceed 255 characters!"
+                "max_length": "Maximum name length exceeded! Name length must not exceed \
+                    255 characters!"
             },
             "price": {
                 "required": "All fields are required! Include a price!",
@@ -66,7 +71,8 @@ class ProductForm(forms.ModelForm):
             },
             "quantity": {
                 "required": "All fields are required! Include a quantity!",
-                "max_value": "Maximum quantity exceeded! Maximum quantity for any one item is 100,000!",
+                "max_value": "Maximum quantity exceeded! Maximum quantity \
+                    for any one item is 100,000!",
             },
             "description": {
                 "required": "All fields are required! Include a description!"
@@ -84,7 +90,8 @@ class ProductForm(forms.ModelForm):
         quantity = self.cleaned_data.get("quantity")
 
         if quantity < 1:
-            raise forms.ValidationError("Minimum quantity requirement not met! Minimum quantity for an item is 1!")
+            raise forms.ValidationError(
+                "Minimum quantity requirement not met! Minimum quantity for an item is 1!"
+            )
 
         return quantity
-
