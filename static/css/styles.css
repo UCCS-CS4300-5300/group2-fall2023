@@ -164,7 +164,7 @@ footer .harvestly-nav-link {
 
 .harvestly-nav-btn-danger {
     text-decoration: none !important;
-    color: var(--light-color);
+    color: var(--danger-color);
 
     position: relative;
     display: inline-block;
@@ -177,13 +177,13 @@ footer .harvestly-nav-link {
 
     border: 2px solid var(--danger-color);
     border-radius: 5px;
-    background-color: var(--danger-color);
+    background-color: transparent;
 
     transition: all 0.3s ease;
 }
 .harvestly-nav-btn-danger:hover {
     color: var(--light-color) !important;
-    background-color: var(--warning-color);
+    background-color: var(--danger-color);
 }
 .harvestly-nav-btn-danger:focus {
     color: var(--light-color) !important;
