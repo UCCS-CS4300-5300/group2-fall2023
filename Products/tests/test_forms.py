@@ -5,9 +5,10 @@
 """ Test Suite for the Product Form """
 
 from django.test import TestCase
+from django.contrib.auth.models import User
+
 from Products import forms
 from Events.models import Event
-from django.contrib.auth.models import User
 
 
 class ProductFormTest(TestCase):
@@ -30,15 +31,15 @@ class ProductFormTest(TestCase):
     def test_valid_product_form_with_market(self):
         """ Test the product form is recognized as valid """
 
-        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
-        self.user.save()
+        user = User.objects.create_user(username="testinguser", password="testingpassword")
+        user.save()
 
         event = Event.objects.create(
             name="Market 1",
             location="Some Location",
             start_time="2025-04-12T00:00-00:00",
             end_time="2025-04-15T00:00-00:00",
-            organizer=self.user
+            organizer=user
         )
 
         data = {
@@ -57,11 +58,13 @@ class ProductFormTest(TestCase):
         """ Test the product form when the provided name is too long """
 
         data = {
-            "name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit congue neque nec tristique. \
-                Duis sed volutpat mi, et rutrum justo. Nunc condimentum feugiat erat in interdum. Proin eu mattis dolor. \
-                Curabitur quis risus consectetur neque tempus ullamcorper. Aliquam venenatis purus at hendrerit vehicula. \
-                Maecenas laoreet vitae elit in lacinia. Vestibulum tristique erat hendrerit dictum consequat. Sed at eleifend est. \
-                Aenean et erat in ligula facilisis vestibulum nec non lectus.",
+            "name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit \
+                congue neque nec tristique. Duis sed volutpat mi, et rutrum justo. Nunc \
+                condimentum feugiat erat in interdum. Proin eu mattis dolor. Curabitur quis \
+                risus consectetur neque tempus ullamcorper. Aliquam venenatis purus at \
+                hendrerit vehicula. Maecenas laoreet vitae elit in lacinia. Vestibulum tristique \
+                erat hendrerit dictum consequat. Sed at eleifend est. Aenean et erat in ligula \
+                facilisis vestibulum nec non lectus.",
             "price": 2.12,
             "quantity": 17,
             "description": "Some Product Description",
@@ -157,4 +160,3 @@ class ProductFormTest(TestCase):
         form = forms.ProductForm(data=data)
         self.assertFalse(form.is_valid())
         self.assertIn("product_event", form.errors)
-
