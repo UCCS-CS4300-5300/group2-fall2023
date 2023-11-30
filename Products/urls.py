@@ -2,6 +2,8 @@
 ### Harvestly
 ### Product app routing
 
+""" URL Configuration for Products App """
+
 from django.urls import path
 from . import views
 

@@ -2,6 +2,8 @@
 ### Harvestly
 ### Test Products Forms
 
+""" Test Suite for the Product Form """
+
 from django.test import TestCase
 from Products import forms
 from Events.models import Event

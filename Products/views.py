@@ -2,6 +2,8 @@
 ### Harvestly
 ### Products Views
 
+""" Implementation of Product List, Detail, Create, Update, and Delete Views """
+
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
@@ -110,12 +112,12 @@ class ProductDetail(DetailView):
 
         context = super().get_context_data(**kwargs)
 
-        # Filter the reservations by customer and product to identify whether the user has a reservation for the product
+        # Store whether or not the user has reserved the product
         if self.request.user.is_authenticated:
             context["reservation"] = Reservation.objects \
                 .filter(customer=self.request.user, product=product) \
                 .first()
-        
+
         return context
 
 
