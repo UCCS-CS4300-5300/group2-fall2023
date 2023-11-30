@@ -115,8 +115,6 @@ class ProductDetail(DetailView):
             context["reservation"] = Reservation.objects \
                 .filter(customer=self.request.user, product=product) \
                 .first()
-        else:
-            context["reservation"] = None
         
         return context
 

@@ -102,6 +102,7 @@ class ReservationUpdate(LoginRequiredMixin, UpdateView):
             reserve_quantity = form.cleaned_data["quantity"]
 
             if reserve_quantity <= reservation.product.quantity:
+                reservation.price = form.instance.quantity * reservation.product.price
                 form.save()
 
                 # Go back to the details page for the reserved product
