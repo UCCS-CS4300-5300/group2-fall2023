@@ -26,11 +26,12 @@ class ReservationCreate(LoginRequiredMixin, CreateView):
     def get(self, request, product_id):
         """ Handle Get Request """
 
-        if request.user.id == product_id:
-            raise PermissionDenied()
-
-        form = self.get_form()
         product = get_object_or_404(Product, pk=product_id)
+        form = self.get_form()
+
+        # Product owner cannot reserve
+        if request.user.id == product.owner.id:
+            raise PermissionDenied()
 
         return render(request, self.template_name, {
                 "form": form,
@@ -43,8 +44,8 @@ class ReservationCreate(LoginRequiredMixin, CreateView):
         product = get_object_or_404(Product, pk=product_id)
         form = self.get_form()
 
-        # Only the reservation customer can access the form
-        if request.user.id == product_id:
+        # Product owner cannot reserve
+        if request.user.id == product.owner.id:
             raise PermissionDenied()
 
         if form.is_valid():
