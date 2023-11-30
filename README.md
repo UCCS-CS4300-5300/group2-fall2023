@@ -174,9 +174,9 @@ This is an evaluation of number of lines of code and their purpose (i.e. blank, 
 
 To evaluate the overall consistency and readability of the code, as well as its adherence to coding best practices, use the `Pylint` library. To evaluate a module use the following command:
 ```
-pylint --generated-members=objects < APP_NAME >
+pylint --generated-members=objects --ignore=migrations < APP_NAME >
 ```
-This will examine the module's code for formatting errors and non-adherence to coding practices, and it will provide a score X/10 based on what it finds. The `--generated-members=objects` qualifier lets PyLint know that the created objects in the test cases are being set dynamically and should be ignored to avoid throwing E1101 (no-member) errors.
+This will examine the module's code for formatting errors and non-adherence to coding practices, and it will provide a score X/10 based on what it finds. The `--generated-members=objects` qualifier lets PyLint know that the created objects in the test cases are being set dynamically and should be ignored to avoid throwing E1101 (no-member) errors. The `--ignore=migrations` qualifier tells PyLine to ignore the migrations directory when checking the code.
 
 
 ## Code Security - Bandit
