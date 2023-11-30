@@ -5,14 +5,17 @@
 from django.test import TestCase
 from Products.models import Product
 from Events.models import Event
+from Reservations.models import Reservation
 from django.contrib.auth.models import User
 
 # TODO - update this when image imports are available
 
 class ProductTests(TestCase):
     """ Test the Product model """
+
     def setUp(self):
         """Set up the necessary testing data"""
+    
         self.user = User.objects.create_user(username="testinguser", password="testingpassword")
         self.user.save()
 
@@ -39,7 +42,6 @@ class ProductTests(TestCase):
         self.assertEqual(product_1.description, description)
         self.assertEqual(product_1.price, price)
         self.assertEqual(product_1.quantity, quantity)
-
 
     def test_product_creation_with_market(self):
         """ Test valid product creation with the addition of an Event object """
@@ -73,7 +75,6 @@ class ProductTests(TestCase):
         self.assertEqual(product_1.price, price)
         self.assertEqual(product_1.quantity, quantity)
         self.assertEqual(product_1.product_event.name, event.name)
-        
 
     def test_product_str(self):
         """ Test the product `__str__` method """
@@ -90,4 +91,27 @@ class ProductTests(TestCase):
 
         self.assertEqual(product_1.name, name)
 
-    
+    def test_product_get_reservation_count(self):
+        """ Test the product `get_reservation_count` method """
+
+        product = Product.objects.create(
+            name="Product 1",
+            description="Product 1 Description",
+            price=3.45,
+            quantity=10,
+            owner=self.user
+        )
+
+        customer = User.objects.create_user(username="customer", password="testingpassword")
+        customer.save()
+
+        reserve_quantity = 5
+
+        reservation = Reservation.objects.create(
+            product=product,
+            customer=customer,
+            quantity=reserve_quantity,
+            price=reserve_quantity*product.price,
+        )
+
+        self.assertEqual(product.get_reservation_count(), reserve_quantity)

@@ -12,9 +12,7 @@
         </div>
         <div class="col-md-6 align-self-center">
             <h3>{{ product.name|title }} Details</h3>
-            <div>
-                <h5>{{ product.description }}</h5>
-            </div>
+            <h5>{{ product.description }}</h5>
             {% if product.product_event %}
                 <a
                     class="harvestly-nav-link mt-4" 
@@ -23,9 +21,20 @@
                     <h6>Available at {{ product.product_event.name|title }}</h6>
                 </a>
             {% endif %}
-            <div class="mt-5 w-100 d-flex justify-content-between">
-                <h5 class="text-muted">${{ product.price|floatformat:"2" }}</h5>
-                <h5 class="text-muted">&times;{{ product.quantity }}</h5>
+            <h5 class="mt-5 mb-3">${{ product.price|floatformat:"2" }}</h5>
+            <div class="d-flex text-muted justify-content-between">
+                <h5>Quantity</h5>
+                <h5>
+                    <i class="bi-server"></i>
+                    {{ product.quantity }}
+                </h5>
+            </div>
+            <div class="d-flex text-muted justify-content-between">
+                <h5>Reserved</h5>
+                <h5 class="{% if product.get_reservation_count >= product.quantity %}text-danger{% endif %}">
+                    <i class="bi-person-x"></i>
+                    {{ product.get_reservation_count }}
+                </h5>
             </div>
         </div>
     </div>
@@ -40,13 +49,48 @@
         </div>
         <!-- If user is not logged in OR if they are not the owner -->
         {% if not user.is_authenticated or user.id != product.owner.id %}
-            <div class="col-md-6  my-1 d-flex flex-column">
-                <a 
-                    href="{% url 'product-reserve' product.id %}" 
-                    class="harvestly-nav-btn-primary d-flex justify-content-center align-items-center mb-3 py-2"
-                >
-                    <h4 class="m-0">Reserve this Product</h4>
-                </a>
+            <div class="col-md-6">
+                {% if not reservation %}
+                    <div class="d-flex justify-content-end">
+                        <a 
+                            href="{% url 'reservation-create' product.id %}" 
+                            class="harvestly-nav-btn-primary p-2"
+                        >
+                            <h5 class="m-0">Reserve this Product</h5>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="d-flex flex-column mb-3">
+                        <div class="d-flex text-muted justify-content-between">
+                            <h5>Your Reserved</h5>
+                            <h5>
+                                <i class="bi-bag-check-fill"></i>
+                                {{ reservation.quantity }}
+                            </h5>
+                        </div>
+                        <div class="d-flex text-muted justify-content-between">
+                            <h5>Total Cost</h5>
+                            <h5>${{ reservation.price|floatformat:"2" }}</h5>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <a 
+                            href="{% url 'reservation-delete' reservation.id %}" 
+                            class="harvestly-nav-btn-danger p-2 mr-2"
+                        >
+                            <h5 class="m-0">
+                                <i class="bi-exclamation-diamond-fill"></i>
+                                Delete Reservation
+                            </h5>
+                        </a>
+                        <a 
+                            href="{% url 'reservation-update' reservation.id %}" 
+                            class="harvestly-nav-btn-primary p-2"
+                        >
+                            <h5 class="m-0">Edit Reservation</h5>
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         <!-- If the user is the owner of this product, display the edit, delete options -->
         {% else %}

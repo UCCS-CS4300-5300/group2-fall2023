@@ -30,9 +30,11 @@ urlpatterns = [
     path("", home_views.Home.as_view(), name="index"),
     path("about-us/", home_views.About.as_view(), name="about"),
     path("profile/", home_views.Profile.as_view(), name="profile"),
+    path("cart/", home_views.Cart.as_view(), name="cart"),
 
     path("markets/", include("Events.urls")),
     path("products/", include("Products.urls")),
+    path("reservations/", include("Reservations.urls")),
 
     path("admin/", admin.site.urls),
     

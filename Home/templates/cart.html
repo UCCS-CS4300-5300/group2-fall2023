@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block title %}Cart{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center">
+    <h2 class="subtitle mb-4">Reserved Products</h6>
+</div>
+{% if reservation_list %}
+    <div class="row">
+        {% for reservation in reservation_list%}
+            <div class="col-lg-4">
+                <a class="harvestly-card-link" href="{% url 'product-details' reservation.product.id %}">
+                    <div class="card">
+                        <div class="harvestly-product-card-img-container">
+                            <!-- Render image thumbnail -->
+                            {% include "_product_thumbnail.html" with product=reservation.product %}
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h3 class="card-title">{{ reservation.product.name|title }}</h3>
+                                <h5>${{ reservation.product.price|floatformat:"2" }}</h5>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <h5>Your Reserved</h5>
+                                <h5>
+                                    <i class="bi-bag-check-fill"></i>
+                                    {{ reservation.quantity }}
+                                </h5>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <h5>Total Cost</h5>
+                                <h5>${{ reservation.price|floatformat:"2" }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a
+                    href="{% url 'reservation-delete' reservation.id %}"
+                    class="harvestly-nav-btn-danger d-flex justify-content-center align-items-center py-1 mt-2 mb-5"
+                >
+                    <h5 class="m-0">
+                        <i class="bi-trash"></i>
+                    </h5>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div>
+        <h1>You have no reservations...</h1>
+        <a class="harvestly-nav-link mt-4" href="{% url 'products' %}">View all available products</a>
+    </div>
+{% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+{% block title %}Edit Reservation{% endblock %}
+
+{% block content %}
+<div>
+    <h3 class="subtitle">{{ reservation.product.name|title }}</h3>
+    {% if form.errors %}
+        {% include "form_errors.html" with error_items=form.errors.items %}
+    {% endif %}
+    <div class="row mt-4 mb-5">
+        <div class="col-md-6">
+            <!-- render image -->
+            {% include "_product_image.html" %}
+        </div>
+        <div class="col-md-6 align-self-center">
+            <form method="post">
+                {% csrf_token %}
+                <h3>{{ reservation.product.name|title }} Details</h3>
+                <h5>{{ reservation.product.description }}</h5>
+                {% if product.product_event %}
+                    <a
+                        class="harvestly-nav-link mt-4" 
+                        href="{% url 'event-detail' product.product_event.id %}"
+                    >
+                        <h6>Available at {{ reservation.product.product_event.name|title }}</h6>
+                    </a>
+                {% endif %}
+                <h5 class="mt-5">${{ reservation.product.price|floatformat:"2" }}</h5>
+                <div class="d-flex text-muted justify-content-between">
+                    <h5>Quantity</h5>
+                    <h5>
+                        <i class="bi-server"></i>
+                        {{ reservation.product.quantity }}
+                    </h5>
+                </div>
+                <div class="d-flex text-muted justify-content-between">
+                    <h5>Reserved</h5>
+                    <h5>
+                        <i class="bi-person-x"></i>
+                        {{ reservation.product.get_reservation_count }}
+                    </h5>
+                </div>
+                <div class="harvestly-form-item mt-5">
+                    {{ form.quantity.label }}
+                    {{ form.quantity }}
+                </div>
+                <div class="row justify-content-end mt-3">
+                    <a
+                        href={% url 'product-details' reservation.product.id %}
+                        class="harvestly-nav-btn-secondary py-2 mx-1 d-flex justify-content-center align-items-center"
+
+                    >
+                        <h5 class="m-0">Cancel</h5>
+                    </a>
+                    <button class="harvestly-nav-btn-primary d-flex py-2 mx-1 justify-content-center" type="submit">
+                        <h5 class="m-0">Confirm</h5>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{%endblock %}

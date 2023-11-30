@@ -2,20 +2,18 @@
 ### Harvestly
 ### Products Views
 
-from typing import Any
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 
-from .models import Product
-from .forms import ProductForm, ProductReserveForm
+from Products.models import Product
+from Products.forms import ProductForm
 from Events.models import Event
-
+from Reservations.models import Reservation
 
 from Common.models import ProductImage
 from Common.forms import ProductImageForm
@@ -29,9 +27,6 @@ class ProductList(ListView):
     model = Product
     template_name = "product_list.html"
     context_object_name = "product_list"
-
-
-# TODO create new create view, inherit from `View` class
 
 
 class ProductCreate(LoginRequiredMixin, CreateView):
@@ -105,6 +100,23 @@ class ProductDetail(DetailView):
     # Set model type
     model = Product
     template_name = "product_detail.html"
+
+    def get_context_data(self, **kwargs):
+        """ Get context data for product details """
+
+        # Get the product for reservation filtering
+        product_id = self.kwargs.get("pk")
+        product = Product.objects.get(pk=product_id)
+
+        context = super().get_context_data(**kwargs)
+
+        # Filter the reservations by customer and product to identify whether the user has a reservation for the product
+        if self.request.user.is_authenticated:
+            context["reservation"] = Reservation.objects \
+                .filter(customer=self.request.user, product=product) \
+                .first()
+        
+        return context
 
 
 class ProductUpdate(LoginRequiredMixin, UpdateView):
@@ -236,40 +248,3 @@ class ProductDelete(LoginRequiredMixin, DeleteView):
         """ Get success URL after post completion """
 
         return reverse("products")
-
-
-class ProductReserve(LoginRequiredMixin, View):
-    """ Reserve a quantity of a specific product. URL `/products/reserve/<int:pk>/` """
-
-    template_name = "product_reserve.html"
-
-    def get(self, request, pk):
-        """ Handle get request to view (render form) """
-
-        product = get_object_or_404(Product, pk=pk)
-        form = ProductReserveForm
-
-        return render(request, self.template_name, {"form": form, "product": product})
-
-    def post(self, request, pk):
-        """ Handle post request """
-
-        product = get_object_or_404(Product, pk=pk)
-        form = ProductReserveForm(request.POST)
-
-        if form.is_valid():
-            reserve_quantity = form.cleaned_data["reserve_quantity"]
-
-            if reserve_quantity <= product.quantity:
-                product.quantity -= reserve_quantity
-                product.save()
-                return HttpResponseRedirect(self.get_success_url(pk))
-
-            form.add_error("reserve_quantity", "Reserve quantity must not exceed available quantity!")
-
-        return render(request, self.template_name, {"form": form, "product": product})
-
-    def get_success_url(self, pk):
-        """ Get success URL after post completion """
-
-        return reverse("product-details", kwargs={"pk": pk})

@@ -38,6 +38,17 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse("product-details", args=[str(self.id)])
+    
+    def get_reservation_count(self):
+        """ Get total count of reservations """
+
+        from Reservations.models import Reservation
+
+        reservations = Reservation.objects.filter(product=self)
+        count = sum([reservation.quantity for reservation in reservations])
+
+        return count
+
 
     def delete(self, *args, **kwargs):
         for image in self.image.all():
@@ -47,3 +58,5 @@ class Product(models.Model):
                 image.thumbnail.delete(save=False)
             image.delete()
         super().delete(*args, **kwargs)
+
+
