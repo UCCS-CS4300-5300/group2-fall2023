@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.http import Http404
 
 from Products.models import Product
 from Reservations.models import Reservation
@@ -27,20 +28,19 @@ class ReservationCreate(LoginRequiredMixin, CreateView):
             raise PermissionDenied()
         
         form = self.get_form()
-        product = Product.objects.get(pk=product_id)
+        product = get_object_or_404(Product, pk=product_id)
+
+        print("HERE")
 
         return render(request, self.template_name, {
                 "form": form,
                 "product": product,
         })
     
-
     def post(self, request, product_id):
         """ Handle Post request """
 
-        # TODO handle case where product id is null
-        # TODO handle case where product does not exist
-        product = Product.objects.get(pk=product_id)
+        product = get_object_or_404(Product, pk=product_id)
         form = self.get_form()
 
         # Only the reservation customer can access the form
@@ -69,13 +69,14 @@ class ReservationCreate(LoginRequiredMixin, CreateView):
             "form": form,
             "product": product,
         })
-    
 
     def get_success_url(self):
         """ Get success URL after post completion. """
-
-        # TODO handle case where product id is null
+        
         product_id = self.kwargs.get("product_id")
+
+        if not product_id:
+            raise Http404()
 
         return reverse("product-details", kwargs={"pk": product_id})
 
@@ -86,7 +87,6 @@ class ReservationUpdate(LoginRequiredMixin, UpdateView):
     model = Reservation
     form_class = ReservationForm
     template_name = "reservation_update.html"
-
 
     def get(self, request, pk):
         """ Handle Get Request """
@@ -104,7 +104,6 @@ class ReservationUpdate(LoginRequiredMixin, UpdateView):
                 "reservation": reservation,
                 "product": reservation.product
         })
-    
 
     def post(self, request, pk):
         """ Handle Post Request """
@@ -154,7 +153,6 @@ class ReservationDelete(LoginRequiredMixin, DeleteView):
 
         return render(request, self.template_name, {"reservation": reservation})
 
-
     def post(self, request, pk):
         """ Handle post request """
 
@@ -167,7 +165,6 @@ class ReservationDelete(LoginRequiredMixin, DeleteView):
         reservation.delete()
 
         return redirect(self.get_success_url())
-
 
     def get_success_url(self):
         """ Get success URL after post completion """
