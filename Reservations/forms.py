@@ -10,6 +10,8 @@ class ReservationForm(forms.ModelForm):
     """ Product reserve form, for user to reserve a quantity of a product """
 
     class Meta:
+        """ Meta class for Reservation form """
+
         model = Reservation
         fields = [
             "quantity",

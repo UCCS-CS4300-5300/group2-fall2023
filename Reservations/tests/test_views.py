@@ -131,9 +131,7 @@ class ReservationCreateTests(TestCase):
 
 class ReservationUpdateTests(TestCase):
     """ Test the Reservation Update view """
-    """ TODO """
 
 
 class ReservationDeleteTests(TestCase):
     """ Test the Reservation Delete view """
-    """ TODO """

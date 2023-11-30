@@ -6,7 +6,6 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
-from Events.models import Event
 from Products.models import Product
 from Reservations.models import Reservation
 
@@ -16,7 +15,7 @@ class ReservationTests(TestCase):
 
     def setUp(self):
         """ Set up the necessary testing data """
-    
+
         self.product_owner = User.objects.create_user(
             username="product_owner",
             password="testingpassword"
@@ -62,7 +61,7 @@ class ReservationTests(TestCase):
         self.assertEqual(reservation.quantity, quantity)
         self.assertEqual(reservation.price, quantity * self.product_price)
 
-    
+
     def test_reservation_creation_max_quantity(self):
         """ Test successful reservation creation with maximum quantity """
 

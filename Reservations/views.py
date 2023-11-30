@@ -26,7 +26,7 @@ class ReservationCreate(LoginRequiredMixin, CreateView):
 
         if request.user.id == product_id:
             raise PermissionDenied()
-        
+
         form = self.get_form()
         product = get_object_or_404(Product, pk=product_id)
 
@@ -34,7 +34,7 @@ class ReservationCreate(LoginRequiredMixin, CreateView):
                 "form": form,
                 "product": product,
         })
-    
+
     def post(self, request, product_id):
         """ Handle Post request """
 
@@ -62,7 +62,7 @@ class ReservationCreate(LoginRequiredMixin, CreateView):
                 form.instance.price = product_price * quantity
 
                 return self.form_valid(form)
-        
+
         return render(request, self.template_name, {
             "form": form,
             "product": product,
@@ -70,7 +70,7 @@ class ReservationCreate(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         """ Get success URL after post completion. """
-        
+
         product_id = self.kwargs.get("product_id")
 
         if not product_id:
@@ -81,7 +81,7 @@ class ReservationCreate(LoginRequiredMixin, CreateView):
 
 class ReservationUpdate(LoginRequiredMixin, UpdateView):
     """ Reservation Update View """
-    
+
     model = Reservation
     form_class = ReservationForm
     template_name = "reservation_update.html"
@@ -94,7 +94,7 @@ class ReservationUpdate(LoginRequiredMixin, UpdateView):
         # Only the reservation customer can access the form
         if not request.user.id == reservation.customer.id:
             raise PermissionDenied()
-        
+
         form = self.form_class(instance=reservation)
 
         return render(request, self.template_name, {
@@ -112,7 +112,7 @@ class ReservationUpdate(LoginRequiredMixin, UpdateView):
         # Only the reservation customer can access the page
         if not request.user.id == reservation.customer.id:
             raise PermissionDenied()
-        
+
         if form.is_valid():
             reserve_quantity = form.cleaned_data["quantity"]
 
