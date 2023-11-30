@@ -22,42 +22,60 @@ class ReservationCreate(LoginRequiredMixin, CreateView):
     form_class = ReservationForm
     template_name = "reservation_create.html"
 
-    def get_context_data(self, **kwargs):
-        """ Pass product to  template """
+    def get(self, request, product_id):
+        """ Handle Get Request """
 
-        # TODO handle case where product id is null
-        # TODO handle case where product does not exist
-        product_id = self.kwargs.get("product_id")
-
-        context = super().get_context_data(**kwargs)
-        context["product"] = Product.objects.get(pk=product_id)
-
-        return context
-    
-
-    def form_valid(self, form):
-        """ Update the `customer` and `product` fields after submission """
-
-        # TODO handle case where product id is null
-        # TODO handle case where product does not exist
-        product_id = self.kwargs.get("product_id")
+        if request.user.id == product_id:
+            raise PermissionDenied()
+        
+        form = self.get_form()
         product = Product.objects.get(pk=product_id)
 
-        product_price = product.price
-        quantity = form.instance.quantity
+        return render(request, self.template_name, {
+                "form": form,
+                "product": product,
+        })
+    
 
-        form.instance.customer = self.request.user
-        form.instance.product = Product.objects.get(pk=product_id)
-        form.instance.price = product_price * quantity
+    def post(self, request, product_id):
+        """ Handle Post request """
 
-        return super().form_valid(form)
+        # TODO handle case where product id is null
+        # TODO handle case where product does not exist
+        product = Product.objects.get(pk=product_id)
+        form = self.get_form()
 
+        # Only the reservation customer can access the form
+        if request.user.id == product_id:
+            raise PermissionDenied()
+
+        if form.is_valid():
+            # Check that quantity does not exceed available
+            quantity = form.cleaned_data["quantity"]
+
+            if quantity > product.quantity:
+                form.add_error("quantity", "Reserve quantity must not exceed product quantity!")
+            else:
+                # Set reservation customer, product, and price
+                product_price = product.price
+                quantity = form.instance.quantity
+
+                form.instance.customer = self.request.user
+                form.instance.product = Product.objects.get(pk=product_id)
+                form.instance.price = product_price * quantity
+
+                return self.form_valid(form)
+        
+        return render(request, self.template_name, {
+            "form": form,
+            "product": product,
+        })
+    
 
     def get_success_url(self):
         """ Get success URL after post completion. """
 
         # TODO handle case where product id is null
-        # TODO handle case where product does not exist
         product_id = self.kwargs.get("product_id")
 
         return reverse("product-details", kwargs={"pk": product_id})
@@ -70,14 +88,13 @@ class ReservationUpdate(LoginRequiredMixin, UpdateView):
     form_class = ReservationForm
     template_name = "reservation_update.html"
 
-    # TODO
 
     def get(self, request, pk):
         """ Handle Get Request """
 
         reservation = get_object_or_404(Reservation, pk=pk)
 
-        # Only the product owner can access the form
+        # Only the reservation customer can access the form
         if not request.user.id == reservation.customer.id:
             raise PermissionDenied()
         
@@ -94,7 +111,7 @@ class ReservationUpdate(LoginRequiredMixin, UpdateView):
         reservation = get_object_or_404(Reservation, pk=pk)
         form = self.form_class(request.POST, instance=reservation)
 
-        # Only the reservation's owner can access the page
+        # Only the reservation customer can access the page
         if not request.user.id == reservation.customer.id:
             raise PermissionDenied()
         
@@ -113,22 +130,22 @@ class ReservationUpdate(LoginRequiredMixin, UpdateView):
         return render(request, self.template_name, {"form": form, "reservation": reservation})
 
     
-    def form_valid(self, form):
-        """ Update the `customer` and `product` fields after submission """
+    # def form_valid(self, form):
+    #     """ Update the `customer` and `product` fields after submission """
 
-        # TODO handle case where product id is null
-        # TODO handle case where product does not exist
-        product_id = self.kwargs.get("product_id")
-        product = Product.objects.get(pk=product_id)
+    #     # TODO handle case where product id is null
+    #     # TODO handle case where product does not exist
+    #     product_id = self.kwargs.get("product_id")
+    #     product = Product.objects.get(pk=product_id)
 
-        product_price = product.price
-        quantity = form.instance.quantity
+    #     product_price = product.price
+    #     quantity = form.instance.quantity
 
-        form.instance.customer = self.request.user
-        form.instance.product = Product.objects.get(pk=product_id)
-        form.instance.price = product_price * quantity
+    #     form.instance.customer = self.request.user
+    #     form.instance.product = Product.objects.get(pk=product_id)
+    #     form.instance.price = product_price * quantity
 
-        return super().form_valid(form)
+    #     return super().form_valid(form)
 
 
 
