@@ -1,29 +1,28 @@
-"""
-CS 4300 Fall 2023 Group 2
-Harvestly
-Test Events Models
-"""
 
+# CS 4300 Fall 2023 Group 2
+# Harvestly
+# Test Events Models
+
+""" Test Suite for Event App Models """
+
+import datetime
 from django.test import TestCase
-from Events.models import Event
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.contrib.auth.models import User
-import datetime
-
+from Events.models import Event
 
 class EventTests(TestCase):
     """Test the Event model"""
-    
-    @classmethod
-    def setUpTestData(cls):
+
+    def setUp(self):
         """Sets up the data for the test cases"""
 
-        cls.user = User.objects.create_user(username="testinguser", password="testingpassword")
-        cls.user.save()
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
 
-        cls.event = Event.objects.create(
+        self.event = Event.objects.create(
             name="Test Event",
             location="Test Location",
             start_time=timezone.make_aware(
@@ -32,7 +31,7 @@ class EventTests(TestCase):
             end_time=timezone.make_aware(
                 datetime.datetime(2023, 11, 1, 12, 0)
             ),  # 2023-11-01 12:00
-            organizer=cls.user,
+            organizer=self.user,
         )
 
     def test_event_creation(self):

@@ -2,6 +2,8 @@
 ### Harvestly
 ### Events Views
 
+""" Implementation of Views for Event Model """
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -9,7 +11,6 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseRedirect
 from Events.models import Event
 from Events.forms import EventForm
 from Events.utils import get_coordinates
@@ -19,7 +20,7 @@ class EventList(ListView):
 
     def get(self, request):
         """ Query all events, render in events list template. """
-        
+
         # Query events
         model = Event.objects.all()
         template_name = "event_list.html"
@@ -38,7 +39,7 @@ class EventDetail(DetailView):
         """ Update context data """
 
         # Note that we are updating the context data with the Google Maps API Key
-        #   This means that the key is being passed to the client side data. This is 
+        #   This means that the key is being passed to the client side data. This is
         #   crucial in order to implement autocomplete functionality. IT IS IMPERITAVE
         #   that you protect your API_KEY through Google's resources (see README for more).
 
@@ -62,7 +63,7 @@ class EventCreate(LoginRequiredMixin, CreateView):
         """ Update context data """
 
         # Note that we are updating the context data with the Google Maps API Key
-        #   This means that the key is being passed to the client side data. This is 
+        #   This means that the key is being passed to the client side data. This is
         #   crucial in order to implement autocomplete functionality. IT IS IMPERITAVE
         #   that you protect your API_KEY through Google's resources (see README for more).
 
@@ -80,7 +81,7 @@ class EventCreate(LoginRequiredMixin, CreateView):
 
         coords = get_coordinates(settings.GOOGLE_MAPS_API_KEY, form.instance.location)
 
-        if(coords):
+        if coords:
             form.instance.latitude = coords[0]
             form.instance.longitude = coords[1]
 
@@ -105,13 +106,13 @@ class EventUpdate(LoginRequiredMixin, UpdateView):
 
     def get(self, request, pk):
         """ Handle get request to delete event """
-        
+
         event = get_object_or_404(Event, pk=pk)
 
         #Only the Event's organizer can get the form
         if not request.user.id == event.organizer.id:
             raise PermissionDenied()
-        
+
         form = self.form_class(instance=event)
         return render(request, self.template_name, {
             "form": form,
@@ -141,7 +142,7 @@ class EventUpdate(LoginRequiredMixin, UpdateView):
 
         coords = get_coordinates(settings.GOOGLE_MAPS_API_KEY, form.instance.location)
 
-        if(coords):
+        if coords:
             form.instance.latitude = coords[0]
             form.instance.longitude = coords[1]
 
@@ -166,7 +167,7 @@ class EventDelete(LoginRequiredMixin, DeleteView):
 
     def get(self, request, pk):
         """ Handle get request to delete event """
-        
+
         event = get_object_or_404(Event, pk=pk)
 
         if not request.user.id == event.organizer.id:
@@ -184,6 +185,6 @@ class EventDelete(LoginRequiredMixin, DeleteView):
 
         if not request.user.id == event.organizer.id:
             raise PermissionDenied()
-        
+
         event.delete()
         return redirect(reverse("events"))

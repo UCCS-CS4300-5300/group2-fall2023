@@ -2,6 +2,8 @@
 ### Harvestly
 ### Events Utilities
 
+""" Implmentation of Google Maps API utilities """
+
 import googlemaps
 
 def get_coordinates(api_key, address):
@@ -15,16 +17,15 @@ def get_coordinates(api_key, address):
     try:
         geo = gm.geocode(address)
 
-        if(geo):
+        if geo:
             coordinates = geo[0]["geometry"]["location"]
-            
+
             latitude = coordinates["lat"]
             longitude = coordinates["lng"]
 
             return (latitude, longitude)
 
-        else:
-            return None
+        return None
 
     except Exception as e:
         return None

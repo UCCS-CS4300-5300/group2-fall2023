@@ -2,14 +2,17 @@
 ### Harvestly
 ### Events Models
 
+""" Implementation of Event Model """
+
 from django.db import models
 from django.urls import reverse
-from django.core.exceptions import ValidationError
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
 
 class Event(models.Model):
+    """ Class for Event Model """
+
     name = models.CharField(max_length=200)
     location = models.CharField(max_length=255)
     latitude = models.FloatField(default=0.0)
@@ -25,6 +28,7 @@ class Event(models.Model):
         return Product.objects.filter(product_event=self.id)
 
     def get_absolute_url(self):
+        """ Get the absolute url of the Event Object """
         return reverse("event-detail", args=[str(self.id)])
 
     def save(self, *args, **kwargs):
@@ -37,4 +41,3 @@ class Event(models.Model):
         # call clean() before saving
         self.full_clean()
         super().save(*args, **kwargs)
-
