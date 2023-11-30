@@ -8,15 +8,7 @@
 {% if reservation_list %}
     <div class="row">
         {% for reservation in reservation_list%}
-            <div class="col-lg-4 my-3">
-                <a
-                    href="{% url 'reservation-delete' reservation.id %}"
-                    class="harvestly-nav-btn-danger d-flex justify-content-center align-items-center py-1 mb-1"
-                >
-                    <h5 class="m-0">
-                        <i class="bi-trash"></i>
-                    </h5>
-                </a>
+            <div class="col-lg-4">
                 <a class="harvestly-card-link" href="{% url 'product-details' reservation.product.id %}">
                     <div class="card">
                         <div class="harvestly-product-card-img-container">
@@ -41,6 +33,14 @@
                             </div>
                         </div>
                     </div>
+                </a>
+                <a
+                    href="{% url 'reservation-delete' reservation.id %}"
+                    class="harvestly-nav-btn-danger d-flex justify-content-center align-items-center py-1 mt-1 mb-4"
+                >
+                    <h5 class="m-0">
+                        <i class="bi-trash"></i>
+                    </h5>
                 </a>
             </div>
         {% endfor %}
