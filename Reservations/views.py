@@ -2,11 +2,9 @@
 ### Harvestly
 ### Reservations Views
 
-from typing import Any
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 
@@ -50,13 +48,14 @@ class ReservationCreate(LoginRequiredMixin, CreateView):
             raise PermissionDenied()
 
         if form.is_valid():
-            # Check that quantity does not exceed available
-            quantity = form.cleaned_data["quantity"]
+            reserve_quantity = form.cleaned_data["quantity"]
 
-            if quantity > product.quantity:
+            # Add form error if reserve quantity exceeds available quantity
+            if reserve_quantity > product.quantity:
                 form.add_error("quantity", "Reserve quantity must not exceed product quantity!")
+
             else:
-                # Set reservation customer, product, and price
+                # Set reservation customer, product, and price, and return success
                 product_price = product.price
                 quantity = form.instance.quantity
 
@@ -99,12 +98,14 @@ class ReservationUpdate(LoginRequiredMixin, UpdateView):
             raise PermissionDenied()
         
         form = self.form_class(instance=reservation)
+
         return render(request, self.template_name, {
                 "form": form,
                 "reservation": reservation,
                 "product": reservation.product
         })
     
+
     def post(self, request, pk):
         """ Handle Post Request """
 
@@ -118,35 +119,22 @@ class ReservationUpdate(LoginRequiredMixin, UpdateView):
         if form.is_valid():
             reserve_quantity = form.cleaned_data["quantity"]
 
-            if reserve_quantity <= reservation.product.quantity:
+            # Add form error if reserve quantity exceeds available quantity
+            if reserve_quantity > reservation.product.quantity:
+                form.add_error("quantity", "Reserve quantity must not exceed product quantity!")
+
+            else:
+                # Set reservation customer, product, and price, and return success
                 reservation.price = form.instance.quantity * reservation.product.price
                 form.save()
 
                 # Go back to the details page for the reserved product
                 return redirect(reverse("product-details", kwargs={"pk": reservation.product.id}))
-            
-            form.add_error("quantity", "Reserve quantity must not exceed product quantity!")
-        
-        return render(request, self.template_name, {"form": form, "reservation": reservation})
 
-    
-    # def form_valid(self, form):
-    #     """ Update the `customer` and `product` fields after submission """
-
-    #     # TODO handle case where product id is null
-    #     # TODO handle case where product does not exist
-    #     product_id = self.kwargs.get("product_id")
-    #     product = Product.objects.get(pk=product_id)
-
-    #     product_price = product.price
-    #     quantity = form.instance.quantity
-
-    #     form.instance.customer = self.request.user
-    #     form.instance.product = Product.objects.get(pk=product_id)
-    #     form.instance.price = product_price * quantity
-
-    #     return super().form_valid(form)
-
+        return render(request, self.template_name, {
+            "form": form,
+            "reservation": reservation,
+        })
 
 
 class ReservationDelete(LoginRequiredMixin, DeleteView):
@@ -178,7 +166,7 @@ class ReservationDelete(LoginRequiredMixin, DeleteView):
 
         reservation.delete()
 
-        return HttpResponseRedirect(self.get_success_url())
+        return redirect(self.get_success_url())
 
 
     def get_success_url(self):
