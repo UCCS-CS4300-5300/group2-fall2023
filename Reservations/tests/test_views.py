@@ -2,9 +2,11 @@
 ### Harvestly
 ### Test Reservations Views
 
+""" Test Suite for the Reservations Views """
+
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import User
 from Products.models import Product
 from Reservations.models import Reservation
 
@@ -47,7 +49,10 @@ class ReservationCreateTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_reservation_create_at_reverse_lookup(self):
-        """ Test that the reservation create view exists at reverse lookup of `reservation-create` """
+        """ 
+        Test that the reservation create view exists at reverse lookup of 
+        `reservation-create` 
+        """
 
         response = self.client.get(reverse("reservation-create", args=[self.product_1.id]))
 
@@ -169,14 +174,20 @@ class ReservationUpdateTests(TestCase):
         self.client.login(username=customer_username, password=password)
 
     def test_reservation_update_at_url(self):
-        """ Test that the reservation update view exists at `/reservations/edit/<int:reservation_id>` """
+        """
+        Test that the reservation update view exists at
+        `/reservations/edit/<int:reservation_id>`
+        """
 
         response = self.client.get(f"/reservations/edit/{self.reservation_1.id}")
 
         self.assertEqual(response.status_code, 200)
 
     def test_reservation_update_at_reverse_lookup(self):
-        """ Test that the reservation update view exists at reverse lookup of `reservation-update` """
+        """
+        Test that the reservation update view exists at reverse lookup of
+        `reservation-update`
+        """
 
         response = self.client.get(reverse("reservation-update", args=[self.reservation_1.id]))
 
@@ -211,7 +222,10 @@ class ReservationUpdateTests(TestCase):
             "quantity": quantity,
         }
 
-        response = self.client.post(reverse("reservation-update", args=[self.reservation_1.id]), data)
+        response = self.client.post(reverse(
+            "reservation-update",
+            args=[self.reservation_1.id]), data
+        )
 
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Reservation.objects.filter(quantity=quantity).exists())
@@ -221,7 +235,11 @@ class ReservationUpdateTests(TestCase):
 
         data = {}
 
-        response = self.client.post(reverse("reservation-update", args=[self.reservation_1.id]), data)
+        response = self.client.post(reverse(
+            "reservation-update",
+            args=[self.reservation_1.id]),
+            data
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "All fields are required! Include a reservation quantity!")
@@ -234,7 +252,11 @@ class ReservationUpdateTests(TestCase):
             "quantity": quantity,
         }
 
-        response = self.client.post(reverse("reservation-update", args=[self.reservation_1.id]), data)
+        response = self.client.post(reverse(
+            "reservation-update",
+            args=[self.reservation_1.id]),
+            data
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Reserve quantity must not exceed product quantity!")
@@ -247,7 +269,11 @@ class ReservationUpdateTests(TestCase):
             "quantity": quantity,
         }
 
-        response = self.client.post(reverse("reservation-update", args=[self.reservation_1.id]), data)
+        response = self.client.post(reverse(
+            "reservation-update",
+            args=[self.reservation_1.id]),
+            data
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Reserve quantity must be at least 1!")
@@ -310,14 +336,20 @@ class ReservationDeleteTests(TestCase):
         self.client.login(username=customer_username, password=password)
 
     def test_reservation_delete_at_url(self):
-        """ Test that the reservation delete view exists at `/reservations/delete/<int:reservation_id>` """
+        """
+        Test that the reservation delete view exists at
+        `/reservations/delete/<int:reservation_id>`
+        """
 
         response = self.client.get(f"/reservations/edit/{self.reservation_1.id}")
 
         self.assertEqual(response.status_code, 200)
 
     def test_reservation_delete_at_reverse_lookup(self):
-        """ Test that the reservation delete view exists at reverse lookup of `reservation-delete` """
+        """
+        Test that the reservation delete view exists at reverse lookup of
+        `reservation-delete`
+        """
 
         response = self.client.get(reverse("reservation-delete", args=[self.reservation_1.id]))
 

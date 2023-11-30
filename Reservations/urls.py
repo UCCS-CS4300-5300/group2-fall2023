@@ -2,6 +2,8 @@
 ### Harvestly
 ### Reservation app routing
 
+""" URL Configuration for Reservation App """
+
 from django.urls import path
 from . import views
 

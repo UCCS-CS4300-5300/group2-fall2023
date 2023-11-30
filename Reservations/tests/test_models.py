@@ -2,6 +2,8 @@
 ### Harvestly
 ### Test Reservations Models
 
+""" Test Suite for the Reservations Model """
+
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError

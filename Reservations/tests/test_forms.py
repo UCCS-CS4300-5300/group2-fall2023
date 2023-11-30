@@ -2,6 +2,8 @@
 ### Harvestly
 ### Test Reservations Forms
 
+""" Test Suite for the Reservations Form """
+
 from django.test import TestCase
 from Reservations import forms
 
@@ -26,7 +28,7 @@ class ReservationFormTests(TestCase):
         form = forms.ReservationForm(data=data)
         self.assertFalse(form.is_valid())
         self.assertIn("quantity", form.errors)
-    
+
     def test_reservation_form_minimum_quantity(self):
         """ Test the reservation form when the quantity is below the minimum """
 
