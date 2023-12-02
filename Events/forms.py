@@ -2,19 +2,25 @@
 ### Harvestly
 ### Events Forms
 
+""" Implementation of Events Form """
+
 from datetime import datetime
 from django.utils import timezone
 from django import forms
-from .models import Event
 from django.conf import settings
+from .models import Event
 
 User = settings.AUTH_USER_MODEL
 
 class DateTimeInput(forms.DateInput):
+    """ Class to define local datetime input for the form. """
     input_type = "datetime-local"
 
 class EventForm(forms.ModelForm):
+    """ Form class for Event Model"""
+
     class Meta:
+        """ Metaclass for Event Form """
         model = Event
         date_time_format = "%Y-%m-%dT%H:%M"
 
@@ -24,7 +30,7 @@ class EventForm(forms.ModelForm):
             "start_time",
             "end_time"
         ]
-        
+
         widgets = {
             "name": forms.TextInput(attrs={"placeholder": "Event name (max 255 characters)"}),
             "location": forms.TextInput(),
@@ -50,8 +56,10 @@ class EventForm(forms.ModelForm):
 
 
     def clean(self):
-        """ Ensure that all required fields are included. Ensure that start_time comes before end_time. 
-        
+        """
+        Ensure that all required fields are included.
+        Ensure that start_time comes before end_time.
+
         Note that this function is called AFTER clean_start_time() and clean_end_time().
         """
 
@@ -62,19 +70,19 @@ class EventForm(forms.ModelForm):
 
         if not name:
             raise forms.ValidationError("All fields are required! Include a market name!")
-        
+
         if not location:
             raise forms.ValidationError("All fields are required! Include a market location!")
 
         if not start_time:
             raise forms.ValidationError("All fields are required! Include a market start time!")
-        
+
         if not end_time:
             raise forms.ValidationError("All fields are required! Include a market end time!")
 
         if start_time and end_time and start_time > end_time:
             raise forms.ValidationError("End time must come after start time!")
-        
+
         return self.cleaned_data
 
 
@@ -98,9 +106,9 @@ class EventForm(forms.ModelForm):
 
         if start_time_aware < now:
             self.add_error("start_time", "Start time must not be in the past!")
-        
+
         return start_time
-    
+
 
     def clean_end_time(self):
         """ Ensure that the end_time is not in the past """
@@ -120,7 +128,7 @@ class EventForm(forms.ModelForm):
         # Note, we do not raise an error here
         #   We need to return a value so that 'clean()' knows the field is non-null
 
-        if end_time_aware < now: 
+        if end_time_aware < now:
             self.add_error("end_time", "End time must not be in the past!")
-        
+
         return end_time

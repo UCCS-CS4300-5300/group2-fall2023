@@ -2,6 +2,7 @@
 ### Harvestly
 ### Test Events Forms
 
+""" Test Suite for Events App Forms"""
 
 from django.test import TestCase
 from Events import forms
@@ -27,7 +28,7 @@ class EventFormTests(TestCase):
 
     def test_event_form_missing_name(self):
         """ Test event form when name is missing """
-        
+
         data = {
             "location": "Some Location",
             "start_time": "2025-12-01T09:00",
@@ -41,7 +42,7 @@ class EventFormTests(TestCase):
 
     def test_event_form_missing_location(self):
         """ Test event form when location is missing """
-        
+
         data = {
             "name": "Some Event",
             "start_time": "2025-12-01T09:00",
@@ -52,10 +53,9 @@ class EventFormTests(TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn("location", form.errors)
 
-    
     def test_event_form_missing_start_time(self):
         """ Test event form when start time is missing """
-        
+
         data = {
             "name": "Some Event",
             "location": "Some Location",
@@ -69,7 +69,7 @@ class EventFormTests(TestCase):
 
     def test_event_form_missing_end_time(self):
         """ Test event form when end time is missing """
-        
+
         data = {
             "name": "Some Event",
             "location": "Some Location",
@@ -141,4 +141,3 @@ class EventFormTests(TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn("__all__", form.errors)
         self.assertIn("End time must come after start time!", form.errors["__all__"])
-
