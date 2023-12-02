@@ -2,16 +2,22 @@
 ### Harvestly
 ### Test Events Views
 
+""" Test Suite for Events Application Views """
+
+import datetime
 from django.test import TestCase
 from django.urls import reverse
-from Events.models import Event
-from django.utils import timezone
 from django.contrib.auth.models import User
-import datetime
-
+from django.utils import timezone
+from Events.models import Event
 
 class EventListTests(TestCase):
     """Test the Event List View"""
+
+    def setUp(self):
+        """ Set up Test Case Data"""
+        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
+        self.user.save()
 
     def test_event_list_at_url(self):
         """Verify that the event list exists at `/markets/`"""
@@ -32,14 +38,14 @@ class EventListTests(TestCase):
 
         response = self.client.get(reverse("events"))
 
-        self.assertTemplateUsed("event_list.html")
+        self.assertTemplateUsed(response, "event_list.html")
 
     def test_event_list_uses_layout(self):
         """Verify that the event list uses the layout template"""
 
         response = self.client.get(reverse("events"))
 
-        self.assertTemplateUsed("layout.html")
+        self.assertTemplateUsed(response, "layout.html")
 
     def test_event_list_empty_uses_empty_template(self):
         """Test the event list view when no events exist"""
@@ -50,9 +56,6 @@ class EventListTests(TestCase):
 
     def test_event_list_with_events(self):
         """Test the event list view with event objects"""
-
-        self.user = User.objects.create_user(username="testinguser", password="testingpassword")
-        self.user.save()
 
         event_1 = Event.objects.create(
             id=1,
@@ -192,7 +195,6 @@ class EventCreateTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "layout.html")
 
-    
     def test_event_creates_object(self):
         """ Verify that the event create view successfully creates an event """
 
@@ -205,7 +207,7 @@ class EventCreateTests(TestCase):
         }
 
         response = self.client.post(reverse("event-create"), data)
-        
+
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Event.objects.filter(name=data["name"]).exists())
 
@@ -241,7 +243,6 @@ class EventCreateTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "All fields are required! Include a market location!")
 
-    
     def test_event_create_missing_start_time(self):
         """ Test event create view when start time is missing """
 
@@ -307,7 +308,6 @@ class EventCreateTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Invalid end time format!")
 
-    
     def test_event_create_end_time_before_start_time(self):
         """ Test the event create view when the end time is before the start time """
 
@@ -384,7 +384,9 @@ class EventUpdateTests(TestCase):
         self.assertEqual(bad_res.status_code, 404)
 
     def test_event_update_displays_object_details(self):
-        """Verify that the form for the update view displays the current state of the Event's data"""
+        """
+        Verify that the form for the update view displays the current state of the Event's data
+        """
 
         form = self.res.context["form"]
 
@@ -446,7 +448,7 @@ class EventUpdateTests(TestCase):
 
     def test_event_update_change_end_time(self):
         """Verify that updates to the Event's end time work correctly"""
-        
+
         new_end_time = timezone.make_aware(datetime.datetime(2025, 12, 5, 12, 0))
 
         data = {

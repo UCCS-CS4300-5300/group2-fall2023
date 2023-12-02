@@ -1,3 +1,9 @@
+# CS 4300 Fall 2023 Group 2
+# Harvestly
+# Test Events Models
+
+""" URLs for Events application """
+
 from django.urls import path
 from . import views
 
