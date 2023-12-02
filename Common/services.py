@@ -1,3 +1,9 @@
+### CS 4300 Fall 2023 Group 2
+### Harvestly
+### Common Services
+
+""" Implementation of Common models """
+
 import os, uuid
 from io import BytesIO
 from PIL import Image as PILImage
@@ -17,6 +23,8 @@ from .models import ProductImage
 
 
 class ImageService:
+    """ Image Service """
+
     # macros
     MAX_IMAGE_SIZE = (1920, 1920)
     DEFAULT_IMAGE_WIDTH = 1080

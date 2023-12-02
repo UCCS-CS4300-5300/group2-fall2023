@@ -2,6 +2,8 @@
 ### Harvestly
 ### Common Forms
 
+""" Implementation of Common models """
+
 from django import forms
 from django.forms import modelform_factory
 from Common.models import ProductImage
@@ -76,7 +78,7 @@ class ImageUploadForm(forms.ModelForm):
                 if image.format not in ImageService.ACCEPTED_FILE_TYPES:
                     raise forms.ValidationError("Invalid file format provided.")
         except Exception as e:
-            raise forms.ValidationError("Invalid file.")
+            raise forms.ValidationError(f"Invalid file. {e.message}")
 
     @staticmethod
     def validate_image_dimensions(image):
@@ -95,7 +97,7 @@ class ImageUploadForm(forms.ModelForm):
                         f"Image {exceeded_dimension} exceeds maximum allowed.  Max allowed is {ImageService.MAX_IMAGE_SIZE[0]}x{ImageService.MAX_IMAGE_SIZE[1]}"
                     )
         except Exception as e:
-            raise forms.ValidationError("Invalid image file.")
+            raise forms.ValidationError(f"Invalid image file. {e.message}")
 
     @staticmethod
     def validate_file_size(file):
