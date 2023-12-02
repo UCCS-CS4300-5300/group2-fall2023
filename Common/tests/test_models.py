@@ -50,4 +50,3 @@ class ProductImageTests(TestCase):
         """ Test that the related model `image` attribute works """
 
         self.assertTrue(self.product.image.filter(pk=self.product_image.pk).exists())
-    

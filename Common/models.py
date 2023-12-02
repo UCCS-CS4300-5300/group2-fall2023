@@ -22,6 +22,8 @@ class ImageUpload(models.Model):
     alt_text = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
+        """ ImageUpload meta class implementation """
+
         abstract = True
 
     def __str__(self):

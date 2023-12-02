@@ -6,10 +6,10 @@
 
 from django import forms
 from django.forms import modelform_factory
+from PIL import Image as PIL
+
 from Common.models import ProductImage
 from Common.services import ImageService
-
-from PIL import Image as PIL
 
 # TODO -[] Check validator methods and update as necessary
 
