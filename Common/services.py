@@ -4,13 +4,14 @@
 
 """ Implementation of Common models """
 
-import os, uuid
+import os
+import uuid
 from io import BytesIO
 from PIL import Image as PILImage
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 
-# !! LEAVE THIS IMPORT HERE FOR NOW
+# LEAVE THIS IMPORT HERE FOR NOW
 from .models import ProductImage
 
 # TODO - [] Add more error checking, especially for PIL and file handling.
@@ -51,7 +52,7 @@ class ImageService:
         Args:
             image_file (file): an image file
             related_object (object): the object type being related to image.
-            image_model (ImageUpload object): The specific object model inheriting ImageUpload base model.
+            image_model (ImageUpload object): The specific object model inheriting ImageUpload.
             alt_text (string, optional): an image's descriptive alternative text. Defaults to None.
             resize_to (int tuple, optional): (width, height). Defaults to DEFAULT_IMAGE_SIZE.
 
@@ -154,7 +155,7 @@ class ImageService:
         Args:
             cleaned_data (object): cleaned data returned from image form
             related_object (model instance): object related to image
-            image_model (the intermediary model to relate image with related_object): Image data structure
+            image_model (ImageUplaod object): intermediary model relates image w/ related_object
             resize_to (integer tuple, optional): (height, width). Defaults to None.
         """
         new_file = cleaned_data.get("file")

@@ -28,7 +28,7 @@ class ImageUpload(models.Model):
 
     def __str__(self):
         """ Output string representation of model """
-        
+
         return self.file.name if self.file else "No File"
 
     @staticmethod

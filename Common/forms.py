@@ -18,6 +18,8 @@ class ImageUploadForm(forms.ModelForm):
     """Image upload form information"""
 
     class Meta:
+        """ Image upload form Meta Class """
+
         fields = ["file", "alt_text"]
         widgets = {
             "file": forms.ClearableFileInput(
@@ -64,7 +66,7 @@ class ImageUploadForm(forms.ModelForm):
 
     @staticmethod
     def validate_file(file):
-        """validate image file contents, format, max and min size"""
+        """ Validate image file contents, format, max and min size """
         # return since image upload is optional
         if not file:
             return
@@ -77,12 +79,14 @@ class ImageUploadForm(forms.ModelForm):
                 # check image format is supported
                 if image.format not in ImageService.ACCEPTED_FILE_TYPES:
                     raise forms.ValidationError("Invalid file format provided.")
-        except Exception as e:
-            raise forms.ValidationError(f"Invalid file. {e.message}")
+        except Exception:
+            raise forms.ValidationError("Invalid file.")
 
     @staticmethod
     def validate_image_dimensions(image):
-        """takes an image file and validates its width and height against the max allowed as defined in Image model: MAX_IMAGE_SIZE"""
+        """ Takes an image file and validates its width and height against
+            the max allowed as defined in Image model: MAX_IMAGE_SIZE
+        """
 
         if not image:
             return
@@ -94,14 +98,17 @@ class ImageUploadForm(forms.ModelForm):
                     exceeded_dimension = "width" if img.width > max_width else "height"
 
                     raise forms.ValidationError(
-                        f"Image {exceeded_dimension} exceeds maximum allowed.  Max allowed is {ImageService.MAX_IMAGE_SIZE[0]}x{ImageService.MAX_IMAGE_SIZE[1]}"
+                        f"Image {exceeded_dimension} exceeds maximum allowed. Max allowed is \
+                            {ImageService.MAX_IMAGE_SIZE[0]}x{ImageService.MAX_IMAGE_SIZE[1]}"
                     )
-        except Exception as e:
-            raise forms.ValidationError(f"Invalid image file. {e.message}")
+
+        except Exception:
+            raise forms.ValidationError("Invalid image file.")
 
     @staticmethod
     def validate_file_size(file):
         """checks file is not too large or small in size"""
+
         if not file:
             return
 
@@ -109,7 +116,8 @@ class ImageUploadForm(forms.ModelForm):
             raise forms.ValidationError(
                 f"Image file too large. max size is {ImageService.MAX_FILE_SIZE_MB} MB"
             )
-        elif file.size < ImageService.MIN_FILE_SIZE:
+
+        if file.size < ImageService.MIN_FILE_SIZE:
             raise forms.ValidationError(
                 f"Image file too small. min size is {ImageService.MIN_FILE_SIZE_KB} KB"
             )
