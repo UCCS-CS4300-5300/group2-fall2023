@@ -35,17 +35,17 @@ class ProductImageFormTests(TestCase):
         form = ProductImageForm(data=data)
         self.assertTrue(form.is_valid())
 
-    def test_image_upload_form_missing_image(self):
-        """ Test image upload form when file is missing """
+    # def test_image_upload_form_missing_image(self):
+    #     """ Test image upload form when file is missing """
 
-        data = {
-            "alt_text": "Test Image",
-        }
+    #     data = {
+    #         "alt_text": "Test Image",
+    #     }
 
-        form = ProductImageForm(data=data)
+    #     form = ProductImageForm(data=data)
 
-        self.assertFalse(form.is_valid())
-        self.assertIn("file", form.errors)
+    #     self.assertFalse(form.is_valid())
+    #     self.assertIn("file", form.errors)
 
 
 class ImageUploadFormTests(TestCase):

@@ -67,6 +67,7 @@ class ImageUploadForm(forms.ModelForm):
     @staticmethod
     def validate_file(file):
         """ Validate image file contents, format, max and min size """
+        
         # return since image upload is optional
         if not file:
             return
