@@ -5,6 +5,7 @@
 """ Implementation of Common models """
 
 from django.db import models
+from Products.models import Product
 
 
 class ImageUpload(models.Model):
@@ -24,12 +25,19 @@ class ImageUpload(models.Model):
 
         return self.file.name if self.file else "No File"
 
+    def delete(self, *args, **kwargs):
+        """ Delete file when model is deleted """
+        if self.file:
+            self.file.delete(save=False)
+        if self.thumbnail:
+            self.thumbnail.delete(save=False)
+        super().delete(*args, **kwargs)
 
 class ProductImage(ImageUpload):
     """ Product Image model """
 
     related_model = models.ForeignKey(
-        "Products.Product", related_name="image", on_delete=models.CASCADE
+        Product, related_name="image", on_delete=models.CASCADE
     )
 
     def __str__(self):
