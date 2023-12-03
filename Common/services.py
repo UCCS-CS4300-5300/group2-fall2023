@@ -155,8 +155,6 @@ class ImageService:
 
         existing_image_instance = related_object.image.first()
 
-        # TODO - clean this structure up a bit
-
         if not new_file:
             return
 
@@ -193,7 +191,7 @@ class ImageService:
             path = os.path.join("thumbnails", filename)
 
             # save image to content file
-            saved_path = default_storage.save(path, ContentFile(image_file.read()))
+            default_storage.save(path, ContentFile(image_file.read()))
 
             return ContentFile(thumb_io.read(), name=image_file.name)
 

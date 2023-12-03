@@ -11,7 +11,7 @@ class ImageUpload(models.Model):
     """ Image upload model """
 
     file = models.ImageField(upload_to="images/", blank=True, null=True)
-    thumbnail = models.ImageField(upload_to="thumbnails/", blank=True, null=True)
+    # thumbnail = models.ImageField(upload_to="thumbnails/", blank=True, null=True)
     alt_text = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
