@@ -33,9 +33,14 @@ class UtilsTests(TestCase):
             field_name=None,
             name="test_image.jpg",
             content_type="image/jpeg",
-            size=buffer.tell(),
+            size=buffer.getbuffer().nbytes,
             charset=None,
         )
+    
+    def tearDown(self):
+        """ Ensure that InMemoryUploadedFile objects are closed """
+
+        self.valid_image_file.close()
 
     def test_successful_validate_file(self):
         """ Test validate file with valid image file """
@@ -62,7 +67,7 @@ class UtilsTests(TestCase):
         )
 
     def test_validate_file_bad_file(self):
-        """ Test validate file with invalid image file """
+        """ Test validate file with a non-image file """
 
         bad_file_content = b"Some file content"
         bad_file_buffer = BytesIO(bad_file_content)
@@ -72,7 +77,7 @@ class UtilsTests(TestCase):
             field_name=None,
             name="bad_file.txt",
             content_type="text/plain",
-            size=bad_file_buffer.tell(),
+            size=bad_file_buffer.getbuffer().nbytes,
             charset=None,
         )
 
@@ -80,6 +85,8 @@ class UtilsTests(TestCase):
             validate_file(bad_file),
             (False, "Invalid file.")
         )
+
+        bad_file.close()
 
     def test_validate_file_invalid_file_type(self):
         """ Test validate file with invalid image file """
@@ -89,16 +96,109 @@ class UtilsTests(TestCase):
         invalid_image_buffer = BytesIO()
         invalid_image.save(invalid_image_buffer, format="ICO")
 
-        bad_file = InMemoryUploadedFile(
+        invalid_image_file = InMemoryUploadedFile(
             invalid_image_buffer,
             field_name=None,
             name="bad_file.txt",
             content_type="image/x-icon",
-            size=invalid_image_buffer.tell(),
+            size=invalid_image_buffer.getbuffer().nbytes,
+            charset=None,
+        )
+
+        self.assertEqual(
+            validate_file(invalid_image_file),
+            (False, "Invalid file format.")
+        )
+
+        invalid_image_file.close()
+
+    def test_validate_image_dimensions_bad_file(self):
+        """ Test validate image dimensions with a non-image file """
+
+        bad_file_content = b"Some file content"
+        bad_file_buffer = BytesIO(bad_file_content)
+
+        bad_file = InMemoryUploadedFile(
+            bad_file_buffer,
+            field_name=None,
+            name="bad_file.txt",
+            content_type="text/plain",
+            size=bad_file_buffer.getbuffer().nbytes,
             charset=None,
         )
 
         self.assertEqual(
             validate_file(bad_file),
-            (False, "Invalid file format.")
+            (False, "Invalid file.")
         )
+
+        bad_file.close()
+
+    def test_validate_image_dimensions_invalid_dimensions(self):
+        """ Test validate image dimensions with invalid image dimensions """
+
+        invalid_image = Image.new("RGB", (
+            ImageService.MAX_IMAGE_SIZE[0] + 1,
+            ImageService.MAX_IMAGE_SIZE[0] + 1,
+        ))
+
+        invalid_image_buffer = BytesIO()
+        invalid_image.save(invalid_image_buffer, format="JPEG")
+
+        invalid_image_file = InMemoryUploadedFile(
+            invalid_image_buffer,
+            field_name=None,
+            name="test_image.jpg",
+            content_type="image/jpeg",
+            size=invalid_image_buffer.getbuffer().nbytes,
+            charset=None,
+        )
+
+        validation_result = validate_image_dimensions(invalid_image_file)
+        self.assertEqual(validation_result[0], False)
+        self.assertIn("exceeds maximum allowed", validation_result[1])
+
+        invalid_image_file.close()
+
+    def test_validate_file_size_minimum_file_size(self):
+        """ Test validate file size with a file size below minimum """
+
+        invalid_image_content = bytes([1 for _ in range(ImageService.MIN_FILE_SIZE - 1)])
+        invalid_image_buffer = BytesIO(invalid_image_content)
+
+        invalid_image_file = InMemoryUploadedFile(
+            invalid_image_buffer,
+            field_name=None,
+            name="test_image.jpg",
+            content_type="image/jpeg",
+            size=invalid_image_buffer.getbuffer().nbytes,
+            charset=None,
+        )
+
+        validation_result = validate_file_size(invalid_image_file)
+        self.assertEqual(validation_result[0], False)
+        self.assertIn("Image file too small.", validation_result[1])
+
+        invalid_image_file.close()
+
+    def test_validate_file_size_maximum_file_size(self):
+        """ Test validate file size with a file size below maximum """
+
+        invalid_image_content = bytes([1 for _ in range(ImageService.MAX_FILE_SIZE + 1)])
+        invalid_image_buffer = BytesIO(invalid_image_content)
+
+        invalid_image_file = InMemoryUploadedFile(
+            invalid_image_buffer,
+            field_name=None,
+            name="test_image.jpg",
+            content_type="image/jpeg",
+            size=invalid_image_buffer.getbuffer().nbytes,
+            charset=None,
+        )
+
+        validation_result = validate_file_size(invalid_image_file)
+        self.assertEqual(validation_result[0], False)
+        self.assertIn("Image file too large.", validation_result[1])
+
+        invalid_image_file.close()
+
