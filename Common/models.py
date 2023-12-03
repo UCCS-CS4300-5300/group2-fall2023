@@ -24,18 +24,6 @@ class ImageUpload(models.Model):
 
         return self.file.name if self.file else "No File"
 
-    @staticmethod
-    def validate_image_size_parameter(size):
-        """ Validate image size """
-
-        # Validate the size parameter is a tuple of length 2
-        if not isinstance(size, tuple) or len(size) != 2:
-            raise TypeError("size parameter must be a tuple of (width, height)")
-        
-        # validate size elements are positive integers
-        if not all(isinstance(n, int) and n > 0 for n in size):
-            raise ValueError("size must contain positive integers")
-
 
 class ProductImage(ImageUpload):
     """ Product Image model """
