@@ -14,14 +14,6 @@ from django.core.files.storage import default_storage
 # LEAVE THIS IMPORT HERE FOR NOW
 from .models import ProductImage
 
-# TODO - [] Add more error checking, especially for PIL and file handling.
-# TODO - [] async image resizing
-# TODO - [] async image uploading
-# TODO - [] async image deletion
-# TODO - [] implement image processing method?
-# TODO - [] standardize names, design naming scheme
-# TODO - [] Work on multiple images logic
-
 
 class ImageService:
     """ Image Service """
@@ -165,7 +157,7 @@ class ImageService:
 
         # TODO - clean this structure up a bit
 
-        if not new_file or new_file is None:
+        if not new_file:
             return
 
         if existing_image_instance:

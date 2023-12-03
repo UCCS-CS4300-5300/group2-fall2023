@@ -7,13 +7,6 @@
 from django.db import models
 
 
-# TODO - make upload_to dynamic
-# TODO - implement generic FKs?
-# TODO - clean out code now covered in services.py
-# TODO - Should I add delete method from services to models?
-# TODO - Implement signals to further detach logic from views?
-
-
 class ImageUpload(models.Model):
     """ Image upload model """
 
@@ -38,6 +31,7 @@ class ImageUpload(models.Model):
         # Validate the size parameter is a tuple of length 2
         if not isinstance(size, tuple) or len(size) != 2:
             raise TypeError("size parameter must be a tuple of (width, height)")
+        
         # validate size elements are positive integers
         if not all(isinstance(n, int) and n > 0 for n in size):
             raise ValueError("size must contain positive integers")
