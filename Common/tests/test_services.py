@@ -4,10 +4,10 @@
 
 """ Test Suite for the Common Models """
 
+from unittest.mock import MagicMock
 from io import BytesIO
 from PIL import Image
 from django.test import TestCase
-from unittest.mock import MagicMock, patch
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth.models import User
 
@@ -62,11 +62,13 @@ class ImageServiceTests(TestCase):
             ProductImage,
         )
 
-        self.assertTrue(self.product.image.count() == 1)
+        self.assertEqual(self.product.image.count(), 1)
         # verify image exists
         self.assertTrue(image_instance.file)
 
     def test_handle_image_update_with_new_image(self):
+        """ Test handle image update with a new image """
+
         # create mock image form with new file data
         image_form = MagicMock(spec=ProductImageForm)
         image_form.cleaned_data = {
@@ -74,14 +76,15 @@ class ImageServiceTests(TestCase):
             "alt_text": "test alt text",
         }
         image_form.changed_data = ["file"]
-        
+
         # call handle_image_update
         ImageService().handle_image_update(image_form, self.product, ProductImage)
-        
+
         # Assert new image instance is created
         self.assertEqual(self.product.image.count(), 1)
 
-    def test_image_update_with_existing_image(self): 
+    def test_image_update_with_existing_image(self):
+        """ Test image update with existing image """
 
         # create existing image instance
         existing_image = ImageService().create_image(
@@ -89,7 +92,7 @@ class ImageServiceTests(TestCase):
             self.product,
             ProductImage,
         )
-        
+
         # create mock image form with new file data
         image_form = MagicMock(spec=ProductImageForm)
         image_form.cleaned_data = {
@@ -97,29 +100,29 @@ class ImageServiceTests(TestCase):
             "alt_text": "test alt text",
         }
         image_form.changed_data = ["file"]
-        
+
         # call handle_image_update
         ImageService().handle_image_update(image_form, self.product, ProductImage)
-        
+
         # assert existing image is replaced
         self.assertEqual(self.product.image.count(), 1)
         self.assertNotEqual(self.product.image.first(), existing_image)
-        
+
     def test_handle_image_update_with_no_file_change(self):
         """ Test image update with no file """
-        
+
         image_form = MagicMock(spec=ProductImageForm)
         image_form.changed_data = []
-        
+
         # call handle_image_update
         ImageService().handle_image_update(image_form, self.product, ProductImage)
-        
+
         # Assert no new image instance is created
         self.assertTrue(self.product.image.count() == 0)
-    
-    def test_handle_image_update_clear(self): 
+
+    def test_handle_image_update_clear(self):
         """ Test image update with clear """
-        
+
         image_form = MagicMock(spec=ProductImageForm)
         image_form.cleaned_data = {
             "file": None,
@@ -132,10 +135,10 @@ class ImageServiceTests(TestCase):
             self.product,
             ProductImage,
         )
-        
+
         # call handle_image_update
         ImageService().handle_image_update(image_form, self.product, ProductImage)
-        
+
         # Assert no new image instance is created
         self.assertTrue(self.product.image.count() == 0)
         # Assert existing image is deleted
@@ -143,10 +146,10 @@ class ImageServiceTests(TestCase):
 
     def test_create_thumbnail(self):
         """ Test create thumbnail """
-        
+
         thumb_path = "thumbnails/thumb_test_image.jpg"
         thumbnail = ImageService().create_thumbnail(self.valid_image_file, thumb_path)
-        
+
         # check thumbnail is created
         self.assertIsNotNone(thumbnail)
 
@@ -154,7 +157,7 @@ class ImageServiceTests(TestCase):
         """ Test resize image """
 
         # Call resize_image
-        resized_image = ImageService()._resize_image(self.valid_image_file)
+        resized_image = ImageService().resize_image(self.valid_image_file)
 
         # Check if the image is resized
         self.assertIsNotNone(resized_image)
@@ -168,20 +171,20 @@ class ImageServiceTests(TestCase):
         filename = "test_image.jpg"
 
         # Call generate_unique_filename
-        unique_filename = image_service._generate_unique_filename(filename)
-        
+        unique_filename = image_service.generate_unique_filename(filename)
+
         # Check if the unique filename is generated
         self.assertIsNotNone(unique_filename)
 
-    def test_file_names_are_unique(self): 
+    def test_file_names_are_unique(self):
         """test that file names are unique"""
-        
+
         # create filename
         filename = "test_image.jpg"
-        
+
         # call generate_unique_filename
-        unique_filename = ImageService()._generate_unique_filename(filename)
-        unique_filename_2 = ImageService()._generate_unique_filename(filename)
-        
+        unique_filename = ImageService().generate_unique_filename(filename)
+        unique_filename_2 = ImageService().generate_unique_filename(filename)
+
         # check names are unique
         self.assertNotEqual(unique_filename, unique_filename_2)

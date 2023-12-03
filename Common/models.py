@@ -27,10 +27,13 @@ class ImageUpload(models.Model):
 
     def delete(self, *args, **kwargs):
         """ Delete file when model is deleted """
+
         if self.file:
             self.file.delete(save=False)
+
         if self.thumbnail:
             self.thumbnail.delete(save=False)
+
         super().delete(*args, **kwargs)
 
 class ProductImage(ImageUpload):

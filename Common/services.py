@@ -49,27 +49,27 @@ class ImageService:
             image_instance: returns the newly created image instance.
         """
 
-        if resize_to: 
-            image_file = self._resize_image(image_file, resize_to)
+        if resize_to:
+            image_file = self.resize_image(image_file, resize_to)
         if alt_text is None:
-            alt_text = self._generate_alt_text(related_object)
-        
+            alt_text = self.generate_alt_text(related_object)
+
         # generate unique filename
-        filename = self._generate_unique_filename(image_file.name)
+        filename = self.generate_unique_filename(image_file.name)
         # set model name
         model_name = related_object.__class__.__name__.lower()
         # create file path
         file_path = os.path.join(model_name, "images", filename)
         # save image
         saved_path = default_storage.save(
-            file_path, 
+            file_path,
             ContentFile(image_file.read())
         )
         # thumb path
         thumb_path = os.path.join(model_name, "thumbnails", f"thumb_{filename}")
         # create thumbnail
         thumbnail = self.create_thumbnail(image_file, thumb_path)
-        
+
 
         # create Image model instance
         image_instance = image_model(
@@ -94,9 +94,9 @@ class ImageService:
         """
 
         # check if file field was changed
-        if 'file' not in image_form.changed_data: 
-            return 
-        
+        if 'file' not in image_form.changed_data:
+            return
+
         new_file = image_form.cleaned_data.get("file")
         new_alt_text = image_form.cleaned_data.get("alt_text")
 
@@ -105,10 +105,10 @@ class ImageService:
 
         # file field changed, delete existing image instance
         if existing_image_instance:
-            existing_image_instance.delete() 
+            existing_image_instance.delete()
 
         # create new image instance
-        if new_file: 
+        if new_file:
             self.create_image(
                 new_file,
                 related_object,
@@ -129,23 +129,23 @@ class ImageService:
             img_format = img.format if img.format else "JPEG"
             img.save(thumb_io, img_format, quality=self.IMAGE_QUALITY)
             thumb_io.seek(0)
-            
+
             # save thumbnail and return
             thumbnail = default_storage.save(
-                thumb_path, 
+                thumb_path,
                 ContentFile(thumb_io.getvalue())
             )
 
             return thumbnail
 
-    def _generate_alt_text(self, related_object):
+    def generate_alt_text(self, related_object):
         """
         generates alt text based upon the image's related object
         :param related_object: object with relation to image object
         """
         return f"{related_object.name} image"
 
-    def _resize_image(self, image_file, size=DEFAULT_IMAGE_SIZE):
+    def resize_image(self, image_file, size=DEFAULT_IMAGE_SIZE):
         """
         Resizes an image to the specified size.
         :param image_file: a file
@@ -160,7 +160,7 @@ class ImageService:
 
             return ContentFile(thumb_io.read(), name=image_file.name)
 
-    def _generate_unique_filename(self, filename):
+    def generate_unique_filename(self, filename):
         """
         Generates a unique filename.
         :param filename: name of a file
