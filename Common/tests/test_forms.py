@@ -51,7 +51,7 @@ class ProductImageFormTests(TestCase):
         """ Test the product image form with a bad file """
 
         bad_file_content = b"Some file content"
-        
+
         buffer = BytesIO(bad_file_content)
         buffer.seek(0)
 

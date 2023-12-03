@@ -4,8 +4,8 @@
 
 """ Test Suite for the Common Utilities Methods """
 
-from PIL import Image
 from io import BytesIO
+from PIL import Image
 from django.test import TestCase
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
@@ -36,7 +36,7 @@ class UtilsTests(TestCase):
             size=buffer.getbuffer().nbytes,
             charset=None,
         )
-    
+
     def tearDown(self):
         """ Ensure that InMemoryUploadedFile objects are closed """
 
@@ -201,4 +201,3 @@ class UtilsTests(TestCase):
         self.assertIn("Image file too large.", validation_result[1])
 
         invalid_image_file.close()
-

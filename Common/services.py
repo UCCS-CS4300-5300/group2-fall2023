@@ -11,9 +11,6 @@ from PIL import Image as PILImage
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 
-# LEAVE THIS IMPORT HERE FOR NOW
-from .models import ProductImage
-
 
 class ImageService:
     """ Image Service """
@@ -128,19 +125,22 @@ class ImageService:
 
     def delete_image_files(self, image_instance):
         """Deletes an image instance's associated files from system storage."""
+
         if image_instance.file:
             image_instance.file.delete(save=False)
+
         if image_instance.thumbnail:
             image_instance.thumbnail.delete(save=False)
 
     def delete_image_instance(self, image_instance):
         """deletes an instance of an image, and its associated files if any"""
+
         self.delete_image_files(image_instance)
         if image_instance:
             image_instance.delete()
 
     def handle_image_update(
-        self, cleaned_data, related_object, image_model, resize_to=None
+        self, cleaned_data, related_object, image_model
     ):
         """helper method for image update process, re-routes to update or create image.
 
@@ -150,6 +150,7 @@ class ImageService:
             image_model (ImageUplaod object): intermediary model relates image w/ related_object
             resize_to (integer tuple, optional): (height, width). Defaults to None.
         """
+
         new_file = cleaned_data.get("file")
         new_alt_text = cleaned_data.get("alt_text")
 
@@ -223,16 +224,18 @@ class ImageService:
         :param filename: name of a file
         e.g. file.png
         """
+
         name, extension = os.path.splitext(filename)
         unique_filename = f"{name}_{uuid.uuid4()}{extension}"
         return unique_filename
 
     def get_image_instance_from_related_obj(
-        self, related_object_instance, related_name
+        self, related_object_instance
     ):
         """
         Returns related instance held by another object instance if it exists.
         :param related_object: instance of an object we are searching for FK
         :param related_name: the related_name field in the related_object_instance
         """
+
         return related_object_instance.related_name.first() or None

@@ -47,7 +47,7 @@ class ImageUploadForm(forms.ModelForm):
 
     def clean_file(self):
         """Performs various validations on image file, returning it if valid"""
-    
+
         file = self.cleaned_data.get("file")
 
         if not file:

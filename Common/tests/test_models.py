@@ -7,13 +7,8 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 
-from Common.models import ImageUpload, ProductImage
+from Common.models import ProductImage
 from Products.models import Product
-
-
-class ImageUploadTests(TestCase):
-    """ Tests for the ImageUpload model """
-
 
 
 class ProductImageTests(TestCase):
