@@ -63,12 +63,12 @@ class ImageUploadForm(forms.ModelForm):
             raise forms.ValidationError(valid_file_size[1])
 
         # validate image dimensions (width, height)
-        validate_image_dimensions(file)
+        valid_image_dimensions = validate_image_dimensions(file)
+        if not validate_image_dimensions[0]:
+            raise forms.ValidationError(valid_image_dimensions[1])
 
         return file
 
-
-# Dynamic forms for adding images to models
 
 # form factory for products
 ProductImageForm = modelform_factory(

@@ -16,6 +16,7 @@ class ProductImageFormTests(TestCase):
     def setUp(self):
         """ Set up for testing the ImageUploadForm """
 
+        # TODO change this to that in utils
         image_content = b"test_image_content"
 
         self.test_image = SimpleUploadedFile(

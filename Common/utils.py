@@ -4,7 +4,7 @@
 
 """ Implementation of Common utilities methods """
 
-from PIL import Image as PIL
+from PIL import Image
 
 from Common.services import ImageService
 
@@ -23,7 +23,7 @@ def validate_file(file):
 
     # validate image file contents
     try:
-        with PIL.open(file) as image:
+        with Image.open(file) as image:
             # check image is valid and readable
             image.verify()
 
@@ -40,13 +40,18 @@ def validate_file(file):
 def validate_image_dimensions(image):
     """ Takes an image file and validates its width and height against
         the max allowed as defined in Image model: MAX_IMAGE_SIZE
+
+    Returns:
+        Tuple containing boolean and string.
+        First element validation result (boolean)
+        Second element error message or None (str)
     """
 
     if not image:
         return (True, None)
 
     try:
-        with PIL.open(image) as img:
+        with Image.open(image) as img:
             max_width, max_height = ImageService.MAX_IMAGE_SIZE
 
             if img.width > max_width or img.height > max_height:
@@ -65,7 +70,13 @@ def validate_image_dimensions(image):
 
 
 def validate_file_size(file):
-    """checks file is not too large or small in size"""
+    """Checks file is not too large or small in size
+    
+    Returns:
+        Tuple containing boolean and string.
+        First element validation result (boolean)
+        Second element error message or None (str)
+    """
 
     if not file:
         return (True, None)
