@@ -1,3 +1,4 @@
+'''This module contains the views for the Home app.'''
 ### CS 4300 Fall 2023 Group 2
 ### Harvestly
 ### Home Views
@@ -17,17 +18,19 @@ from Reservations.models import Reservation
 
 @login_required
 def logout_request(request):
+    '''Handles logout functionality'''
     logout(request)
     return redirect("index")
 
 
 def login_redirect(request):
+    '''Basic redirect for login to redirect to the home page'''
     return redirect("index")
 
 
 class Home(View):
     """ Harvestly home page. URL `/` """
-    
+
     def get(self, request):
         """ Render home page. """
 
@@ -36,7 +39,7 @@ class Home(View):
 
 class About(View):
     """ Harvestly home page. URL `/about-us` """
-    
+
     def get(self, request):
         """ Render about page. """
 
@@ -45,7 +48,7 @@ class About(View):
 
 class SignUp(CreateView):
     """ Sign-up page. URL `/signup` """
-    
+
     form_class = UserCreationForm
     template_name = "registration/signup.html"
     success_url = reverse_lazy("login")
@@ -53,14 +56,13 @@ class SignUp(CreateView):
 
 class Profile(LoginRequiredMixin, View):
     """ User profile page for seeing events and products """
-    
+
     def get(self, request):
         """ Handle get requests for profile """
 
         event_list = Event.objects.filter(organizer=request.user)
         product_list = Product.objects.filter(owner=request.user)
-        
-        
+
         return render(request, "profile.html", {
             "event_list": event_list,
             "product_list": product_list,
