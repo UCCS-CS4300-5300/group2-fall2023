@@ -171,19 +171,9 @@ class ProductUpdate(LoginRequiredMixin, UpdateView):
 
         if form.is_valid() and image_form.is_valid():
             form.save()
-
-            # perform image processing, updating, creating
-            if image_form.cleaned_data.get("file") is None and image:
-                # product has image instance but no image, delete
-                ImageService().delete_image_instance(image)
-
-            else:
-                image = ImageService().handle_image_update(
-                    image_form.cleaned_data, product, ProductImage
-                )
-
-                if image:
-                    image_form.save()
+            ImageService().handle_image_update(
+                image_form, product, ProductImage
+            )
 
             return HttpResponseRedirect(self.get_success_url())
 
@@ -242,6 +232,10 @@ class ProductDelete(LoginRequiredMixin, DeleteView):
         # Only the Product's owner can create the object
         if not request.user.id == product.owner.id:
             raise PermissionDenied()
+
+        # delete image if exists
+        if product.image.exists():
+            product.image.first().delete()
 
         product.delete()
         return HttpResponseRedirect(self.get_success_url())

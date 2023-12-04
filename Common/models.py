@@ -1,41 +1,49 @@
+### CS 4300 Fall 2023 Group 2
+### Harvestly
+### Common Models
+
+""" Implementation of Common models """
+
 from django.db import models
-
-
-# TODO - [] make upload_to dynamic
-# TODO - [] implement generic FKs?
-# TODO - [] clean out code now covered in services.py
-# TODO - [] Should I add delete method from services to models?
-# TODO - [x] handle alt text for images
-# TODO - [x] clean out code now covered in services.py
-# TODO - [N] Should I add delete method from services to models?
-# TODO - [] Implement signals to further detach logic from views?
+from Products.models import Product
 
 
 class ImageUpload(models.Model):
+    """ Image upload model """
+
     file = models.ImageField(upload_to="images/", blank=True, null=True)
     thumbnail = models.ImageField(upload_to="thumbnails/", blank=True, null=True)
     alt_text = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
+        """ ImageUpload meta class implementation """
+
         abstract = True
 
     def __str__(self):
+        """ Output string representation of model """
+
         return self.file.name if self.file else "No File"
 
-    @staticmethod
-    def validate_image_size_parameter(size):
-        # Validate the size parameter is a tuple of length 2
-        if not isinstance(size, tuple) or len(size) != 2:
-            raise TypeError("size parameter must be a tuple of (width, height)")
-        # validate size elements are positive integers
-        if not all(isinstance(n, int) and n > 0 for n in size):
-            raise ValueError("size must contain positive integers")
+    def delete(self, *args, **kwargs):
+        """ Delete file when model is deleted """
 
+        if self.file:
+            self.file.delete(save=False)
+
+        if self.thumbnail:
+            self.thumbnail.delete(save=False)
+
+        super().delete(*args, **kwargs)
 
 class ProductImage(ImageUpload):
+    """ Product Image model """
+
     related_model = models.ForeignKey(
-        "Products.Product", related_name="image", on_delete=models.CASCADE
+        Product, related_name="image", on_delete=models.CASCADE
     )
 
     def __str__(self):
+        """ Output string representation of model """
+
         return f"{self.related_model.name} image"

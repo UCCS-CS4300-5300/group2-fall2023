@@ -34,8 +34,8 @@ class ReservationCreate(LoginRequiredMixin, CreateView):
             raise PermissionDenied()
 
         return render(request, self.template_name, {
-                "form": form,
-                "product": product,
+            "form": form,
+            "product": product,
         })
 
     def post(self, request, product_id):
@@ -101,9 +101,9 @@ class ReservationUpdate(LoginRequiredMixin, UpdateView):
         form = self.form_class(instance=reservation)
 
         return render(request, self.template_name, {
-                "form": form,
-                "reservation": reservation,
-                "product": reservation.product
+            "form": form,
+            "reservation": reservation,
+            "product": reservation.product
         })
 
     def post(self, request, pk):
@@ -134,6 +134,7 @@ class ReservationUpdate(LoginRequiredMixin, UpdateView):
         return render(request, self.template_name, {
             "form": form,
             "reservation": reservation,
+            "product": reservation.product,
         })
 
 
