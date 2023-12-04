@@ -1,12 +1,13 @@
+'''This module holds all tests for the Home app views.'''
 ### CS 4300 Fall 2023 Group 2
 ### Harvestly
 ### Test Home Views (Including Signup/Login)
 
+import re
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
 
-import re
 
 
 class HomeTests(TestCase):
@@ -31,7 +32,7 @@ class HomeTests(TestCase):
     def test_home_uses_template(self):
         """ Verify that the home view uses the correct template """
 
-        response = self.client.get(reverse("index"))
+        self.client.get(reverse("index"))
 
         self.assertTemplateUsed("home.html")
 
@@ -39,7 +40,7 @@ class HomeTests(TestCase):
     def test_home_uses_layout(self):
         """ Verify that the home view uses the layout template """
 
-        response = self.client.get(reverse("index"))
+        self.client.get(reverse("index"))
 
         self.assertTemplateUsed("layout.html")
 
@@ -66,7 +67,7 @@ class AboutTests(TestCase):
     def test_about_uses_template(self):
         """ Verify that the about view uses the correct template """
 
-        response = self.client.get(reverse("about"))
+        self.client.get(reverse("about"))
 
         self.assertTemplateUsed("about.html")
 
@@ -74,7 +75,7 @@ class AboutTests(TestCase):
     def test_about_uses_layout(self):
         """ Verify that the about view uses the layout template """
 
-        response = self.client.get(reverse("about"))
+        self.client.get(reverse("about"))
 
         self.assertTemplateUsed("layout.html")
 
@@ -101,7 +102,7 @@ class SignUpTests(TestCase):
     def test_sign_up_uses_template(self):
         """ Verify that the signup view uses the correct template """
 
-        response = self.client.get(reverse("signup"))
+        self.client.get(reverse("signup"))
 
         self.assertTemplateUsed("registration/signup.html")
 
@@ -109,11 +110,10 @@ class SignUpTests(TestCase):
     def test_sign_up_uses_layout(self):
         """ Verify that the signup view uses the layout template """
 
-        response = self.client.get(reverse("signup"))
+        self.client.get(reverse("signup"))
 
         self.assertTemplateUsed("layout.html")
 
-    
     def test_sign_up_valid_form(self):
         """ Test a valid sign up form submission """
 
@@ -157,7 +157,6 @@ class SignUpTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "This field is required.")
 
-    
     def test_sign_up_missing_password2(self):
         """ Test a sign up form submission without a password confirmation """
 
@@ -191,7 +190,7 @@ class SignUpTests(TestCase):
 
 class LoginTests(TestCase):
     """ Test the Login view """
-    
+
     def setUp(self):
         """ Set up a user to validate against """
 
@@ -220,7 +219,7 @@ class LoginTests(TestCase):
     def test_login_uses_template(self):
         """ Verify that the login view uses the correct template """
 
-        response = self.client.get(reverse("login"))
+        self.client.get(reverse("login"))
 
         self.assertTemplateUsed("registration/login.html")
 
@@ -228,11 +227,11 @@ class LoginTests(TestCase):
     def test_login_uses_layout(self):
         """ Verify that the login view uses the layout template """
 
-        response = self.client.get(reverse("login"))
+        self.client.get(reverse("login"))
 
         self.assertTemplateUsed("layout.html")
 
-    
+
     def test_login_valid_form(self):
         """ Test a valid login form submission """
 
@@ -287,5 +286,6 @@ class LoginTests(TestCase):
         response = self.client.post(reverse("login"), data)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Please enter a correct username and password. Note that both fields may be case-sensitive.")
+        self.assertContains(response, "Please enter a correct username and password.")
+        self.assertContains(response, "Note that both fields may be case-sensitive.")
         
